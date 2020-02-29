@@ -1,8 +1,7 @@
 ---
 authors:
 - admin
-bio: My research interests include distributed robotics, mobile computing and programmable
-  matter.
+bio: I'm a data analytics professional with expertise in public health and psychology.
 education:
   courses:
   - course: PhD in Artificial Intelligence
@@ -19,11 +18,11 @@ interests:
 - Artificial Intelligence
 - Computational Linguistics
 - Information Retrieval
-name: Nelson Bighetti
+name: André van Zyl
 organizations:
-- name: Stanford University
-  url: ""
-role: Professor of Artificial Intelligence
+- name: Sefako Makgatho Health Sciences University
+  url: "https://www.smu.ac.za/"
+role: Data Manager
 social:
 - icon: envelope
   icon_pack: fas
@@ -36,7 +35,7 @@ social:
   link: https://scholar.google.co.uk/citations?user=sIwtMXoAAAAJ
 - icon: github
   icon_pack: fab
-  link: https://github.com/gcushen
+  link: https://github.com/drevanzyl
 superuser: true
 user_groups:
 - Researchers
