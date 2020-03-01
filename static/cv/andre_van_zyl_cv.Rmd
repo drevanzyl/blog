@@ -421,7 +421,7 @@ N/A
 
 2019
 
-### [Data Science Specialization](https://www.coursera.org/specializations/jhu-data-science) (95% Completed)
+### [Data Science Specialization](https://www.coursera.org/specializations/jhu-data-science)
 
 Offered by Johns Hopkins University on [Coursera](https://www.coursera.org/)
 

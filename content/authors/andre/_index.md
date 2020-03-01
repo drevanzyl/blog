@@ -28,6 +28,9 @@ social:
 - icon: envelope
   icon_pack: fas
   link: '#contact'
+- icon: at
+  icon_pack: fas
+  link: mailto:drevanzyl@gmail.com
 - icon: linkedin
   icon_pack: fab
   link: https://www.linkedin.com/in/andre-van-zyl
