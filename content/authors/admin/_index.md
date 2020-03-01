@@ -1,7 +1,7 @@
 ---
 authors:
-- André van Zyl
-bio: I'm a data analytics professional with expertise in public health and psychology.
+- andre
+bio: I'm a data and public health professional with expertise in psychology.
 education:
   courses:
   - course: PhD in Artificial Intelligence
@@ -27,9 +27,12 @@ social:
 - icon: envelope
   icon_pack: fas
   link: '#contact'
-- icon: twitter
+- icon: github
   icon_pack: fab
-  link: https://twitter.com/GeorgeCushen
+  link: https://github.com/drevanzyl
+- icon: linkedin
+  icon_pack: fab
+  link: https://www.linkedin.com/in/andre-van-zyl/
 - icon: google-scholar
   icon_pack: ai
   link: https://scholar.google.co.uk/citations?user=sIwtMXoAAAAJ

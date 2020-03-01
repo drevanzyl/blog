@@ -2,21 +2,21 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Demo | Getting to Know Through Data</title>
-    <link>/tags/demo/</link>
-      <atom:link href="/tags/demo/index.xml" rel="self" type="application/rss+xml" />
+    <link>https://andrevanzyl.netlify.com/tags/demo/</link>
+      <atom:link href="https://andrevanzyl.netlify.com/tags/demo/index.xml" rel="self" type="application/rss+xml" />
     <description>Demo</description>
     <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><lastBuildDate>Sat, 29 Feb 2020 00:00:00 +0000</lastBuildDate>
     <image>
       <url>img/map[gravatar:%!s(bool=false) shape:circle]</url>
       <title>Demo</title>
-      <link>/tags/demo/</link>
+      <link>https://andrevanzyl.netlify.com/tags/demo/</link>
     </image>
     
     <item>
       <title>Intro to Cars</title>
-      <link>/post/intro-to-cars/</link>
+      <link>https://andrevanzyl.netlify.com/post/intro-to-cars/</link>
       <pubDate>Sat, 29 Feb 2020 00:00:00 +0000</pubDate>
-      <guid>/post/intro-to-cars/</guid>
+      <guid>https://andrevanzyl.netlify.com/post/intro-to-cars/</guid>
       <description>
 
 
@@ -53,7 +53,7 @@ pie(
   init.angle = -50, border = NA
 )&lt;/code&gt;&lt;/pre&gt;
 &lt;div class=&#34;figure&#34;&gt;&lt;span id=&#34;fig:pie&#34;&gt;&lt;/span&gt;
-&lt;img src=&#34;/post/2020-02-29-intro-to-cars_files/figure-html/pie-1.png&#34; alt=&#34;A fancy pie chart.&#34; width=&#34;672&#34; /&gt;
+&lt;img src=&#34;https://andrevanzyl.netlify.com/post/2020-02-29-intro-to-cars_files/figure-html/pie-1.png&#34; alt=&#34;A fancy pie chart.&#34; width=&#34;672&#34; /&gt;
 &lt;p class=&#34;caption&#34;&gt;
 Figure 1: A fancy pie chart.
 &lt;/p&gt;
@@ -64,9 +64,9 @@ Figure 1: A fancy pie chart.
     
     <item>
       <title>External Project</title>
-      <link>/project/external-project/</link>
+      <link>https://andrevanzyl.netlify.com/project/external-project/</link>
       <pubDate>Wed, 27 Apr 2016 00:00:00 +0000</pubDate>
-      <guid>/project/external-project/</guid>
+      <guid>https://andrevanzyl.netlify.com/project/external-project/</guid>
       <description></description>
     </item>
     
