@@ -6,7 +6,7 @@ active = true  # Activate this widget? true/false
 weight = 40  # Order that this section will appear.
 
 title = "Key Experience"
-subtitle = "Below, I've highlighted some of my key work experience. [You can click here for my full resume.](https://sourcethemes.com/academic/docs/customization/#date-format)"
+subtitle = "I've highlighted some of my key work experience below. [You can click here for my full resume.](/cv/andre_van_zyl_cv.html)"
 
 # Date format for experience
 #   Refer to https://sourcethemes.com/academic/docs/customization/#date-format
