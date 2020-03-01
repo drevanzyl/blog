@@ -45,7 +45,7 @@ title = "Getting to Know Through Data"
 # [cta_alt]
 [cta]
 
-  url = "https://andrevanzyl.netlify.com/post/"
+  url = "/post/"
   label = "Skip to the blog"
 
 # Note. An optional note to show underneath the links.
