@@ -34,6 +34,9 @@ social:
 - icon: twitter
   icon_pack: fab
   link: https://twitter.com/DreVanZyl
+- icon: skype
+  icon_pack: fab
+  link: https://join.skype.com/invite/h0VHiLg2Impf
 - icon: researchgate
   icon_pack: fab
   link: https://www.researchgate.net/profile/Andre_Van_Zyl3
