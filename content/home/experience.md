@@ -39,6 +39,16 @@ date_format = "Jan 2006"
   """
 
 [[experience]]
+  title = "Executive member"
+  company = "Public Health Association of South Africa (PHASA)"
+  company_url = "https://phasa.org.za/"
+  location = "South Africa"
+  date_start = "2017-09-01"
+  date_end = "2019-09-01"
+  description = """
+  """
+
+[[experience]]
   title = "Research Data Administrator"
   company = "The Foundation for Professional Development"
   company_url = "https://www.foundation.co.za/"
@@ -47,6 +57,14 @@ date_format = "Jan 2006"
   date_end = "2017-08-15"
   description = """I supported the data and implementation teams in project and data management on various research projects."""
 
+[[experience]]
+  title = "Founding Chair of the Health Information and Technology Special Interest Group"
+  company = "Public Health Association of South Africa (PHASA)"
+  company_url = "https://phasa.org.za/special-interest-groups/health-information-and-technology"
+  location = "Pretoria, South Africa"
+  date_start = "2016-09-01"
+  date_end = "2017-08-15"
+  description = """I supported the data and implementation teams in project and data management on various research projects."""
 
 [[experience]]
   title = "Research Assistant"
