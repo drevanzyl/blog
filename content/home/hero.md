@@ -51,7 +51,7 @@ title = "Getting to Know Through Data"
 # Note. An optional note to show underneath the links.
 [cta_note]
 #   label = '<a class="js-github-release" href="https://sourcethemes.com/academic/updates" data-repo="gcushen/hugo-academic">Latest release<!-- V --></a>'
-label = 'or scroll down to learn more about the author and website.'
+label = 'or scroll down to learn more about the website and author.'
 +++
 
 **A website dedicated to teaching you something about using data to understand the world.**
