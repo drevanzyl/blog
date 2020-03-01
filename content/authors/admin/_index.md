@@ -1,6 +1,6 @@
 ---
 authors:
-- admin
+- André van Zyl
 bio: I'm a data analytics professional with expertise in public health and psychology.
 education:
   courses:
@@ -13,7 +13,7 @@ education:
   - course: BSc in Artificial Intelligence
     institution: Massachusetts Institute of Technology
     year: 2008
-email: ""
+email: "drevanzyl@gmail.com"
 interests:
 - Artificial Intelligence
 - Computational Linguistics
