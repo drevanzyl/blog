@@ -1,7 +1,7 @@
 ---
 authors:
 - andre
-bio: I'm a data and public health professional.
+bio: André is a public health data analytics professional.
 education:
   courses:
   - course: Masters in Public Health (MPH)
@@ -52,6 +52,6 @@ user_groups:
 - Visitors
 ---
 
-André is a data and public health professional with around ten years' work experience in roles related to research, technology, analytics, public health, behavioral health, and education. His current career interests revolve around digital analytics and data science, electronic data acquisition, epidemiology, and monitoring and evaluation. For the past two years, he has been responsible for monitoring and managing the data collection of a research project with 27 sites in three South African provinces. 
+I'm a public health data analytics professional with around ten years’ work experience in roles related to research, technology, analytics, public health, behavioral health, and education. My current career interests revolve around digital analytics and data science, electronic data acquisition, epidemiology, and monitoring and evaluation. For the past two years, I've been responsible for monitoring and managing the data collection of a research project with 27 sites in three South African provinces. [You can click here for my full resume.](/cv/andre_van_zyl_cv.html)
 
 

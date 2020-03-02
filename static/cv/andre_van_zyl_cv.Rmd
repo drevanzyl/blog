@@ -117,87 +117,104 @@ Main
 André van Zyl {#title}
 --------------------------------------------------------------------------------
 
-### Public health consultant with research data management experience
+### Public Health Data Analytics Professional 
+
+André is a public health data analytics professional with around ten years’ work experience in roles related to research, technology, analytics, public health, behavioral health, and education. His current career interests revolve around digital analytics and data science, electronic data acquisition, epidemiology, and monitoring and evaluation. For the past two years, he has been responsible for monitoring and managing the data collection of a research project with 27 sites in three South African provinces.
 
 
-André is a public health professional with a Master of Public Health (MPH) degree. He has around ten years' work experience, of which four years is in a research-related role. For the past two years, he has been responsible for monitoring and managing the data collection of a research project with 27 sites in three South African provinces. His responsibilities include building electronic data collection tools on [CommCare](https://www.dimagi.com/commcare/), developing training material (video, presentations, documents), training staff on using the data collection tools, remote monitoring of data collection and operations, remote staff support, analysis, and reporting on implementation progress. He would like to continue working on projects requiring his skills in electronic data collection, data management, epidemiology, analysis, and monitoring and evaluation. 
-
-
-Education {data-icon=graduation-cap data-concise=true}
---------------------------------------------------------------------------------
-
-### [Nelson Mandela University](https://www.mandela.ac.za/)
-
-BA General, Sociology and Psychology
-
-[Port Elizabeth, South Africa](https://goo.gl/maps/HPiR3HkfGB1QUZAr9)
-
-2010
-
-### [Nelson Mandela University](https://www.mandela.ac.za/)
-
-BA Honours, Psychology
-
-[Port Elizabeth, South Africa](https://goo.gl/maps/HPiR3HkfGB1QUZAr9)
-
-2012
-
-### [University of Pretoria](https://www.up.ac.za/)
-
-Master of Public Health
-
-[Pretoria, South Africa](https://goo.gl/maps/Emge8nvV8RiNadJt5)
-
-2016
- 
-Thesis: Health education resources available to high school Life Orientation educators in Tshwane, South Africa. 
-  
 Professional Experience {data-icon=suitcase}
 --------------------------------------------------------------------------------
 
-### Internet Service Provider
+### Data Manager
 
-Sole Proprietor
+[Sefako Makgatho Health Sciences University](https://www.smu.ac.za/) 
 
-[Port Elizabeth, South Africa](https://goo.gl/maps/RReHSy3s3MedDZu48)
+[Ga-Rankuwa, South Africa](https://goo.gl/maps/sQB7yHuauV29mqXs9)
 
 ```{r message=FALSE, warning=FALSE, include=FALSE}
 library(anytime) 
-isp = as.numeric(round((anytime("1 Jun 2008") - anytime("1 Jul 2005"))/365, digits = 1))
+dm = as.numeric(round((anytime(Sys.Date()) - anytime("1 Sep 2017"))/365, digits = 1))
 ```
 
-Jul 2005 - Jun 2008
+Present -  Sep 2017
 
+::: concise
+- Project planning and implementation related to data collection and management.
+- Questionnaire improvement. 
+- Development of the mobile data collection application on the [CommCare platform](https://www.dimagi.com/commcare/).
+- Configuration of the [short text messaging system](https://telerivet.com/) used to communicate with participants.
+- Drafting of technical aspects of the protocol.
+- Training of coordinators and fieldworkers on using Android OS, internet communication tools, the data collection application, and questionnaire completion.
+-	Develop video recordings, presentations, and documents used to train field staff. 
+- Provision of local and remote technical and data collection support to 27 fieldworkers and 3 project coordinators.  
+- Ensure that researchers are blinded. 
+- Remote monitoring of data collection process and quality of submitted data.
+- Data cleaning.
+- Creation of project performance reports and visual data representations using [RStudio](https://rstudio.com/). My resume is an example of such a report written in RStudio.
+:::
+
+Title of the research: [ImPROving TB outcomes by modifying LIFE-style behaviours through a brief motivational intervention followed by short text messages (ProLife): study protocol for a randomised controlled trial](https://trialsjournal.biomedcentral.com/articles/10.1186/s13063-019-3551-9)
+
+### Data Administrator
+
+[The Foundation for Professional Development](https://www.foundation.co.za/) 
+
+[Pretoria, South Africa](https://goo.gl/maps/D1DQiSzMDdYYRQnc8)
+
+```{r message=FALSE, warning=FALSE, include=FALSE}
+library(anytime) 
+da = as.numeric(round((anytime("1 Sep 2017") - anytime("1 Sep 2016"))/365, digits = 1))
+```
+
+Sep 2017 - Sep 2016
+
+I supported the data and implementation teams on the following projects:
+
+::: concise
+- Assessment of mental health care services provided in public health clinics in four districts in SA, 2016-2017
+- Validation of TB stigma scales in Buffalo City Metropolitan, Nkangala and Tshwane Districts in South Africa
+- Phased implementation of a public health program: cryptococcal antigen screening and treatment in South Africa
+- Investigating the acceptability, feasibility and outcomes of home-based TB testing of household contacts using a new, mobile point of care technology
+- Pilot study of STI screening and treatment for PMTCT
+:::
 
 ### Research Assistant
 
-[Nelson Mandela University Department of Nursing](https://www.mandela.ac.za/)
+[University of Pretoria](https://www.up.ac.za/)
 
-[Port Elizabeth, South Africa](https://goo.gl/maps/HPiR3HkfGB1QUZAr9)
-
-```{r message=FALSE, warning=FALSE, include=FALSE}
-library(anytime) 
-nmmu_ra = as.numeric(round((anytime("1 Jul 2012") - anytime("1 Oct 2011"))/365, digits = 1))
-```
-
-Oct 2011 - Jul 2012
-
-Title of the research: [Help-seeking behaviour, barriers to care and experiences of care among persons with depression in Eastern Cape, South Africa.](https://www.ncbi.nlm.nih.gov/pubmed/23890669)
-
-### Support Counselor
-
-[Harmony Addiction and Psychiatric Care](https://harmonyclinic.co.za/)
-
-[Cape Town, South Africa](https://goo.gl/maps/hMRwS26RxbZL6DTh6) 
-
+[Pretoria, South Africa](https://goo.gl/maps/Emge8nvV8RiNadJt5)
 
 ```{r message=FALSE, warning=FALSE, include=FALSE}
 library(anytime) 
-sc = as.numeric(round((anytime("1 Jul 2013") - anytime("1 Jan 2013"))/365, digits = 1))
+up_ra = as.numeric(round((anytime("1 Sep 2016") - anytime("1 Mar 2016"))/365, digits = 1))
 ```
 
+Mar 2016 - Sep 2016
 
-Jan 2013 - Jul 2013
+Title of the research: [Addressing tobacco smoking and drinking to improve TB treatment outcomes in South Africa: a feasibility study of the "ProLife" programme](https://doi.org/10.1093/tbm/ibz100)
+
+
+### Support Consultant
+
+[ITSI](https://www.itsieducation.com/)  
+
+[Pretoria, South Africa](https://goo.gl/maps/hTyDWRCNqSopgEQH9)
+
+```{r message=FALSE, warning=FALSE, include=FALSE}
+library(anytime) 
+itsi = as.numeric(round((anytime("1 May 2016") - anytime("1 Jan 2014"))/365, digits = 1))
+```
+
+May 2016 - Jan 2014
+
+::: concise
+- Supported the implementation of the ITSI eLearning platform in South African schools. 
+- Training teachers and learners on how to use the ITSI eLearning platform. 
+- Quality assurance on electronic textbooks. 
+- Developing training material. 
+- Provided helpdesk support.
+- Testing of the ITSI eLearning platform and recommending product improvements. 
+:::
 
 ### Behavioral Therapist
 
@@ -217,132 +234,109 @@ Feb 2014 - Jul 2014
        
 :::
 
-### Support Consultant
+### Support Counselor
 
-[ITSI](https://www.itsieducation.com/)  
+[Harmony Addiction and Psychiatric Care](https://harmonyclinic.co.za/)
 
-[Pretoria, South Africa](https://goo.gl/maps/hTyDWRCNqSopgEQH9)
+[Cape Town, South Africa](https://goo.gl/maps/hMRwS26RxbZL6DTh6) 
+
 
 ```{r message=FALSE, warning=FALSE, include=FALSE}
 library(anytime) 
-itsi = as.numeric(round((anytime("1 May 2016") - anytime("1 Jan 2014"))/365, digits = 1))
+sc = as.numeric(round((anytime("1 Jul 2013") - anytime("1 Jan 2013"))/365, digits = 1))
 ```
 
-Jan 2014 - May 2016
 
-::: concise
-- Supported the implementation of the ITSI eLearning platform in South African schools. 
-- Training teachers and learners on how to use the ITSI eLearning platform. 
-- Quality assurance on electronic textbooks. 
-- Developing training material. 
-- Provided helpdesk support.
-- Testing of the ITSI eLearning platform and recommending product improvements. 
-:::
+Jul 2013 - Jan 2013
 
 ### Research Assistant
 
-[University of Pretoria](https://www.up.ac.za/)
+[Nelson Mandela University Department of Nursing](https://www.mandela.ac.za/)
+
+[Port Elizabeth, South Africa](https://goo.gl/maps/HPiR3HkfGB1QUZAr9)
+
+```{r message=FALSE, warning=FALSE, include=FALSE}
+library(anytime) 
+nmmu_ra = as.numeric(round((anytime("1 Jul 2012") - anytime("1 Oct 2011"))/365, digits = 1))
+```
+
+Jul 2012 - Oct 2011
+
+Title of the research: [Help-seeking behaviour, barriers to care and experiences of care among persons with depression in Eastern Cape, South Africa.](https://www.ncbi.nlm.nih.gov/pubmed/23890669)
+
+### Internet Service Provider
+
+Sole Proprietor
+
+[Port Elizabeth, South Africa](https://goo.gl/maps/RReHSy3s3MedDZu48)
+
+```{r message=FALSE, warning=FALSE, include=FALSE}
+library(anytime) 
+isp = as.numeric(round((anytime("1 Jun 2008") - anytime("1 Jul 2005"))/365, digits = 1))
+```
+
+Jun 2008 - Jul 2005
+Jul 2005
+
+
+
+
+
+
+
+
+
+Education {data-icon=graduation-cap data-concise=true}
+--------------------------------------------------------------------------------
+
+
+
+### [University of Pretoria](https://www.up.ac.za/)
+
+Master of Public Health
 
 [Pretoria, South Africa](https://goo.gl/maps/Emge8nvV8RiNadJt5)
 
-```{r message=FALSE, warning=FALSE, include=FALSE}
-library(anytime) 
-up_ra = as.numeric(round((anytime("1 Sep 2016") - anytime("1 Mar 2016"))/365, digits = 1))
-```
+2016
+ 
+Thesis: Health education resources available to high school Life Orientation educators in Tshwane, South Africa. 
 
-Mar 2016 - Sep 2016
 
-Title of the research: [Addressing tobacco smoking and drinking to improve TB treatment outcomes in South Africa: a feasibility study of the "ProLife" programme](https://doi.org/10.1093/tbm/ibz100)
+### [Nelson Mandela University](https://www.mandela.ac.za/)
 
-### Data Administrator
+BA Honours, Psychology
 
-[The Foundation for Professional Development](https://www.foundation.co.za/) 
+[Port Elizabeth, South Africa](https://goo.gl/maps/HPiR3HkfGB1QUZAr9)
 
-[Pretoria, South Africa](https://goo.gl/maps/D1DQiSzMDdYYRQnc8)
+2012
 
-```{r message=FALSE, warning=FALSE, include=FALSE}
-library(anytime) 
-da = as.numeric(round((anytime("1 Sep 2017") - anytime("1 Sep 2016"))/365, digits = 1))
-```
 
-Sep 2016 - Sep 2017
+### [Nelson Mandela University](https://www.mandela.ac.za/)
 
-I supported the data and implementation teams on the following projects:
+BA General, Sociology and Psychology
 
-::: concise
-- Assessment of mental health care services provided in public health clinics in four districts in SA, 2016-2017
-- Validation of TB stigma scales in Buffalo City Metropolitan, Nkangala and Tshwane Districts in South Africa
-- Phased implementation of a public health program: cryptococcal antigen screening and treatment in South Africa
-- Investigating the acceptability, feasibility and outcomes of home-based TB testing of household contacts using a new, mobile point of care technology
-- Pilot study of STI screening and treatment for PMTCT
-:::
+[Port Elizabeth, South Africa](https://goo.gl/maps/HPiR3HkfGB1QUZAr9)
 
-### Data Manager
+2010
 
-[Sefako Makgatho Health Sciences University](https://www.smu.ac.za/) 
 
-[Ga-Rankuwa, South Africa](https://goo.gl/maps/sQB7yHuauV29mqXs9)
+Publications {data-icon=file}
+--------------------------------------------------------------------------------
 
-```{r message=FALSE, warning=FALSE, include=FALSE}
-library(anytime) 
-dm = as.numeric(round((anytime(Sys.Date()) - anytime("1 Sep 2017"))/365, digits = 1))
-```
+### Mixed-methods evaluation of mental healthcare integration into tuberculosis and maternal-child healthcare services of four South African districts.
 
-Sep 2017 -  Present
+[BMC Health Services Research volume 19, Article number: 83 (2019)](https://bmchealthservres.biomedcentral.com/articles/10.1186/s12913-019-3912-9)
 
-::: concise
-- Project planning and implementation related to data collection and management.
-- Questionnaire improvement. 
-- Development of the mobile data collection application on the [CommCare platform](https://www.dimagi.com/commcare/).
-- Configuration of the [short text messaging system](https://telerivet.com/) used to communicate with participants.
-- Drafting of technical aspects of the protocol.
-- Training of coordinators and fieldworkers on using Android OS, internet communication tools, the data collection application, and questionnaire completion.
--	Develop video recordings, presentations, and documents used to train field staff. 
-- Provision of local and remote technical and data collection support to 27 fieldworkers and 3 project coordinators.  
-- Ensure that researchers are blinded. 
-- Remote monitoring of data collection process and quality of submitted data.
-- Data cleaning.
-- Creation of project performance reports and visual data representations using [RStudio](https://rstudio.com/). My resume is an example of such a report written in RStudio.
-:::
+N/A
 
-Title of the research: [ImPROving TB outcomes by modifying LIFE-style behaviours through a brief motivational intervention followed by short text messages (ProLife): study protocol for a randomised controlled trial](https://trialsjournal.biomedcentral.com/articles/10.1186/s13063-019-3551-9)
+2019
+
+Kathryn L. Lovero, Samantha L. Lammie, **André van Zyl**, Sharon N. Paul, Phuti Ngwepe, Jennifer J. Mootz, Catherine Carlson, Annika C. Sweetland, Rachel C. Shelton, Milton L. Wainberg & Andrew Medina-Marino
+
 
 
 <i class="fas fa-hands-helping"></i> Volunteer Experience {data-icon=NA} 
 --------------------------------------------------------------------------------
-
-
-### Lay counselor
-
-[South African National Institute for Crime Prevention and the Reintegration of Offenders (NICRO)](https://www.nicro.org.za/)
-
-[Port Elizabeth, South Africa]() 
-
-Mar 2012 - Nov 2012
-
-### [Junior Public Health Association of South Africa (JuPHASA) Secretary](https://phasa.org.za/special-interest-group/ju-phasa/)
-
-[Public Health Association of South Africa (PHASA)](https://phasa.org.za/)
-
-[South Africa](https://goo.gl/maps/2mwaAMWevTagurWT7)
-
-Oct 2015 - Sep 2016
-
-### [Public Health Association of South Africa (PHASA) Health Information and Technology Special Interest Group Chair](https://phasa.org.za/special-interest-groups/health-information-and-technology)
-
-[PHASA](https://phasa.org.za/)
-
-[South Africa](https://goo.gl/maps/2mwaAMWevTagurWT7)
-
-Mar 2016 - Jun 2018
-
-### [JuPHASA Chair](https://phasa.org.za/special-interest-group/ju-phasa/)
-
-[PHASA](https://phasa.org.za/)
-
-[South Africa](https://goo.gl/maps/2mwaAMWevTagurWT7)
-
-Sep 2016 - Sep 2017
 
 ### [PHASA Executive member](https://phasa.org.za/)
 
@@ -350,20 +344,133 @@ Sep 2016 - Sep 2017
 
 [South Africa](https://goo.gl/maps/2mwaAMWevTagurWT7)
 
-Sep 2017 - Sep 2019
+Sep 2019 - Sep 2017
 
+### [JuPHASA Chair](https://phasa.org.za/special-interest-group/ju-phasa/)
 
+[PHASA](https://phasa.org.za/)
+
+[South Africa](https://goo.gl/maps/2mwaAMWevTagurWT7)
+
+Sep 2017 - Sep 2016
+
+### [Public Health Association of South Africa (PHASA) Health Information and Technology Special Interest Group Chair](https://phasa.org.za/special-interest-groups/health-information-and-technology)
+
+[PHASA](https://phasa.org.za/)
+
+[South Africa](https://goo.gl/maps/2mwaAMWevTagurWT7)
+
+Jun 2018 - Mar 2016
+
+### [Junior Public Health Association of South Africa (JuPHASA) Secretary](https://phasa.org.za/special-interest-group/ju-phasa/)
+
+[Public Health Association of South Africa (PHASA)](https://phasa.org.za/)
+
+[South Africa](https://goo.gl/maps/2mwaAMWevTagurWT7)
+
+Sep 2016 - Oct 2015
+
+### Lay counselor
+
+[South African National Institute for Crime Prevention and the Reintegration of Offenders (NICRO)](https://www.nicro.org.za/)
+
+[Port Elizabeth, South Africa]() 
+
+Nov 2012 - Mar 2012
 
 Professional Development Courses {data-icon=chalkboard-teacher}
 --------------------------------------------------------------------------------
 
-### Teaching English to Speakers of Other Languages (SIT TESOL)
+### [Data Science Specialization](https://www.coursera.org/specializations/jhu-data-science)
 
-[Nelson Mandela University](https://www.mandela.ac.za/)
+Offered by Johns Hopkins University on [Coursera](https://www.coursera.org/)
 
-[Port Elizabeth, South Africa](https://goo.gl/maps/HPiR3HkfGB1QUZAr9)
+N/A
 
-2012
+2020
+
+
+### [Statistician with R](https://www.dropbox.com/s/j3g5tbj4k0r74gi/statistician_with_r_track.pdf?dl=0) 
+
+Offered by [DataCamp](https://www.datacamp.com/tracks/statistician-with-r?version=1)
+
+N/A
+
+2019
+
+### [Data Scientist with R](https://www.datacamp.com/statement-of-accomplishment/track/cb5f9735a69f661b4ff8a241a74c5e2319438bde)
+
+Offered by [DataCamp](https://www.datacamp.com/tracks/data-scientist-with-r?version=2)
+
+N/A
+
+2019
+
+### [The Complete SQL Bootcamp](https://www.udemy.com/course/the-complete-sql-bootcamp/) (10% Completed)
+
+Offered by [Pierian Data Inc.](https://www.pieriandata.com/) on [Udemy](https://www.udemy.com/course/the-complete-sql-bootcamp/)
+
+N/A
+
+2019
+
+
+### [Oracle SQL: A Complete Introduction](https://www.udemy.com/course/introduction-to-oracle-sql/) (50% Completed)
+
+Offered by [DatabaseStar](https://www.databasestar.com/) on [Udemy](https://www.udemy.com/course/introduction-to-oracle-sql/)
+
+N/A
+
+2019
+
+### [SQL Fundamentals](https://www.datacamp.com/tracks/sql-fundamentals) (60% Completed)
+
+Offered by [DataCamp](https://www.datacamp.com/tracks/sql-fundamentals)
+
+N/A
+
+2019
+
+### [CommCare Application Building](https://academy.dimagi.com/certificates/2d616a12aed0465188ec91ae8d70501a)
+
+Offered by Dimagi on [Dimagi Academy](https://academy.dimagi.com/)
+
+N/A
+
+2019
+
+### [CommCare Fundamentals](https://academy.dimagi.com/certificates/cd278e017a9747988a2cba3bd0c894d6)
+
+Offered by Dimagi on [Dimagi Academy](https://academy.dimagi.com/)
+
+N/A
+
+2019
+
+
+### [Data Management for Clinical Research](https://www.coursera.org/learn/clinical-data-management)
+
+Offered by Vanderbilt University on [Coursera](https://www.coursera.org/)
+
+N/A
+
+2017
+
+### Good Clinical Practice Certificate Course
+
+[The Foundation for Professional Development](https://www.foundation.co.za/) 
+
+[Pretoria, South Africa](https://goo.gl/maps/D1DQiSzMDdYYRQnc8)
+
+2017
+
+### Project management principles and practices
+
+[The Foundation for Professional Development](https://www.foundation.co.za/) 
+
+[Pretoria, South Africa](https://goo.gl/maps/D1DQiSzMDdYYRQnc8)
+
+2016
 
 ### Counselor and Support Group Facilitator Training
 
@@ -381,104 +488,14 @@ The Zizi Centre
 
 2014
 
-### Project management principles and practices
+### Teaching English to Speakers of Other Languages (SIT TESOL)
 
-[The Foundation for Professional Development](https://www.foundation.co.za/) 
+[Nelson Mandela University](https://www.mandela.ac.za/)
 
-[Pretoria, South Africa](https://goo.gl/maps/D1DQiSzMDdYYRQnc8)
+[Port Elizabeth, South Africa](https://goo.gl/maps/HPiR3HkfGB1QUZAr9)
 
-2016
+2012
 
-### Good Clinical Practice Certificate Course
 
-[The Foundation for Professional Development](https://www.foundation.co.za/) 
 
-[Pretoria, South Africa](https://goo.gl/maps/D1DQiSzMDdYYRQnc8)
-
-2017
-
-### [Data Management for Clinical Research](https://www.coursera.org/learn/clinical-data-management)
-
-Offered by Vanderbilt University on [Coursera](https://www.coursera.org/)
-
-N/A
-
-2017
-
-### [Data Scientist with R](https://www.datacamp.com/statement-of-accomplishment/track/cb5f9735a69f661b4ff8a241a74c5e2319438bde)
-
-Offered by [DataCamp](https://www.datacamp.com/tracks/data-scientist-with-r?version=2)
-
-N/A
-
-2019
-
-### [Statistician with R](https://www.dropbox.com/s/j3g5tbj4k0r74gi/statistician_with_r_track.pdf?dl=0) 
-
-Offered by [DataCamp](https://www.datacamp.com/tracks/statistician-with-r?version=1)
-
-N/A
-
-2019
-
-### [Data Science Specialization](https://www.coursera.org/specializations/jhu-data-science)
-
-Offered by Johns Hopkins University on [Coursera](https://www.coursera.org/)
-
-N/A
-
-2019
-
-### [CommCare Fundamentals](https://academy.dimagi.com/certificates/cd278e017a9747988a2cba3bd0c894d6)
-
-Offered by Dimagi on [Dimagi Academy](https://academy.dimagi.com/)
-
-N/A
-
-2019
-
-### [CommCare Application Building](https://academy.dimagi.com/certificates/2d616a12aed0465188ec91ae8d70501a)
-
-Offered by Dimagi on [Dimagi Academy](https://academy.dimagi.com/)
-
-N/A
-
-2019
-
-### [SQL Fundamentals](https://www.datacamp.com/tracks/sql-fundamentals) (60% Completed)
-
-Offered by [DataCamp](https://www.datacamp.com/tracks/sql-fundamentals)
-
-N/A
-
-2019
-
-### [Oracle SQL: A Complete Introduction](https://www.udemy.com/course/introduction-to-oracle-sql/) (50% Completed)
-
-Offered by [DatabaseStar](https://www.databasestar.com/) on [Udemy](https://www.udemy.com/course/introduction-to-oracle-sql/)
-
-N/A
-
-2019
-
-### [The Complete SQL Bootcamp](https://www.udemy.com/course/the-complete-sql-bootcamp/) (10% Completed)
-
-Offered by [Pierian Data Inc.](https://www.pieriandata.com/) on [Udemy](https://www.udemy.com/course/the-complete-sql-bootcamp/)
-
-N/A
-
-2019
-
-Publications {data-icon=file}
---------------------------------------------------------------------------------
-
-### Mixed-methods evaluation of mental healthcare integration into tuberculosis and maternal-child healthcare services of four South African districts.
-
-[BMC Health Services Research volume 19, Article number: 83 (2019)](https://bmchealthservres.biomedcentral.com/articles/10.1186/s12913-019-3912-9)
-
-N/A
-
-2019
-
-Kathryn L. Lovero, Samantha L. Lammie, **André van Zyl**, Sharon N. Paul, Phuti Ngwepe, Jennifer J. Mootz, Catherine Carlson, Annika C. Sweetland, Rachel C. Shelton, Milton L. Wainberg & Andrew Medina-Marino
 

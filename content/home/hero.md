@@ -46,7 +46,7 @@ title = "Getting to Know Through Data"
 [cta]
 
   url = "/post/"
-  label = "Skip to the blog"
+  label = "Go to the posts"
 
 # Note. An optional note to show underneath the links.
 [cta_note]
