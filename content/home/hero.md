@@ -5,7 +5,7 @@ headless = true  # This file represents a page section.
 active = true  # Activate this widget? true/false
 weight = 10  # Order that this section will appear.
 
-title = "Getting to Know Through Data"
+title = "A website dedicated to teaching you something about using data to understand the world."
 
 # Hero image (optional). Enter filename of an image in the `static/img/` folder.
 # hero_media = "hero-academic.png"
@@ -20,8 +20,8 @@ title = "Getting to Know Through Data"
   # color = "navy"
   
   # Background gradient.
-  gradient_start = "#4bb4e3"
-  gradient_end = "#2b94c3"
+  gradient_start = "#446FD5"
+  gradient_end = "#446FD5"
   
   # Background image.
   # image = ""  # Name of image in `static/img/`.
@@ -53,8 +53,5 @@ title = "Getting to Know Through Data"
 #   label = '<a class="js-github-release" href="https://sourcethemes.com/academic/updates" data-repo="gcushen/hugo-academic">Latest release<!-- V --></a>'
 label = 'or scroll down to learn more about the website and author.'
 +++
-
-**A website dedicated to teaching you something about using data to understand the world.**
-
 
 

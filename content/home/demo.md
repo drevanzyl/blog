@@ -50,11 +50,5 @@ subtitle = ""
  css_class = ""
 +++
 
-Hello, and welcome to my website! 
-
 Here you will find a series of articles showing my steps in analyzing publicly available data. In most of my posts, I will include instructions on obtaining data, code for processing and analyis, and the interpretation of my results.  Technologies I'm planning to use in drafting my posts include [R](https://www.r-project.org/) and [RStudio](https://rstudio.com/), [Python](https://www.python.org/), [SQL](https://en.wikipedia.org/wiki/SQL), and [Power BI](https://powerbi.microsoft.com/en-us/). In some articles, I will share some of my thoughts and experience in working with data. 
-
-I hope you find this website useful!
-
-André
 
