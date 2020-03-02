@@ -1,23 +1,24 @@
 ---
 authors:
 - andre
-bio: I'm a data and public health professional with expertise in psychology.
+bio: I'm a data and public health professional.
 education:
   courses:
-  - course: PhD in Artificial Intelligence
-    institution: Stanford University
+  - course: Masters in Public Health (MPH)
+    institution: University of Pretoria
+    year: 2016
+  - course: BA Honours, Psychology
+    institution: Nelson Mandela University
     year: 2012
-  - course: MEng in Artificial Intelligence
-    institution: Massachusetts Institute of Technology
-    year: 2009
-  - course: BSc in Artificial Intelligence
-    institution: Massachusetts Institute of Technology
-    year: 2008
+  - course: BA General, Sociology and Psychology
+    institution: Nelson Mandela University
+    year: 2010
 email: "drevanzyl@gmail.com"
 interests:
-- Artificial Intelligence
-- Computational Linguistics
-- Information Retrieval
+- Data Science
+- Public Health
+- Epidemiology
+- Statistics 
 name: André van Zyl
 organizations:
 - name: Sefako Makgatho Health Sciences University
@@ -27,15 +28,21 @@ social:
 - icon: envelope
   icon_pack: fas
   link: '#contact'
-- icon: github
-  icon_pack: fab
-  link: https://github.com/drevanzyl
+- icon: at
+  icon_pack: fas
+  link: mailto:drevanzyl@gmail.com
 - icon: linkedin
   icon_pack: fab
-  link: https://www.linkedin.com/in/andre-van-zyl/
-- icon: google-scholar
-  icon_pack: ai
-  link: https://scholar.google.co.uk/citations?user=sIwtMXoAAAAJ
+  link: https://www.linkedin.com/in/andre-van-zyl
+- icon: twitter
+  icon_pack: fab
+  link: https://twitter.com/DreVanZyl
+- icon: skype
+  icon_pack: fab
+  link: https://join.skype.com/invite/h0VHiLg2Impf
+- icon: researchgate
+  icon_pack: fab
+  link: https://www.researchgate.net/profile/Andre_Van_Zyl3
 - icon: github
   icon_pack: fab
   link: https://github.com/drevanzyl
@@ -45,6 +52,6 @@ user_groups:
 - Visitors
 ---
 
-Nelson Bighetti is a professor of artificial intelligence at the Stanford AI Lab. His research interests include distributed robotics, mobile computing and programmable matter. He leads the Robotic Neurobiology group, which develops self-reconfiguring robots, systems of self-organizing robots, and mobile sensor networks.
+André is a data and public health professional with around ten years' work experience in roles related to research, technology, analytics, public health, behavioral health, and education. His current career interests revolve around digital analytics and data science, electronic data acquisition, epidemiology, and monitoring and evaluation. For the past two years, he has been responsible for monitoring and managing the data collection of a research project with 27 sites in three South African provinces. 
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed neque elit, tristique placerat feugiat ac, facilisis vitae arcu. Proin eget egestas augue. Praesent ut sem nec arcu pellentesque aliquet. Duis dapibus diam vel metus tempus vulputate.
+

@@ -1,6 +1,6 @@
 ---
 title: "Hello R Markdown"
-author: "Frida Gomam"
+author: andre
 date: 2015-07-23T21:13:14-05:00
 categories: ["R"]
 tags: ["R Markdown", "plot", "regression"]
@@ -8,6 +8,7 @@ tags: ["R Markdown", "plot", "regression"]
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(collapse = TRUE)
+knitr::render_markdown(TRUE)
 ```
 
 # R Markdown
@@ -16,13 +17,23 @@ This is an R Markdown document. Markdown is a simple formatting syntax for autho
 
 You can embed an R code chunk like this:
 
+`r blogdown::shortcode('tweet', '666616452582129664')`
+
 ```{r cars}
 summary(cars)
 fit <- lm(dist ~ speed, data = cars)
 fit
+htmltools::HTML("{{< youtube id= ztGdf3aNGLE >}}")
 ```
 
 # Including Plots
+
+
+
+
+
+
+`r htmltools::HTML("{{< tweet 666616452582129664 >}}")`
 
 You can also embed plots. See Figure \@ref(fig:pie) for example:
 
@@ -35,3 +46,6 @@ pie(
   init.angle = -50, border = NA
 )
 ```
+
+
+`r htmltools::HTML("{{< youtube id= ztGdf3aNGLE >}}")`
