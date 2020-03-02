@@ -110,7 +110,6 @@ proficiency %>%
         axis.ticks.y=element_blank())
 ```
 
-
 Main
 ================================================================================
 
@@ -120,7 +119,6 @@ André van Zyl {#title}
 ### Public Health Data Analytics Professional 
 
 André is a public health data analytics professional with around ten years’ work experience in roles related to research, technology, analytics, public health, behavioral health, and education. His current career interests revolve around digital analytics and data science, electronic data acquisition, epidemiology, and monitoring and evaluation. For the past two years, he has been responsible for monitoring and managing the data collection of a research project with 27 sites in three South African provinces.
-
 
 Professional Experience {data-icon=suitcase}
 --------------------------------------------------------------------------------
@@ -193,7 +191,6 @@ Mar 2016 - Sep 2016
 
 Title of the research: [Addressing tobacco smoking and drinking to improve TB treatment outcomes in South Africa: a feasibility study of the "ProLife" programme](https://doi.org/10.1093/tbm/ibz100)
 
-
 ### Support Consultant
 
 [ITSI](https://www.itsieducation.com/)  
@@ -227,7 +224,7 @@ library(anytime)
 bt = as.numeric(round((anytime("1 Jul 2014") - anytime("1 Feb 2014"))/365, digits = 1))
 ```
 
-Feb 2014 - Jul 2014
+Jul 2014 - Feb 2014
 
 ::: concise
         
@@ -240,12 +237,10 @@ Feb 2014 - Jul 2014
 
 [Cape Town, South Africa](https://goo.gl/maps/hMRwS26RxbZL6DTh6) 
 
-
 ```{r message=FALSE, warning=FALSE, include=FALSE}
 library(anytime) 
 sc = as.numeric(round((anytime("1 Jul 2013") - anytime("1 Jan 2013"))/365, digits = 1))
 ```
-
 
 Jul 2013 - Jan 2013
 
@@ -276,20 +271,9 @@ isp = as.numeric(round((anytime("1 Jun 2008") - anytime("1 Jul 2005"))/365, digi
 ```
 
 Jun 2008 - Jul 2005
-Jul 2005
-
-
-
-
-
-
-
-
 
 Education {data-icon=graduation-cap data-concise=true}
 --------------------------------------------------------------------------------
-
-
 
 ### [University of Pretoria](https://www.up.ac.za/)
 
@@ -301,7 +285,6 @@ Master of Public Health
  
 Thesis: Health education resources available to high school Life Orientation educators in Tshwane, South Africa. 
 
-
 ### [Nelson Mandela University](https://www.mandela.ac.za/)
 
 BA Honours, Psychology
@@ -310,7 +293,6 @@ BA Honours, Psychology
 
 2012
 
-
 ### [Nelson Mandela University](https://www.mandela.ac.za/)
 
 BA General, Sociology and Psychology
@@ -318,7 +300,6 @@ BA General, Sociology and Psychology
 [Port Elizabeth, South Africa](https://goo.gl/maps/HPiR3HkfGB1QUZAr9)
 
 2010
-
 
 Publications {data-icon=file}
 --------------------------------------------------------------------------------
@@ -332,8 +313,6 @@ N/A
 2019
 
 Kathryn L. Lovero, Samantha L. Lammie, **André van Zyl**, Sharon N. Paul, Phuti Ngwepe, Jennifer J. Mootz, Catherine Carlson, Annika C. Sweetland, Rachel C. Shelton, Milton L. Wainberg & Andrew Medina-Marino
-
-
 
 <i class="fas fa-hands-helping"></i> Volunteer Experience {data-icon=NA} 
 --------------------------------------------------------------------------------
@@ -388,7 +367,6 @@ Offered by Johns Hopkins University on [Coursera](https://www.coursera.org/)
 N/A
 
 2020
-
 
 ### [Statistician with R](https://www.dropbox.com/s/j3g5tbj4k0r74gi/statistician_with_r_track.pdf?dl=0) 
 
