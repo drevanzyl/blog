@@ -113,7 +113,7 @@ ALTER USER postgres PASSWORD '<My Root Password>';
 ```
 You should now be able to access your database through [pgAdmin](https://www.pgadmin.org/) or [DBeaver](https://dbeaver.io/).
 
-# Removal
+# Remove PostgreSQL
 To remove PostgreSQL, you can do the following in your terminal. 
 
 1. If you like, remove all your databases  with:
