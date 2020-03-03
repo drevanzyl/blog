@@ -25,15 +25,15 @@ subtitle = ""
   # color = "navy"
   
   # Background gradient.
-  # gradient_start = "DeepSkyBlue"
-  # gradient_end = "SkyBlue"
+  gradient_start = "#446FD5"
+  gradient_end = "#446FD5"
   
   # Background image.
-  image = "headers/wv.jpg"  # Name of image in `static/img/`.
-  image_darken = 0.6  # Darken the image? Range 0-1 where 0 is transparent and 1 is opaque.
-  image_size = "cover"  #  Options are `cover` (default), `contain`, or `actual` size.
-  image_position = "center"  # Options include `left`, `center` (default), or `right`.
-  image_parallax = true  # Use a fun parallax-like fixed background effect? true/false
+  #image = "headers/wv.jpg"  # Name of image in `static/img/`.
+  #image_darken = 0.6  # Darken the image? Range 0-1 where 0 is transparent and 1 is opaque.
+  #image_size = "cover"  #  Options are `cover` (default), `contain`, or `actual` size.
+  #image_position = "center"  # Options include `left`, `center` (default), or `right`.
+  #image_parallax = true  # Use a fun parallax-like fixed background effect? true/false
 
   # Text color (true=light or false=dark).
   text_color_light = true
@@ -49,6 +49,7 @@ subtitle = ""
  # CSS class.
  css_class = ""
 +++
+
 
 Here you will find a series of articles showing my steps in analyzing publicly available data. In most of my posts, I will include instructions on obtaining data, code for processing and analyis, and the interpretation of my results.  Technologies I'm planning to use in drafting my posts include [R](https://www.r-project.org/) and [RStudio](https://rstudio.com/), [Python](https://www.python.org/), [SQL](https://en.wikipedia.org/wiki/SQL), and [Power BI](https://powerbi.microsoft.com/en-us/). In some articles, I will share some of my thoughts and experience in working with data. 
 

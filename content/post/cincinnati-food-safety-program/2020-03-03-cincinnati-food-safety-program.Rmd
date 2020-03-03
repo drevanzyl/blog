@@ -1,0 +1,93 @@
+---
+title: Cincinnati Food Safety Program
+author: andre
+date: '2020-03-03'
+slug: cincinnati-food-safety-program
+categories:
+  - Public Health
+  - R
+tags:
+  - Food Safety
+subtitle: ''
+summary: ''
+authors: []
+lastmod: '2020-03-03T15:22:56-05:00'
+featured: no
+image:
+  caption: ''
+  focal_point: ''
+  preview_only: no
+projects: []
+---
+
+```{r echo=TRUE, eval=FALSE, message=FALSE, warning=FALSE, include=FALSE}
+## Install the required package with:
+## install.packages("RSocrata")
+
+library("RSocrata")
+
+df <- read.socrata(
+  "https://data.cincinnati-oh.gov/resource/rg6p-b3h3.json"#,
+  #app_token = "YOURAPPTOKENHERE",
+  #email     = "user@example.com",
+  #password  = "fakepassword"
+)
+```
+
+```{r echo=TRUE, eval=FALSE, include=FALSE}
+library(DBI)
+con <- dbConnect(odbc::odbc(), .connection_string = "Driver={PostgreSQL ODBC Driver(ANSI)};", timeout = 10)
+```
+
+
+```{r echo=TRUE, eval=FALSE, include=FALSE}
+library("RPostgreSQL")
+#drv <- dbDriver("PostgreSQL")
+con <- dbConnect(dbDriver("PostgreSQL"), 
+             dbname="cincinnati",
+             host="localhost",
+             port=5432,
+             user="dre",
+             password="password")
+print("connected")
+
+```
+
+```{r}
+library(DBI)
+con <- dbConnect(odbc::odbc(), Server = "127.0.0.1", Database = "cincinnati", 
+    UID = "dre", PWD = "password", Port = 5432, .connection_string = "Driver={PostgreSQL ODBC Driver(ANSI)};", 
+    timeout = 10)
+```
+
+
+```{r echo=TRUE, eval=FALSE, include=FALSE}
+dbWriteTable(con, "foodsafety", df, row.names=FALSE, append=TRUE)
+```
+
+
+```{r echo=TRUE, eval=FALSE, include=FALSE}
+dbExistsTable(con, "foodsafety")
+```
+
+```{sql connection=con, output.var = "healthy_eating" }
+SELECT *
+FROM chcc_activities
+WHERE category ='HEALTHY EATING'
+```
+
+
+```{r}
+library(reticulate)
+library(knitr)
+library(tidyverse)
+head(healthy_eating) %>% knitr::kable()
+```
+
+
+
+```{python}
+
+```
+
+

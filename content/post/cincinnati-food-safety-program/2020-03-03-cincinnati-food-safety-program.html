@@ -1,0 +1,190 @@
+---
+title: Cincinnati Food Safety Program
+author: andre
+date: '2020-03-03'
+slug: cincinnati-food-safety-program
+categories:
+  - Public Health
+  - R
+tags:
+  - Food Safety
+subtitle: ''
+summary: ''
+authors: []
+lastmod: '2020-03-03T15:22:56-05:00'
+featured: no
+image:
+  caption: ''
+  focal_point: ''
+  preview_only: no
+projects: []
+---
+
+<script src="/rmarkdown-libs/header-attrs/header-attrs.js"></script>
+
+
+<pre class="r"><code>library(DBI)
+con &lt;- dbConnect(odbc::odbc(), Server = &quot;127.0.0.1&quot;, Database = &quot;cincinnati&quot;, 
+    UID = &quot;dre&quot;, PWD = &quot;password&quot;, Port = 5432, .connection_string = &quot;Driver={PostgreSQL ODBC Driver(ANSI)};&quot;, 
+    timeout = 10)</code></pre>
+<pre class="sql"><code>SELECT *
+FROM chcc_activities
+WHERE category =&#39;HEALTHY EATING&#39;</code></pre>
+<pre class="r"><code>library(reticulate)
+library(knitr)
+library(tidyverse)</code></pre>
+<pre><code>## -- Attaching packages -------------------------------------------------------------------------------------------------------------------- tidyverse 1.3.0 --</code></pre>
+<pre><code>## v ggplot2 3.2.1     v purrr   0.3.3
+## v tibble  2.1.3     v dplyr   0.8.4
+## v tidyr   1.0.2     v stringr 1.4.0
+## v readr   1.3.1     v forcats 0.4.0</code></pre>
+<pre><code>## -- Conflicts ----------------------------------------------------------------------------------------------------------------------- tidyverse_conflicts() --
+## x dplyr::filter() masks stats::filter()
+## x dplyr::lag()    masks stats::lag()</code></pre>
+<pre class="r"><code>head(healthy_eating) %&gt;% knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">index</th>
+<th align="left">address</th>
+<th align="left">category</th>
+<th align="left">description</th>
+<th align="left">implementation_date</th>
+<th align="left">intervention</th>
+<th align="left">latitude</th>
+<th align="left">location</th>
+<th align="left">longitude</th>
+<th align="left">neighborhood</th>
+<th align="left">notes</th>
+<th align="left">outcome</th>
+<th align="left">partners</th>
+<th align="left">status</th>
+<th align="center">topics</th>
+<th align="left">zip_code</th>
+<th align="left">zipcode_pop_2010</th>
+<th align="left">zipcode_pop_2016</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">3</td>
+<td align="left">12191 MOSTELLER RD</td>
+<td align="left">HEALTHY EATING</td>
+<td align="left">HEALTHY FOOD OPTIONS (FRUIT AND VEGETABLE “TO GO” CUPS AND SALADS) AT UDF</td>
+<td align="left">2016-04-01T00:00:00.000</td>
+<td align="left">SYSTEMS</td>
+<td align="left">39.2982939357563</td>
+<td align="left">SHARONVILLE (UDF LOCATION)</td>
+<td align="left">-84.4287401442128</td>
+<td align="left">OUTSIDE CITY LIMITS</td>
+<td align="left">NA</td>
+<td align="left">UDF HEALTHY FOOD RETAIL</td>
+<td align="left">UNITED DAIRY FARMERS, OHIO DEPARTMENT OF HEALTH</td>
+<td align="left">COMPLETED</td>
+<td align="center">SMALL RETAIL/SUPERMARKETS</td>
+<td align="left">45241</td>
+<td align="left">23044</td>
+<td align="left">23707</td>
+</tr>
+<tr class="even">
+<td align="right">4</td>
+<td align="left">1710 COLUMBUS AV</td>
+<td align="left">HEALTHY EATING</td>
+<td align="left">HEALTHY FOOD OPTIONS (FRUIT AND VEGETABLE “TO GO” CUPS AND SALADS) AT UDF</td>
+<td align="left">2016-04-01T00:00:00.000</td>
+<td align="left">SYSTEMS</td>
+<td align="left">39.0769917000299</td>
+<td align="left">WASHINGTON COURT HOUSE (UDF LOCATION)</td>
+<td align="left">-84.3418176</td>
+<td align="left">OUTSIDE CITY LIMITS</td>
+<td align="left">NA</td>
+<td align="left">UDF HEALTHY FOOD RETAIL</td>
+<td align="left">UNITED DAIRY FARMERS, OHIO DEPARTMENT OF HEALTH</td>
+<td align="left">COMPLETED</td>
+<td align="center">SMALL RETAIL/SUPERMARKETS</td>
+<td align="left">43160</td>
+<td align="left">22305</td>
+<td align="left">22171</td>
+</tr>
+<tr class="odd">
+<td align="right">9</td>
+<td align="left">735 E MAIN ST</td>
+<td align="left">HEALTHY EATING</td>
+<td align="left">HEALTHY FOOD OPTIONS (FRUIT AND VEGETABLE “TO GO” CUPS AND SALADS) AT UDF</td>
+<td align="left">2016-04-01T00:00:00.000</td>
+<td align="left">SYSTEMS</td>
+<td align="left">39.9576447000294</td>
+<td align="left">WEST UNION (UDF LOCATION)</td>
+<td align="left">-82.9797113</td>
+<td align="left">OUTSIDE CITY LIMITS</td>
+<td align="left">NA</td>
+<td align="left">UDF HEALTHY FOOD RETAIL</td>
+<td align="left">UNITED DAIRY FARMERS, OHIO DEPARTMENT OF HEALTH</td>
+<td align="left">COMPLETED</td>
+<td align="center">SMALL RETAIL/SUPERMARKETS</td>
+<td align="left">45693</td>
+<td align="left">8981</td>
+<td align="left">8305</td>
+</tr>
+<tr class="even">
+<td align="right">11</td>
+<td align="left">509 LICKING PIKE</td>
+<td align="left">HEALTHY EATING</td>
+<td align="left">HEALTHY FOOD OPTIONS (FRUIT AND VEGETABLE “TO GO” CUPS AND SALADS) AT UDF</td>
+<td align="left">2016-04-01T00:00:00.000</td>
+<td align="left">SYSTEMS</td>
+<td align="left">39.0553626000299</td>
+<td align="left">WILDER (UDF LOCATION)</td>
+<td align="left">-84.4866546</td>
+<td align="left">OUTSIDE CITY LIMITS</td>
+<td align="left">NA</td>
+<td align="left">UDF HEALTHY FOOD RETAIL</td>
+<td align="left">UNITED DAIRY FARMERS, OHIO DEPARTMENT OF HEALTH</td>
+<td align="left">COMPLETED</td>
+<td align="center">SMALL RETAIL/SUPERMARKETS</td>
+<td align="left">41071</td>
+<td align="left">20869</td>
+<td align="left">20724</td>
+</tr>
+<tr class="odd">
+<td align="right">12</td>
+<td align="left">7224 TAYLORSVILLE RD</td>
+<td align="left">HEALTHY EATING</td>
+<td align="left">HEALTHY FOOD OPTIONS (FRUIT AND VEGETABLE “TO GO” CUPS AND SALADS) AT UDF</td>
+<td align="left">2016-04-01T00:00:00.000</td>
+<td align="left">SYSTEMS</td>
+<td align="left">39.8605103000295</td>
+<td align="left">HUBER HEIGHTS (UDF LOCATION)</td>
+<td align="left">-84.105625</td>
+<td align="left">OUTSIDE CITY LIMITS</td>
+<td align="left">NA</td>
+<td align="left">UDF HEALTHY FOOD RETAIL</td>
+<td align="left">UNITED DAIRY FARMERS, OHIO DEPARTMENT OF HEALTH</td>
+<td align="left">COMPLETED</td>
+<td align="center">SMALL RETAIL/SUPERMARKETS</td>
+<td align="left">45424</td>
+<td align="left">49930</td>
+<td align="left">50670</td>
+</tr>
+<tr class="even">
+<td align="right">15</td>
+<td align="left">3139 MADISON RD</td>
+<td align="left">HEALTHY EATING</td>
+<td align="left">HEALTHY FOOD OPTIONS (FRUIT AND VEGETABLE “TO GO” CUPS AND SALADS) AT UDF</td>
+<td align="left">2016-04-01T00:00:00.000</td>
+<td align="left">SYSTEMS</td>
+<td align="left">39.1535748430757</td>
+<td align="left">OAKLEY (UDF LOCATION)</td>
+<td align="left">-84.4285960059571</td>
+<td align="left">OAKLEY</td>
+<td align="left">NA</td>
+<td align="left">UDF HEALTHY FOOD RETAIL</td>
+<td align="left">UNITED DAIRY FARMERS, OHIO DEPARTMENT OF HEALTH</td>
+<td align="left">COMPLETED</td>
+<td align="center">SMALL RETAIL/SUPERMARKETS</td>
+<td align="left">45209</td>
+<td align="left">9605</td>
+<td align="left">10151</td>
+</tr>
+</tbody>
+</table>

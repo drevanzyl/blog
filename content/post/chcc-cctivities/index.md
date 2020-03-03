@@ -36,11 +36,10 @@ print (sys.version_info)
 ```
 
     Python version
-    3.7.4 (default, Aug 13 2019, 20:35:49) 
-    [GCC 7.3.0]
+    3.7.1 (v3.7.1:260ec2c36a, Oct 20 2018, 14:57:15) [MSC v.1915 64 bit (AMD64)]
     Version info.
-    sys.version_info(major=3, minor=7, micro=4, releaselevel='final', serial=0)
-
+    sys.version_info(major=3, minor=7, micro=1, releaselevel='final', serial=0)
+    
 
 
 ```python
@@ -70,7 +69,7 @@ chcc_activities = pd.DataFrame.from_records(chcc_activities_soda)
 ```
 
     WARNING:root:Requests made without an app_token will be subject to strict throttling limits.
-
+    
 
 
 ```python
@@ -82,29 +81,27 @@ print(chcc_activities.info())
     <class 'pandas.core.frame.DataFrame'>
     RangeIndex: 406 entries, 0 to 405
     Data columns (total 17 columns):
-     #   Column               Non-Null Count  Dtype 
-    ---  ------               --------------  ----- 
-     0   category             406 non-null    object
-     1   topics               406 non-null    object
-     2   intervention         406 non-null    object
-     3   description          406 non-null    object
-     4   status               406 non-null    object
-     5   outcome              406 non-null    object
-     6   implementation_date  406 non-null    object
-     7   location             406 non-null    object
-     8   address              406 non-null    object
-     9   zip_code             406 non-null    object
-     10  zipcode_pop_2016     406 non-null    object
-     11  partners             406 non-null    object
-     12  longitude            406 non-null    object
-     13  latitude             406 non-null    object
-     14  neighborhood         406 non-null    object
-     15  zipcode_pop_2010     406 non-null    object
-     16  notes                8 non-null      object
+    address                406 non-null object
+    category               406 non-null object
+    description            406 non-null object
+    implementation_date    406 non-null object
+    intervention           406 non-null object
+    latitude               406 non-null object
+    location               406 non-null object
+    longitude              406 non-null object
+    neighborhood           406 non-null object
+    notes                  8 non-null object
+    outcome                406 non-null object
+    partners               406 non-null object
+    status                 406 non-null object
+    topics                 406 non-null object
+    zip_code               406 non-null object
+    zipcode_pop_2010       406 non-null object
+    zipcode_pop_2016       406 non-null object
     dtypes: object(17)
     memory usage: 54.0+ KB
     None
-
+    
 
 
 ```python
@@ -132,23 +129,23 @@ chcc_activities.describe(include='all')
   <thead>
     <tr style="text-align: right;">
       <th></th>
-      <th>category</th>
-      <th>topics</th>
-      <th>intervention</th>
-      <th>description</th>
-      <th>status</th>
-      <th>outcome</th>
-      <th>implementation_date</th>
-      <th>location</th>
       <th>address</th>
-      <th>zip_code</th>
-      <th>zipcode_pop_2016</th>
-      <th>partners</th>
-      <th>longitude</th>
+      <th>category</th>
+      <th>description</th>
+      <th>implementation_date</th>
+      <th>intervention</th>
       <th>latitude</th>
+      <th>location</th>
+      <th>longitude</th>
       <th>neighborhood</th>
-      <th>zipcode_pop_2010</th>
       <th>notes</th>
+      <th>outcome</th>
+      <th>partners</th>
+      <th>status</th>
+      <th>topics</th>
+      <th>zip_code</th>
+      <th>zipcode_pop_2010</th>
+      <th>zipcode_pop_2016</th>
     </tr>
   </thead>
   <tbody>
@@ -163,74 +160,74 @@ chcc_activities.describe(include='all')
       <td>406</td>
       <td>406</td>
       <td>406</td>
-      <td>406</td>
-      <td>406</td>
-      <td>406</td>
-      <td>406</td>
-      <td>406</td>
-      <td>406</td>
-      <td>406</td>
       <td>8</td>
+      <td>406</td>
+      <td>406</td>
+      <td>406</td>
+      <td>406</td>
+      <td>406</td>
+      <td>406</td>
+      <td>406</td>
     </tr>
     <tr>
       <th>unique</th>
-      <td>3</td>
-      <td>8</td>
+      <td>386</td>
       <td>3</td>
       <td>9</td>
-      <td>1</td>
-      <td>8</td>
       <td>11</td>
-      <td>345</td>
-      <td>386</td>
-      <td>123</td>
-      <td>124</td>
-      <td>10</td>
+      <td>3</td>
       <td>378</td>
+      <td>345</td>
       <td>378</td>
       <td>47</td>
-      <td>123</td>
       <td>8</td>
+      <td>8</td>
+      <td>10</td>
+      <td>1</td>
+      <td>8</td>
+      <td>123</td>
+      <td>123</td>
+      <td>124</td>
     </tr>
     <tr>
       <th>top</th>
-      <td>HEALTHY EATING</td>
-      <td>ENVIRONMENTAL HEALTH</td>
-      <td>SYSTEMS</td>
-      <td>HEALTHY FOOD OPTIONS (FRUIT AND VEGETABLE "TO ...</td>
-      <td>COMPLETED</td>
-      <td>CRIME PREVENTION THROUGH ENVIRONMENTAL DESIGN</td>
-      <td>2016-04-01T00:00:00.000</td>
-      <td>COLUMBUS (UDF LOCATION)</td>
       <td>3951 W 8TH ST</td>
-      <td>45202</td>
-      <td>13761</td>
-      <td>UNITED DAIRY FARMERS, OHIO DEPARTMENT OF HEALTH</td>
-      <td>-84.5120196</td>
+      <td>HEALTHY EATING</td>
+      <td>HEALTHY FOOD OPTIONS (FRUIT AND VEGETABLE "TO ...</td>
+      <td>2016-04-01T00:00:00.000</td>
+      <td>SYSTEMS</td>
       <td>39.1031182000299</td>
+      <td>COLUMBUS (UDF LOCATION)</td>
+      <td>-84.5120196</td>
       <td>OUTSIDE CITY LIMITS</td>
+      <td>ADDRESS AN INTERSECTION, USED FOLLOWING ADDRES...</td>
+      <td>CRIME PREVENTION THROUGH ENVIRONMENTAL DESIGN</td>
+      <td>UNITED DAIRY FARMERS, OHIO DEPARTMENT OF HEALTH</td>
+      <td>COMPLETED</td>
+      <td>ENVIRONMENTAL HEALTH</td>
+      <td>45202</td>
       <td>15483</td>
-      <td>ADDRESS WOULD NOT GEOCODE, USED NEIGHBORING BU...</td>
+      <td>13761</td>
     </tr>
     <tr>
       <th>freq</th>
+      <td>4</td>
       <td>198</td>
-      <td>174</td>
+      <td>173</td>
+      <td>173</td>
       <td>210</td>
+      <td>8</td>
+      <td>23</td>
+      <td>8</td>
+      <td>156</td>
+      <td>1</td>
+      <td>174</td>
       <td>173</td>
       <td>406</td>
       <td>174</td>
-      <td>173</td>
-      <td>23</td>
-      <td>4</td>
       <td>19</td>
       <td>19</td>
-      <td>173</td>
-      <td>8</td>
-      <td>8</td>
-      <td>156</td>
       <td>19</td>
-      <td>1</td>
     </tr>
   </tbody>
 </table>
@@ -245,6 +242,52 @@ import psycopg2
 engine = sqlalchemy.create_engine('postgresql://dre:password@localhost:5432/cincinnati')
 chcc_activities.to_sql('chcc_activities', engine)
 ```
+
+
+    ---------------------------------------------------------------------------
+
+    ValueError                                Traceback (most recent call last)
+
+    <ipython-input-9-65a7214cef2e> in <module>
+          2 import psycopg2
+          3 engine = sqlalchemy.create_engine('postgresql://dre:password@localhost:5432/cincinnati')
+    ----> 4 chcc_activities.to_sql('chcc_activities', engine)
+    
+
+    C:\Program Files\Python37\lib\site-packages\pandas\core\generic.py in to_sql(self, name, con, schema, if_exists, index, index_label, chunksize, dtype, method)
+       2529         sql.to_sql(self, name, con, schema=schema, if_exists=if_exists,
+       2530                    index=index, index_label=index_label, chunksize=chunksize,
+    -> 2531                    dtype=dtype, method=method)
+       2532 
+       2533     def to_pickle(self, path, compression='infer',
+    
+
+    C:\Program Files\Python37\lib\site-packages\pandas\io\sql.py in to_sql(frame, name, con, schema, if_exists, index, index_label, chunksize, dtype, method)
+        458     pandas_sql.to_sql(frame, name, if_exists=if_exists, index=index,
+        459                       index_label=index_label, schema=schema,
+    --> 460                       chunksize=chunksize, dtype=dtype, method=method)
+        461 
+        462 
+    
+
+    C:\Program Files\Python37\lib\site-packages\pandas\io\sql.py in to_sql(self, frame, name, if_exists, index, index_label, schema, chunksize, dtype, method)
+       1171                          if_exists=if_exists, index_label=index_label,
+       1172                          schema=schema, dtype=dtype)
+    -> 1173         table.create()
+       1174         table.insert(chunksize, method=method)
+       1175         if (not name.isdigit() and not name.islower()):
+    
+
+    C:\Program Files\Python37\lib\site-packages\pandas\io\sql.py in create(self)
+        573             if self.if_exists == 'fail':
+        574                 raise ValueError(
+    --> 575                     "Table '{name}' already exists.".format(name=self.name))
+        576             elif self.if_exists == 'replace':
+        577                 self.pd_sql.drop_table(self.name, self.schema)
+    
+
+    ValueError: Table 'chcc_activities' already exists.
+
 
 
 ```python
@@ -268,16 +311,12 @@ if(connection):
 
     Selecting rows from chcc_activities table using cursor.fetchall
     PostgreSQL connection is closed
-
+    
 
 
 ```python
 %load_ext sql
 ```
-
-    The sql extension is already loaded. To reload it, use:
-      %reload_ext sql
-
 
 
 ```python
@@ -303,7 +342,7 @@ FETCH FIRST 5 ROWS ONLY
 
      * postgresql://dre:***@localhost:5432/cincinnati
     5 rows affected.
-
+    
 
 
 
@@ -311,123 +350,123 @@ FETCH FIRST 5 ROWS ONLY
 <table>
     <tr>
         <th>index</th>
-        <th>category</th>
-        <th>topics</th>
-        <th>intervention</th>
-        <th>description</th>
-        <th>status</th>
-        <th>outcome</th>
-        <th>implementation_date</th>
-        <th>location</th>
         <th>address</th>
-        <th>zip_code</th>
-        <th>zipcode_pop_2016</th>
-        <th>partners</th>
-        <th>longitude</th>
+        <th>category</th>
+        <th>description</th>
+        <th>implementation_date</th>
+        <th>intervention</th>
         <th>latitude</th>
+        <th>location</th>
+        <th>longitude</th>
         <th>neighborhood</th>
-        <th>zipcode_pop_2010</th>
         <th>notes</th>
+        <th>outcome</th>
+        <th>partners</th>
+        <th>status</th>
+        <th>topics</th>
+        <th>zip_code</th>
+        <th>zipcode_pop_2010</th>
+        <th>zipcode_pop_2016</th>
     </tr>
     <tr>
         <td>3</td>
-        <td>HEALTHY EATING</td>
-        <td>SMALL RETAIL/SUPERMARKETS</td>
-        <td>SYSTEMS</td>
-        <td>HEALTHY FOOD OPTIONS (FRUIT AND VEGETABLE &quot;TO GO&quot; CUPS AND SALADS) AT UDF</td>
-        <td>COMPLETED</td>
-        <td>UDF HEALTHY FOOD RETAIL</td>
-        <td>2016-04-01T00:00:00.000</td>
-        <td>SHARONVILLE (UDF LOCATION)</td>
         <td>12191 MOSTELLER RD</td>
-        <td>45241</td>
-        <td>23707</td>
-        <td>UNITED DAIRY FARMERS, OHIO DEPARTMENT OF HEALTH</td>
-        <td>-84.4287401442128</td>
+        <td>HEALTHY EATING</td>
+        <td>HEALTHY FOOD OPTIONS (FRUIT AND VEGETABLE &quot;TO GO&quot; CUPS AND SALADS) AT UDF</td>
+        <td>2016-04-01T00:00:00.000</td>
+        <td>SYSTEMS</td>
         <td>39.2982939357563</td>
+        <td>SHARONVILLE (UDF LOCATION)</td>
+        <td>-84.4287401442128</td>
         <td>OUTSIDE CITY LIMITS</td>
-        <td>23044</td>
         <td>None</td>
+        <td>UDF HEALTHY FOOD RETAIL</td>
+        <td>UNITED DAIRY FARMERS, OHIO DEPARTMENT OF HEALTH</td>
+        <td>COMPLETED</td>
+        <td>SMALL RETAIL/SUPERMARKETS</td>
+        <td>45241</td>
+        <td>23044</td>
+        <td>23707</td>
     </tr>
     <tr>
         <td>4</td>
-        <td>HEALTHY EATING</td>
-        <td>SMALL RETAIL/SUPERMARKETS</td>
-        <td>SYSTEMS</td>
-        <td>HEALTHY FOOD OPTIONS (FRUIT AND VEGETABLE &quot;TO GO&quot; CUPS AND SALADS) AT UDF</td>
-        <td>COMPLETED</td>
-        <td>UDF HEALTHY FOOD RETAIL</td>
-        <td>2016-04-01T00:00:00.000</td>
-        <td>WASHINGTON COURT HOUSE (UDF LOCATION)</td>
         <td>1710 COLUMBUS AV</td>
-        <td>43160</td>
-        <td>22171</td>
-        <td>UNITED DAIRY FARMERS, OHIO DEPARTMENT OF HEALTH</td>
-        <td>-84.3418176</td>
+        <td>HEALTHY EATING</td>
+        <td>HEALTHY FOOD OPTIONS (FRUIT AND VEGETABLE &quot;TO GO&quot; CUPS AND SALADS) AT UDF</td>
+        <td>2016-04-01T00:00:00.000</td>
+        <td>SYSTEMS</td>
         <td>39.0769917000299</td>
+        <td>WASHINGTON COURT HOUSE (UDF LOCATION)</td>
+        <td>-84.3418176</td>
         <td>OUTSIDE CITY LIMITS</td>
-        <td>22305</td>
         <td>None</td>
+        <td>UDF HEALTHY FOOD RETAIL</td>
+        <td>UNITED DAIRY FARMERS, OHIO DEPARTMENT OF HEALTH</td>
+        <td>COMPLETED</td>
+        <td>SMALL RETAIL/SUPERMARKETS</td>
+        <td>43160</td>
+        <td>22305</td>
+        <td>22171</td>
     </tr>
     <tr>
         <td>9</td>
-        <td>HEALTHY EATING</td>
-        <td>SMALL RETAIL/SUPERMARKETS</td>
-        <td>SYSTEMS</td>
-        <td>HEALTHY FOOD OPTIONS (FRUIT AND VEGETABLE &quot;TO GO&quot; CUPS AND SALADS) AT UDF</td>
-        <td>COMPLETED</td>
-        <td>UDF HEALTHY FOOD RETAIL</td>
-        <td>2016-04-01T00:00:00.000</td>
-        <td>WEST UNION (UDF LOCATION)</td>
         <td>735 E MAIN ST</td>
-        <td>45693</td>
-        <td>8305</td>
-        <td>UNITED DAIRY FARMERS, OHIO DEPARTMENT OF HEALTH</td>
-        <td>-82.9797113</td>
+        <td>HEALTHY EATING</td>
+        <td>HEALTHY FOOD OPTIONS (FRUIT AND VEGETABLE &quot;TO GO&quot; CUPS AND SALADS) AT UDF</td>
+        <td>2016-04-01T00:00:00.000</td>
+        <td>SYSTEMS</td>
         <td>39.9576447000294</td>
+        <td>WEST UNION (UDF LOCATION)</td>
+        <td>-82.9797113</td>
         <td>OUTSIDE CITY LIMITS</td>
-        <td>8981</td>
         <td>None</td>
+        <td>UDF HEALTHY FOOD RETAIL</td>
+        <td>UNITED DAIRY FARMERS, OHIO DEPARTMENT OF HEALTH</td>
+        <td>COMPLETED</td>
+        <td>SMALL RETAIL/SUPERMARKETS</td>
+        <td>45693</td>
+        <td>8981</td>
+        <td>8305</td>
     </tr>
     <tr>
         <td>11</td>
-        <td>HEALTHY EATING</td>
-        <td>SMALL RETAIL/SUPERMARKETS</td>
-        <td>SYSTEMS</td>
-        <td>HEALTHY FOOD OPTIONS (FRUIT AND VEGETABLE &quot;TO GO&quot; CUPS AND SALADS) AT UDF</td>
-        <td>COMPLETED</td>
-        <td>UDF HEALTHY FOOD RETAIL</td>
-        <td>2016-04-01T00:00:00.000</td>
-        <td>WILDER (UDF LOCATION)</td>
         <td>509 LICKING PIKE</td>
-        <td>41071</td>
-        <td>20724</td>
-        <td>UNITED DAIRY FARMERS, OHIO DEPARTMENT OF HEALTH</td>
-        <td>-84.4866546</td>
+        <td>HEALTHY EATING</td>
+        <td>HEALTHY FOOD OPTIONS (FRUIT AND VEGETABLE &quot;TO GO&quot; CUPS AND SALADS) AT UDF</td>
+        <td>2016-04-01T00:00:00.000</td>
+        <td>SYSTEMS</td>
         <td>39.0553626000299</td>
+        <td>WILDER (UDF LOCATION)</td>
+        <td>-84.4866546</td>
         <td>OUTSIDE CITY LIMITS</td>
-        <td>20869</td>
         <td>None</td>
+        <td>UDF HEALTHY FOOD RETAIL</td>
+        <td>UNITED DAIRY FARMERS, OHIO DEPARTMENT OF HEALTH</td>
+        <td>COMPLETED</td>
+        <td>SMALL RETAIL/SUPERMARKETS</td>
+        <td>41071</td>
+        <td>20869</td>
+        <td>20724</td>
     </tr>
     <tr>
         <td>12</td>
-        <td>HEALTHY EATING</td>
-        <td>SMALL RETAIL/SUPERMARKETS</td>
-        <td>SYSTEMS</td>
-        <td>HEALTHY FOOD OPTIONS (FRUIT AND VEGETABLE &quot;TO GO&quot; CUPS AND SALADS) AT UDF</td>
-        <td>COMPLETED</td>
-        <td>UDF HEALTHY FOOD RETAIL</td>
-        <td>2016-04-01T00:00:00.000</td>
-        <td>HUBER HEIGHTS (UDF LOCATION)</td>
         <td>7224 TAYLORSVILLE RD</td>
-        <td>45424</td>
-        <td>50670</td>
-        <td>UNITED DAIRY FARMERS, OHIO DEPARTMENT OF HEALTH</td>
-        <td>-84.105625</td>
+        <td>HEALTHY EATING</td>
+        <td>HEALTHY FOOD OPTIONS (FRUIT AND VEGETABLE &quot;TO GO&quot; CUPS AND SALADS) AT UDF</td>
+        <td>2016-04-01T00:00:00.000</td>
+        <td>SYSTEMS</td>
         <td>39.8605103000295</td>
+        <td>HUBER HEIGHTS (UDF LOCATION)</td>
+        <td>-84.105625</td>
         <td>OUTSIDE CITY LIMITS</td>
-        <td>49930</td>
         <td>None</td>
+        <td>UDF HEALTHY FOOD RETAIL</td>
+        <td>UNITED DAIRY FARMERS, OHIO DEPARTMENT OF HEALTH</td>
+        <td>COMPLETED</td>
+        <td>SMALL RETAIL/SUPERMARKETS</td>
+        <td>45424</td>
+        <td>49930</td>
+        <td>50670</td>
     </tr>
 </table>
 
@@ -451,7 +490,7 @@ print(udf_intervention)
     | HEALTHY FOOD OPTIONS (FRUIT AND VEGETABLE "TO GO" CUPS AND SALADS) AT UDF |
     | HEALTHY FOOD OPTIONS (FRUIT AND VEGETABLE "TO GO" CUPS AND SALADS) AT UDF |
     +---------------------------------------------------------------------------+
-
+    
 
 
 ```python
@@ -463,7 +502,7 @@ udf_intervention_df
 
      * postgresql://dre:***@localhost:5432/cincinnati
     173 rows affected.
-
+    
 
 
 
@@ -517,9 +556,259 @@ udf_intervention_df
       <td>SYSTEMS</td>
     </tr>
     <tr>
+      <th>5</th>
+      <td>HEALTHY FOOD OPTIONS (FRUIT AND VEGETABLE "TO ...</td>
+      <td>SYSTEMS</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>HEALTHY FOOD OPTIONS (FRUIT AND VEGETABLE "TO ...</td>
+      <td>SYSTEMS</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>HEALTHY FOOD OPTIONS (FRUIT AND VEGETABLE "TO ...</td>
+      <td>SYSTEMS</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>HEALTHY FOOD OPTIONS (FRUIT AND VEGETABLE "TO ...</td>
+      <td>SYSTEMS</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>HEALTHY FOOD OPTIONS (FRUIT AND VEGETABLE "TO ...</td>
+      <td>SYSTEMS</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>HEALTHY FOOD OPTIONS (FRUIT AND VEGETABLE "TO ...</td>
+      <td>SYSTEMS</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>HEALTHY FOOD OPTIONS (FRUIT AND VEGETABLE "TO ...</td>
+      <td>SYSTEMS</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>HEALTHY FOOD OPTIONS (FRUIT AND VEGETABLE "TO ...</td>
+      <td>SYSTEMS</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>HEALTHY FOOD OPTIONS (FRUIT AND VEGETABLE "TO ...</td>
+      <td>SYSTEMS</td>
+    </tr>
+    <tr>
+      <th>14</th>
+      <td>HEALTHY FOOD OPTIONS (FRUIT AND VEGETABLE "TO ...</td>
+      <td>SYSTEMS</td>
+    </tr>
+    <tr>
+      <th>15</th>
+      <td>HEALTHY FOOD OPTIONS (FRUIT AND VEGETABLE "TO ...</td>
+      <td>SYSTEMS</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>HEALTHY FOOD OPTIONS (FRUIT AND VEGETABLE "TO ...</td>
+      <td>SYSTEMS</td>
+    </tr>
+    <tr>
+      <th>17</th>
+      <td>HEALTHY FOOD OPTIONS (FRUIT AND VEGETABLE "TO ...</td>
+      <td>SYSTEMS</td>
+    </tr>
+    <tr>
+      <th>18</th>
+      <td>HEALTHY FOOD OPTIONS (FRUIT AND VEGETABLE "TO ...</td>
+      <td>SYSTEMS</td>
+    </tr>
+    <tr>
+      <th>19</th>
+      <td>HEALTHY FOOD OPTIONS (FRUIT AND VEGETABLE "TO ...</td>
+      <td>SYSTEMS</td>
+    </tr>
+    <tr>
+      <th>20</th>
+      <td>HEALTHY FOOD OPTIONS (FRUIT AND VEGETABLE "TO ...</td>
+      <td>SYSTEMS</td>
+    </tr>
+    <tr>
+      <th>21</th>
+      <td>HEALTHY FOOD OPTIONS (FRUIT AND VEGETABLE "TO ...</td>
+      <td>SYSTEMS</td>
+    </tr>
+    <tr>
+      <th>22</th>
+      <td>HEALTHY FOOD OPTIONS (FRUIT AND VEGETABLE "TO ...</td>
+      <td>SYSTEMS</td>
+    </tr>
+    <tr>
+      <th>23</th>
+      <td>HEALTHY FOOD OPTIONS (FRUIT AND VEGETABLE "TO ...</td>
+      <td>SYSTEMS</td>
+    </tr>
+    <tr>
+      <th>24</th>
+      <td>HEALTHY FOOD OPTIONS (FRUIT AND VEGETABLE "TO ...</td>
+      <td>SYSTEMS</td>
+    </tr>
+    <tr>
+      <th>25</th>
+      <td>HEALTHY FOOD OPTIONS (FRUIT AND VEGETABLE "TO ...</td>
+      <td>SYSTEMS</td>
+    </tr>
+    <tr>
+      <th>26</th>
+      <td>HEALTHY FOOD OPTIONS (FRUIT AND VEGETABLE "TO ...</td>
+      <td>SYSTEMS</td>
+    </tr>
+    <tr>
+      <th>27</th>
+      <td>HEALTHY FOOD OPTIONS (FRUIT AND VEGETABLE "TO ...</td>
+      <td>SYSTEMS</td>
+    </tr>
+    <tr>
+      <th>28</th>
+      <td>HEALTHY FOOD OPTIONS (FRUIT AND VEGETABLE "TO ...</td>
+      <td>SYSTEMS</td>
+    </tr>
+    <tr>
+      <th>29</th>
+      <td>HEALTHY FOOD OPTIONS (FRUIT AND VEGETABLE "TO ...</td>
+      <td>SYSTEMS</td>
+    </tr>
+    <tr>
       <th>...</th>
       <td>...</td>
       <td>...</td>
+    </tr>
+    <tr>
+      <th>143</th>
+      <td>HEALTHY FOOD OPTIONS (FRUIT AND VEGETABLE "TO ...</td>
+      <td>SYSTEMS</td>
+    </tr>
+    <tr>
+      <th>144</th>
+      <td>HEALTHY FOOD OPTIONS (FRUIT AND VEGETABLE "TO ...</td>
+      <td>SYSTEMS</td>
+    </tr>
+    <tr>
+      <th>145</th>
+      <td>HEALTHY FOOD OPTIONS (FRUIT AND VEGETABLE "TO ...</td>
+      <td>SYSTEMS</td>
+    </tr>
+    <tr>
+      <th>146</th>
+      <td>HEALTHY FOOD OPTIONS (FRUIT AND VEGETABLE "TO ...</td>
+      <td>SYSTEMS</td>
+    </tr>
+    <tr>
+      <th>147</th>
+      <td>HEALTHY FOOD OPTIONS (FRUIT AND VEGETABLE "TO ...</td>
+      <td>SYSTEMS</td>
+    </tr>
+    <tr>
+      <th>148</th>
+      <td>HEALTHY FOOD OPTIONS (FRUIT AND VEGETABLE "TO ...</td>
+      <td>SYSTEMS</td>
+    </tr>
+    <tr>
+      <th>149</th>
+      <td>HEALTHY FOOD OPTIONS (FRUIT AND VEGETABLE "TO ...</td>
+      <td>SYSTEMS</td>
+    </tr>
+    <tr>
+      <th>150</th>
+      <td>HEALTHY FOOD OPTIONS (FRUIT AND VEGETABLE "TO ...</td>
+      <td>SYSTEMS</td>
+    </tr>
+    <tr>
+      <th>151</th>
+      <td>HEALTHY FOOD OPTIONS (FRUIT AND VEGETABLE "TO ...</td>
+      <td>SYSTEMS</td>
+    </tr>
+    <tr>
+      <th>152</th>
+      <td>HEALTHY FOOD OPTIONS (FRUIT AND VEGETABLE "TO ...</td>
+      <td>SYSTEMS</td>
+    </tr>
+    <tr>
+      <th>153</th>
+      <td>HEALTHY FOOD OPTIONS (FRUIT AND VEGETABLE "TO ...</td>
+      <td>SYSTEMS</td>
+    </tr>
+    <tr>
+      <th>154</th>
+      <td>HEALTHY FOOD OPTIONS (FRUIT AND VEGETABLE "TO ...</td>
+      <td>SYSTEMS</td>
+    </tr>
+    <tr>
+      <th>155</th>
+      <td>HEALTHY FOOD OPTIONS (FRUIT AND VEGETABLE "TO ...</td>
+      <td>SYSTEMS</td>
+    </tr>
+    <tr>
+      <th>156</th>
+      <td>HEALTHY FOOD OPTIONS (FRUIT AND VEGETABLE "TO ...</td>
+      <td>SYSTEMS</td>
+    </tr>
+    <tr>
+      <th>157</th>
+      <td>HEALTHY FOOD OPTIONS (FRUIT AND VEGETABLE "TO ...</td>
+      <td>SYSTEMS</td>
+    </tr>
+    <tr>
+      <th>158</th>
+      <td>HEALTHY FOOD OPTIONS (FRUIT AND VEGETABLE "TO ...</td>
+      <td>SYSTEMS</td>
+    </tr>
+    <tr>
+      <th>159</th>
+      <td>HEALTHY FOOD OPTIONS (FRUIT AND VEGETABLE "TO ...</td>
+      <td>SYSTEMS</td>
+    </tr>
+    <tr>
+      <th>160</th>
+      <td>HEALTHY FOOD OPTIONS (FRUIT AND VEGETABLE "TO ...</td>
+      <td>SYSTEMS</td>
+    </tr>
+    <tr>
+      <th>161</th>
+      <td>HEALTHY FOOD OPTIONS (FRUIT AND VEGETABLE "TO ...</td>
+      <td>SYSTEMS</td>
+    </tr>
+    <tr>
+      <th>162</th>
+      <td>HEALTHY FOOD OPTIONS (FRUIT AND VEGETABLE "TO ...</td>
+      <td>SYSTEMS</td>
+    </tr>
+    <tr>
+      <th>163</th>
+      <td>HEALTHY FOOD OPTIONS (FRUIT AND VEGETABLE "TO ...</td>
+      <td>SYSTEMS</td>
+    </tr>
+    <tr>
+      <th>164</th>
+      <td>HEALTHY FOOD OPTIONS (FRUIT AND VEGETABLE "TO ...</td>
+      <td>SYSTEMS</td>
+    </tr>
+    <tr>
+      <th>165</th>
+      <td>HEALTHY FOOD OPTIONS (FRUIT AND VEGETABLE "TO ...</td>
+      <td>SYSTEMS</td>
+    </tr>
+    <tr>
+      <th>166</th>
+      <td>HEALTHY FOOD OPTIONS (FRUIT AND VEGETABLE "TO ...</td>
+      <td>SYSTEMS</td>
+    </tr>
+    <tr>
+      <th>167</th>
+      <td>HEALTHY FOOD OPTIONS (FRUIT AND VEGETABLE "TO ...</td>
+      <td>SYSTEMS</td>
     </tr>
     <tr>
       <th>168</th>
@@ -575,17 +864,13 @@ chart.bar()
 
      * postgresql://dre:***@localhost:5432/cincinnati
     3 rows affected.
-
+    
 
 
 
 
     <BarContainer object of 3 artists>
 
-
-
-
-![png](./index_13_2.png)
 
 
 
@@ -598,7 +883,7 @@ chart.bar()
 
      * postgresql://dre:***@localhost:5432/cincinnati
     8 rows affected.
-
+    
 
 
 
