@@ -2,7 +2,7 @@
 title: Cincinnati Food Safety Program
 author: andre
 date: '2020-03-04'
-slug: cincinnati-food-safety-program
+slug: cincinnati-food-safety
 categories:
   - Public Health
   - R
@@ -20,6 +20,13 @@ output:
 ---
 
 
+```{r setup}
+
+knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file())
+
+```
+
+
 Image credit: [**Unsplash**](https://unsplash.com/photos/CpkOjOcXdUY)
 
 * <span style="color: #fd7f6f;">Complaint</span>
@@ -33,7 +40,6 @@ Image credit: [**Unsplash**](https://unsplash.com/photos/CpkOjOcXdUY)
 library("RSocrata")
 library(tidyverse)
 library(knitr)
-library(leaflet)
 library(DBI)
 ```
 
@@ -111,6 +117,14 @@ FROM foodsafety
 results %>% knitr::kable()
 ```
 
+
+
+
+```{r}
+results %>% head() %>% kable()
+```
+
+
 # Cities 
 
 ```{sql connection=con, output.var = "results" , cache=TRUE}
@@ -125,61 +139,17 @@ results %>% knitr::kable()
 
 # Postal Codes 
 
-```{sql connection=con, output.var = "results" , cache=TRUE}
+```{sql connection=con, output.var = "results"}
 SELECT DISTINCT postal_code AS postal_codes, city
 FROM foodsafety
 ```
 
-
-```{r message=FALSE, warning=FALSE, cache=TRUE}
+```{r message=FALSE, warning=FALSE}
 results %>% knitr::kable()
 ```
 
-# Map
 
 
-
-```{sql connection=con, output.var = "results" , cache=TRUE}
-ALTER TABLE foodsafety
-  ALTER COLUMN "latitude" TYPE NUMERIC(14, 11) 
-    USING ("latitude"::NUMERIC(14,11)),
-  ALTER COLUMN "longitude" TYPE NUMERIC(14, 11) 
-    USING ("longitude"::NUMERIC(14,11));
-```
-
-
-```{sql connection=con, output.var = "results" , cache=TRUE}
-SELECT  DISTINCT(postal_code), latitude, longitude, insp_type
-FROM foodsafety
-```
-
-
-```{r}
-results %>% head() %>% kable()
-```
-
-
-
-```{r fig.height=15, fig.width=15}
-pal <- colorFactor(c("#fd7f6f", "#7eb0d5", "#b2e061"), domain = c("COMPLAINT", "ROUTINE", "INITIAL"))
-
-leaflet(results) %>% addTiles() %>%
-  addCircleMarkers(
-    lng=~longitude, lat=~latitude,
-    color = ~pal(insp_type),
-    stroke = FALSE, fillOpacity = 0.5,
-    clusterOptions = markerClusterOptions()
-  ) %>% addProviderTiles(providers$Esri.NatGeoWorldMap)
-```
-
-
-Image credit: [**Unsplash**](https://unsplash.com/photos/CpkOjOcXdUY)
-
-* <span style="color: #fd7f6f;">Complaint</span>
-
-* <span style="color: #7eb0d5;">Routine</span>
-
-* <span style="color: #b2e061;">Initial</span>
 
 # Complaint Discriptions
 
@@ -190,10 +160,39 @@ WHERE insp_type = 'COMPLAINT'
 LIMIT 5
 ```
 
+# And now? 
 
 ```{r message=FALSE, warning=FALSE, cache=TRUE}
 results %>% knitr::kable()
 ```
+
+
+# A Map
+
+Will it go away?
+
+```{sql connection=con, output.var = "results"}
+ALTER TABLE foodsafety
+  ALTER COLUMN "latitude" TYPE NUMERIC(14, 11) 
+    USING ("latitude"::NUMERIC(14,11)),
+  ALTER COLUMN "longitude" TYPE NUMERIC(14, 11) 
+    USING ("longitude"::NUMERIC(14,11));
+```
+
+# And now?
+
+```{sql connection=con, output.var = "results" }
+SELECT  DISTINCT(postal_code), latitude, longitude, insp_type
+FROM foodsafety
+```
+
+# Here is a nice plot. 
+
+```{r}
+
+```
+
+
 
 # Build Site
 
@@ -211,6 +210,44 @@ setwd("/home/dre/Documents/blog/")
 blogdown::build_site()
 blogdown::serve_site()
 ```
+
+
+
+
+```{r}
+library(leaflet)
+pal <- colorFactor(c("#fd7f6f", "#7eb0d5", "#b2e061"), domain = c("COMPLAINT", "ROUTINE", "INITIAL"))
+
+leafMap <- leaflet(results) %>% addTiles() %>%
+  addCircleMarkers(
+    lng=~longitude, lat=~latitude,
+    color = ~pal(insp_type),
+    stroke = FALSE, fillOpacity = 0.5,
+    clusterOptions = markerClusterOptions()
+  ) %>% addProviderTiles(providers$Esri.NatGeoWorldMap)
+```
+
+
+```{r}
+library(htmlwidgets)
+library(htmltools)
+
+currentWD <- getwd()
+dir.create("static/leaflet", showWarnings = FALSE)
+setwd("static/leaflet")
+saveWidget(leafMap, "leafMap.html")
+setwd(currentWD)
+```
+
+
+The html that was saved with the saveWidget function can be called with the iframe html tag.
+
+<iframe seamless src="/leaflet/leafMap.html" width="100%" height="500"></iframe>
+
+
+* <span style="color: #fd7f6f;">Complaint</span>
+* <span style="color: #7eb0d5;">Routine</span>
+* <span style="color: #b2e061;">Initial</span>
 
 
 # References
@@ -234,3 +271,6 @@ blogdown::serve_site()
 [Leaflet for R](https://rstudio.github.io/leaflet/)
 
 [Postgres columns of latitude and longitude from varchar to numeric](https://dba.stackexchange.com/questions/78580/postgres-columns-of-latitude-and-longitude-from-varchar-to-numeric)
+
+[Using Leaflet and htmlwidgets in a Hugo-generated page](https://waterdata.usgs.gov/blog/leaflet/)
+
