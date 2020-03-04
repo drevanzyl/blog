@@ -149,6 +149,12 @@ sudo groupdel postgres
 sudo userdel -r dre
 sudo groupdel dre
 ```
+
+# Importing Data
+
+In future posts, I'll show how to import data used for analysis into the PostgreSQL database I've created. 
+
+
 # References
 1. [How To Remove PostgreSQL](https://www.liquidweb.com/kb/how-to-remove-postgresql/) 
 
