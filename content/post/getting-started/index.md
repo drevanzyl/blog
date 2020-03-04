@@ -20,8 +20,9 @@ tags:
 title: 'Academic: the website builder for Hugo'
 ---
 
+{{% toc %}}
 
-# My Appreciation
+## My Appreciation
 
 I was very reluctant to invest a significant amount of time in learning new tools to build a website. However, I had significant personal and career motivation to learn how to use [R](https://www.r-project.org/) and [R Studio](https://rstudio.com/). During my exploration of tools that I can use to improve my work reporting, I came across a book by Yihui Xie, Amber Thomas, and Alison Presmanes Hill with the title: [blogdown: Creating Websites with R Markdown](https://bookdown.org/yihui/blogdown/). Blogdown introduced me to the [Academic theme for Hugo](https://sourcethemes.com/academic/), the backbone for this website. With the guidance of blogdown and tools like RStudio and the Academic theme, I was able to build my website in a few hours. Now, I'm using the tools I work with every day to create my site. The best part of using these tools is that they do not limit me to using the R language for my analyses and publications; I can use Python and SQL too.
 
@@ -29,7 +30,7 @@ In appreciation to the authors who developed these tools, I've decided to keep t
 
 André
 
-# The Original Page Content 
+## The Original Page Content 
 
 **Create a free website with Academic using Markdown, Jupyter, or RStudio. Choose a beautiful color theme and build anything with the Page Builder - over 40 _widgets_, _themes_, and _language packs_ included!**
 

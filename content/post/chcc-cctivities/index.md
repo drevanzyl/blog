@@ -25,6 +25,14 @@ image:
 #   Otherwise, set `projects = []`.
 projects: []
 ---
+* <span style="color: #fd7f6f;">Healthy Eathing</span>
+
+* <span style="color: #7eb0d5;">Active Living</span>
+
+* <span style="color: #b2e061;">Tobacco Free Living</span>
+
+{{% toc %}}
+
 
 ```python
 import sys
@@ -240,54 +248,8 @@ chcc_activities.describe(include='all')
 import sqlalchemy
 import psycopg2
 engine = sqlalchemy.create_engine('postgresql://dre:password@localhost:5432/cincinnati')
-chcc_activities.to_sql('chcc_activities', engine)
+#chcc_activities.to_sql('chcc_activities', engine)
 ```
-
-
-    ---------------------------------------------------------------------------
-
-    ValueError                                Traceback (most recent call last)
-
-    <ipython-input-9-65a7214cef2e> in <module>
-          2 import psycopg2
-          3 engine = sqlalchemy.create_engine('postgresql://dre:password@localhost:5432/cincinnati')
-    ----> 4 chcc_activities.to_sql('chcc_activities', engine)
-    
-
-    C:\Program Files\Python37\lib\site-packages\pandas\core\generic.py in to_sql(self, name, con, schema, if_exists, index, index_label, chunksize, dtype, method)
-       2529         sql.to_sql(self, name, con, schema=schema, if_exists=if_exists,
-       2530                    index=index, index_label=index_label, chunksize=chunksize,
-    -> 2531                    dtype=dtype, method=method)
-       2532 
-       2533     def to_pickle(self, path, compression='infer',
-    
-
-    C:\Program Files\Python37\lib\site-packages\pandas\io\sql.py in to_sql(frame, name, con, schema, if_exists, index, index_label, chunksize, dtype, method)
-        458     pandas_sql.to_sql(frame, name, if_exists=if_exists, index=index,
-        459                       index_label=index_label, schema=schema,
-    --> 460                       chunksize=chunksize, dtype=dtype, method=method)
-        461 
-        462 
-    
-
-    C:\Program Files\Python37\lib\site-packages\pandas\io\sql.py in to_sql(self, frame, name, if_exists, index, index_label, schema, chunksize, dtype, method)
-       1171                          if_exists=if_exists, index_label=index_label,
-       1172                          schema=schema, dtype=dtype)
-    -> 1173         table.create()
-       1174         table.insert(chunksize, method=method)
-       1175         if (not name.isdigit() and not name.islower()):
-    
-
-    C:\Program Files\Python37\lib\site-packages\pandas\io\sql.py in create(self)
-        573             if self.if_exists == 'fail':
-        574                 raise ValueError(
-    --> 575                     "Table '{name}' already exists.".format(name=self.name))
-        576             elif self.if_exists == 'replace':
-        577                 self.pd_sql.drop_table(self.name, self.schema)
-    
-
-    ValueError: Table 'chcc_activities' already exists.
-
 
 
 ```python
@@ -317,6 +279,10 @@ if(connection):
 ```python
 %load_ext sql
 ```
+
+    The sql extension is already loaded. To reload it, use:
+      %reload_ext sql
+    
 
 
 ```python
@@ -491,6 +457,10 @@ print(udf_intervention)
     | HEALTHY FOOD OPTIONS (FRUIT AND VEGETABLE "TO GO" CUPS AND SALADS) AT UDF |
     +---------------------------------------------------------------------------+
     
+
+
+
+## A Long Table
 
 
 ```python
@@ -855,6 +825,10 @@ type(udf_intervention_df)
 
 
 
+
+## A Bar Plot
+
+
 ```python
 import matplotlib.pyplot as plt
 plt.figure(figsize=(18,7))
@@ -870,6 +844,8 @@ chart.bar()
 
 
     <BarContainer object of 3 artists>
+
+
 
 
 
@@ -893,8 +869,10 @@ chart.bar()
 
 
 
-![png](./index_14_2.png)
+![png](./index_21_2.png)
 
+
+jupyter nbconvert index.ipynb --to markdown --NbConvertApp.output_files_dir=.
 
 # References
 

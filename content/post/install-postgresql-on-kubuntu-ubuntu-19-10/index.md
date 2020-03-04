@@ -22,6 +22,8 @@ projects: []
 toc: true
 toc: float
 markup: blackfriday
+subtitle: Creating a pace to store your data.
+summary: Creating a pace to store your data.
 ---
 
 {{% toc %}}

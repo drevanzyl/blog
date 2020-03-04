@@ -13,14 +13,23 @@ summary: ''
 authors: []
 lastmod: '2020-03-04T07:53:58-05:00'
 featured: no
-image:
-  caption: ''
-  focal_point: ''
-  preview_only: no
 projects: []
+output:
+  blogdown::html_page:
+    toc: true
 ---
 
 
+Image credit: [**Unsplash**](https://unsplash.com/photos/CpkOjOcXdUY)
+
+* <span style="color: #fd7f6f;">Complaint</span>
+
+* <span style="color: #7eb0d5;">Routine</span>
+
+* <span style="color: #b2e061;">Initial</span>
+
+
+# Getting data
 
 ```{r echo=TRUE, eval=FALSE, message=FALSE, warning=FALSE, include=FALSE}
 ## Install the required package with:
@@ -55,7 +64,7 @@ print("connected")
 
 ```
 
-```{r}
+```{r, cache=TRUE}
 library(DBI)
 con <- dbConnect(odbc::odbc(), Server = "127.0.0.1", Database = "cincinnati", 
     UID = "dre", PWD = "password", Port = 5432, .connection_string = "Driver={PostgreSQL ODBC Driver(ANSI)};", 
@@ -72,14 +81,18 @@ dbWriteTable(con, "foodsafety", df, row.names=FALSE, append=TRUE)
 dbExistsTable(con, "foodsafety")
 ```
 
-```{sql connection=con, output.var = "healthy_eating" }
+# SQL
+
+Why is this not showing? 
+
+```{sql connection=con, output.var = "healthy_eating" , cache=TRUE}
 SELECT *
 FROM chcc_activities
 WHERE category ='HEALTHY EATING'
 ```
 
 
-```{r}
+```{r message=TRUE, warning=TRUE, cache=TRUE}
 library(reticulate)
 library(knitr)
 library(tidyverse)
@@ -88,6 +101,6 @@ head(healthy_eating) %>% knitr::kable()
 
 
 
-```{python}
+```{python, cache=TRUE}
 
 ```
