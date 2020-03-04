@@ -29,78 +29,208 @@ Image credit: [**Unsplash**](https://unsplash.com/photos/CpkOjOcXdUY)
 * <span style="color: #b2e061;">Initial</span>
 
 
+```{r message=FALSE, warning=FALSE}
+library("RSocrata")
+library(tidyverse)
+library(knitr)
+library(leaflet)
+library(DBI)
+```
+
+
 # Getting data
 
-```{r echo=TRUE, eval=FALSE, message=FALSE, warning=FALSE, include=FALSE}
+```{r echo=TRUE}
+if (Sys.info()["sysname"] != "Linux"){
+  con <- dbConnect(odbc::odbc(), Server = "127.0.0.1", Database = "cincinnati", 
+    UID = "dre", PWD = "password", Port = 5432, .connection_string = "Driver={PostgreSQL ODBC Driver(ANSI)};", 
+    timeout = 10)
+  
+} else {
+  con <- dbConnect(odbc::odbc(), Server = "127.0.0.1", Database = "cincinnati", 
+    UID = "dre", PWD = "password", Port = 5432, .connection_string = "Driver={PostgreSQL ANSI};", 
+    timeout = 10)
+}
+```
+
+
+
+```{r message=FALSE, warning=FALSE, include=FALSE}
+
 ## Install the required package with:
 ## install.packages("RSocrata")
 
-library("RSocrata")
 
-df <- read.socrata(
+if (!dbExistsTable(con, "foodsafety")){
+  df <- read.socrata(
   "https://data.cincinnati-oh.gov/resource/rg6p-b3h3.json"#,
   #app_token = "YOURAPPTOKENHERE",
   #email     = "user@example.com",
   #password  = "fakepassword"
 )
-```
-
-```{r echo=TRUE, eval=FALSE, include=FALSE}
-library(DBI)
-con <- dbConnect(odbc::odbc(), .connection_string = "Driver={PostgreSQL ODBC Driver(ANSI)};", timeout = 10)
-```
-
-
-```{r echo=TRUE, eval=FALSE, include=FALSE}
-library("RPostgreSQL")
-#drv <- dbDriver("PostgreSQL")
-con <- dbConnect(dbDriver("PostgreSQL"), 
-             dbname="cincinnati",
-             host="localhost",
-             port=5432,
-             user="dre",
-             password="password")
-print("connected")
-
-```
-
-```{r, cache=TRUE}
-library(DBI)
-con <- dbConnect(odbc::odbc(), Server = "127.0.0.1", Database = "cincinnati", 
-    UID = "dre", PWD = "password", Port = 5432, .connection_string = "Driver={PostgreSQL ODBC Driver(ANSI)};", 
-    timeout = 10)
-```
-
-
-```{r echo=TRUE, eval=FALSE, include=FALSE}
-dbWriteTable(con, "foodsafety", df, row.names=FALSE, append=TRUE)
-```
-
-
-```{r echo=TRUE, eval=FALSE, include=FALSE}
+  dbWriteTable(con, "foodsafety", df, row.names=FALSE, append=TRUE)
+}
 dbExistsTable(con, "foodsafety")
 ```
 
-# SQL
+# Column Names
 
-Why is this not showing? 
+```{sql connection=con, output.var = "results" , cache=TRUE}
+SELECT column_name,data_type 
+FROM information_schema.columns 
+WHERE table_name = 'foodsafety';
+```
 
-```{sql connection=con, output.var = "healthy_eating" , cache=TRUE}
+
+```{r message=FALSE, warning=FALSE, cache=TRUE}
+results %>% knitr::kable()
+```
+
+# Sample of Data
+
+```{sql connection=con, output.var = "results" , cache=TRUE}
 SELECT *
-FROM chcc_activities
-WHERE category ='HEALTHY EATING'
+FROM foodsafety
+LIMIT 5
 ```
 
 
-```{r message=TRUE, warning=TRUE, cache=TRUE}
-library(reticulate)
-library(knitr)
-library(tidyverse)
-head(healthy_eating) %>% knitr::kable()
+```{r message=FALSE, warning=FALSE, cache=TRUE}
+results %>% knitr::kable()
+```
+
+# Inspection Types 
+
+```{sql connection=con, output.var = "results" , cache=TRUE}
+SELECT DISTINCT insp_type
+FROM foodsafety
+```
+
+
+```{r message=FALSE, warning=FALSE, cache=TRUE}
+results %>% knitr::kable()
+```
+
+# Cities 
+
+```{sql connection=con, output.var = "results" , cache=TRUE}
+SELECT DISTINCT city AS Cities
+FROM foodsafety
+```
+
+
+```{r message=FALSE, warning=FALSE, cache=TRUE}
+results %>% knitr::kable()
+```
+
+# Postal Codes 
+
+```{sql connection=con, output.var = "results" , cache=TRUE}
+SELECT DISTINCT postal_code AS postal_codes, city
+FROM foodsafety
+```
+
+
+```{r message=FALSE, warning=FALSE, cache=TRUE}
+results %>% knitr::kable()
+```
+
+# Map
+
+
+
+```{sql connection=con, output.var = "results" , cache=TRUE}
+ALTER TABLE foodsafety
+  ALTER COLUMN "latitude" TYPE NUMERIC(14, 11) 
+    USING ("latitude"::NUMERIC(14,11)),
+  ALTER COLUMN "longitude" TYPE NUMERIC(14, 11) 
+    USING ("longitude"::NUMERIC(14,11));
+```
+
+
+```{sql connection=con, output.var = "results" , cache=TRUE}
+SELECT  DISTINCT(postal_code), latitude, longitude, insp_type
+FROM foodsafety
+```
+
+
+```{r}
+results %>% head() %>% kable()
 ```
 
 
 
-```{python, cache=TRUE}
+```{r fig.height=15, fig.width=15}
+pal <- colorFactor(c("#fd7f6f", "#7eb0d5", "#b2e061"), domain = c("COMPLAINT", "ROUTINE", "INITIAL"))
 
+leaflet(results) %>% addTiles() %>%
+  addCircleMarkers(
+    lng=~longitude, lat=~latitude,
+    color = ~pal(insp_type),
+    stroke = FALSE, fillOpacity = 0.5,
+    clusterOptions = markerClusterOptions()
+  ) %>% addProviderTiles(providers$Esri.NatGeoWorldMap)
 ```
+
+
+Image credit: [**Unsplash**](https://unsplash.com/photos/CpkOjOcXdUY)
+
+* <span style="color: #fd7f6f;">Complaint</span>
+
+* <span style="color: #7eb0d5;">Routine</span>
+
+* <span style="color: #b2e061;">Initial</span>
+
+# Complaint Discriptions
+
+```{sql connection=con, output.var = "results" , cache=TRUE}
+SELECT DISTINCT violation_description AS complaint_description
+FROM foodsafety
+WHERE insp_type = 'COMPLAINT'
+LIMIT 5
+```
+
+
+```{r message=FALSE, warning=FALSE, cache=TRUE}
+results %>% knitr::kable()
+```
+
+# Build Site
+
+```{r eval=FALSE, include=FALSE}
+if (exists("con")) {
+  library(DBI)
+  dbDisconnect(con)
+}
+
+con.State
+isPostgresqlIdCurrent(con)
+dbCanConnect(con)
+
+setwd("/home/dre/Documents/blog/")
+blogdown::build_site()
+blogdown::serve_site()
+```
+
+
+# References
+
+[Food Safety and Inspections](https://www.cincinnati-oh.gov/health/cincinnati-health-department-programs/food-safety-and-inspections-program/)
+
+[Cincinnati Food Safety Program](https://data.cincinnati-oh.gov/Thriving-Neighborhoods/Cincinnati-Food-Safety-Program/rg6p-b3h3)
+
+[SODA: Cincinnati Food Safety Program](https://dev.socrata.com/foundry/data.cincinnati-oh.gov/rg6p-b3h3)
+
+[Connect to a Database](https://db.rstudio.com/getting-started/connect-to-database/)
+
+[Databases using R](https://db.rstudio.com/)
+
+[How to get a list column names and datatype of a table in PostgreSQL?](https://stackoverflow.com/questions/20194806/how-to-get-a-list-column-names-and-datatype-of-a-table-in-postgresql)
+
+[Open A Socrata Dataset In Microsoft Power BI](https://support.socrata.com/hc/en-us/articles/115011432428)
+
+[SQL Tutorial](https://www.w3schools.com/sql/default.asp)
+
+[Leaflet for R](https://rstudio.github.io/leaflet/)
+
+[Postgres columns of latitude and longitude from varchar to numeric](https://dba.stackexchange.com/questions/78580/postgres-columns-of-latitude-and-longitude-from-varchar-to-numeric)

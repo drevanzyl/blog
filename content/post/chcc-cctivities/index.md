@@ -6,8 +6,8 @@ authors:
 - andre
 tags: [Jupyter, Health Promotion]
 categories: [Python, Public Health]
-date: "2020-02-03T00:00:00Z"
-lastMod: "2020-02-03T00:00:00Z"
+date: "2020-03-04T00:00:00Z"
+lastMod: "2020-03-04T00:00:00Z"
 featured: true
 draft: false
 
@@ -47,7 +47,7 @@ print (sys.version_info)
     3.7.1 (v3.7.1:260ec2c36a, Oct 20 2018, 14:57:15) [MSC v.1915 64 bit (AMD64)]
     Version info.
     sys.version_info(major=3, minor=7, micro=1, releaselevel='final', serial=0)
-    
+
 
 
 ```python
@@ -77,7 +77,7 @@ chcc_activities = pd.DataFrame.from_records(chcc_activities_soda)
 ```
 
     WARNING:root:Requests made without an app_token will be subject to strict throttling limits.
-    
+
 
 
 ```python
@@ -109,7 +109,7 @@ print(chcc_activities.info())
     dtypes: object(17)
     memory usage: 54.0+ KB
     None
-    
+
 
 
 ```python
@@ -273,7 +273,7 @@ if(connection):
 
     Selecting rows from chcc_activities table using cursor.fetchall
     PostgreSQL connection is closed
-    
+
 
 
 ```python
@@ -282,7 +282,7 @@ if(connection):
 
     The sql extension is already loaded. To reload it, use:
       %reload_ext sql
-    
+
 
 
 ```python
@@ -308,7 +308,7 @@ FETCH FIRST 5 ROWS ONLY
 
      * postgresql://dre:***@localhost:5432/cincinnati
     5 rows affected.
-    
+
 
 
 
@@ -456,7 +456,7 @@ print(udf_intervention)
     | HEALTHY FOOD OPTIONS (FRUIT AND VEGETABLE "TO GO" CUPS AND SALADS) AT UDF |
     | HEALTHY FOOD OPTIONS (FRUIT AND VEGETABLE "TO GO" CUPS AND SALADS) AT UDF |
     +---------------------------------------------------------------------------+
-    
+
 
 
 
@@ -472,7 +472,7 @@ udf_intervention_df
 
      * postgresql://dre:***@localhost:5432/cincinnati
     173 rows affected.
-    
+
 
 
 
@@ -838,7 +838,7 @@ chart.bar()
 
      * postgresql://dre:***@localhost:5432/cincinnati
     3 rows affected.
-    
+
 
 
 
@@ -859,7 +859,7 @@ chart.bar()
 
      * postgresql://dre:***@localhost:5432/cincinnati
     8 rows affected.
-    
+
 
 
 
