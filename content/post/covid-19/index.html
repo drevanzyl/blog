@@ -1,0 +1,112 @@
+---
+title: 'A Map of the Total Number of Confirmed Coronavirus Cases in Each Country or Region'
+author: andre
+date: '2020-03-06'
+slug: covid_19
+categories:
+  - Public Health
+  - R
+tags:
+  - 'COVID-19'
+subtitle: ''
+summary: ''
+authors: []
+lastmod: '2020-03-04T07:53:58-05:00'
+featured: no
+projects: []
+output:
+  blogdown::html_page:
+    toc: true
+---
+
+
+<div id="TOC">
+<ul>
+<li><a href="#references">References</a></li>
+<li><a href="#r-code">R Code</a></li>
+</ul>
+</div>
+
+<p>The data that was used in generating this map is available on the Github page of the <a href="https://github.com/CSSEGISandData">Center for Systems Science and Engineering at Johns Hopkins University</a></p>
+<iframe seamless src="/maps/covid-19/covid_total_map.html" width="100%" height="500">
+</iframe>
+<div id="references" class="section level1">
+<h1>References</h1>
+<p><a href="https://rviews.rstudio.com/2020/03/05/covid-19-epidemiology-with-r/">COVID-19 epidemiology with R</a></p>
+<p><a href="https://github.com/CSSEGISandData">CSSE at Johns Hopkins University</a></p>
+<p><a href="https://timchurches.github.io/blog/posts/2020-03-06-covid-19-call-to-arms/">COVID-19 call-to-arms</a></p>
+<p><a href="https://timchurches.github.io/blog/posts/2020-03-01-analysing-covid-19-2019-ncov-outbreak-data-with-r-part-2/">Analysing COVID-19 (2019-nCoV) outbreak data with R - part 2</a></p>
+<p><a href="https://www.bbc.com/news/world-africa-51752974">Coronavirus: South Africa’s President Ramaphosa warns of crisis</a></p>
+</div>
+<div id="r-code" class="section level1">
+<h1>R Code</h1>
+<pre><code># Load libraries
+library(tidyverse)
+library(knitr)
+library(plotly)
+library(htmlwidgets)
+library(htmltools)
+library(leaflet)
+library(stringr)
+
+# Get data and rename the columns 
+jhu_url &lt;- &quot;https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Confirmed.csv&quot;
+
+covid &lt;- read_csv(jhu_url) %&gt;% rename(province = &quot;Province/State&quot;, 
+  country_region = &quot;Country/Region&quot;) %&gt;% pivot_longer(-c(province, 
+  country_region, Lat, Long), names_to = &quot;Date&quot;, values_to = &quot;cumulative_cases&quot;)
+
+#Keep the total number of cases
+covid_total &lt;- covid %&gt;% group_by(country_region) %&gt;% filter(cumulative_cases == max(cumulative_cases)) %&gt;% slice(1)
+
+#Build the map
+covid_total_map &lt;- leaflet(covid_total) %&gt;% addTiles() %&gt;%
+  addCircleMarkers(
+    lng = ~ Long,
+    lat = ~ Lat,
+    radius = 10,
+    layerId = NULL,
+    group = ~ country_region,
+    stroke = TRUE,
+    color = &quot;red&quot;,
+    weight = 5,
+    opacity = 0.5,
+    fill = TRUE,
+    fillColor = &quot;red&quot;,
+    fillOpacity = 0.2,
+    dashArray = NULL,
+    popup = NULL,
+    popupOptions = NULL,
+    #clusterOptions = markerClusterOptions(),
+    label = paste(covid_total$cumulative_cases),
+    labelOptions = labelOptions(
+      interactive = FALSE,
+      clickable = FALSE,
+      noHide = NULL,
+      permanent = TRUE,
+      className = &quot;&quot;,
+      direction = &quot;auto&quot;,
+      offset = c(0, 0),
+      opacity = 1,
+      textsize = &quot;15px&quot;,
+      textOnly = TRUE,
+      style = NULL,
+      zoomAnimation = NULL,
+      sticky = TRUE
+    )
+  ) %&gt;%
+  #addPopups(popup = paste(&quot;Cumulative Cases:&quot;, covid_total$cumulative_cases)) %&gt;%
+  addLabelOnlyMarkers(label = paste(covid_total$cumulative_cases)) %&gt;%
+  addProviderTiles(providers$Esri)
+
+
+#Save the map
+currentWD &lt;- getwd()
+dir.create(&quot;static/maps/covid-19&quot;, showWarnings = FALSE)
+setwd(&quot;static/maps/covid-19&quot;)
+saveWidget(leafMap, &quot;covid_total_map.html&quot;)
+setwd(currentWD)
+
+# Filter by long and lat
+#africa &lt;- covid %&gt;% group_by(country_region) %&gt;% filter(between(Lat, -36.88, 36.46), cumulative_cases == max(cumulative_cases), between(Long, -20.72, 52.50 ))</code></pre>
+</div>
