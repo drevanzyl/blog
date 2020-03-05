@@ -45,6 +45,8 @@ library(leaflet)
 
 # Getting data
 
+First, you will need to create your database. Click [here](https://andrevanzyl.netlify.com/post/install-postgresql-on-kubuntu-ubuntu-19-10/) for instructions on setting up a PostgreSQL server on Kubuntu 19.10. 
+
 ```{r echo=TRUE}
 if (Sys.info()["sysname"] != "Linux"){
   con <- dbConnect(odbc::odbc(), Server = "127.0.0.1", Database = "cincinnati", 
@@ -58,7 +60,7 @@ if (Sys.info()["sysname"] != "Linux"){
 }
 ```
 
-```{r message=FALSE, warning=FALSE, include=FALSE}
+```{r message=FALSE, warning=FALSE, include=TRUE}
 
 ## Install the required package with:
 ## install.packages("RSocrata")
@@ -196,18 +198,12 @@ GROUP BY recordnum_license,	license_no,	business_name,	address,	city,	state,	pos
 --HAVING
 --    COUNT(*)>1
 ORDER BY counts DESC
-LIMIT 10;
+LIMIT 3;
 ```
 
 ```{r message=FALSE, warning=FALSE}
 results %>% knitr::kable()
 ```
-
-
-```{r message=FALSE, warning=FALSE}
-results %>% knitr::kable()
-```
-
 
 # Neighborhood
 
