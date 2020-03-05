@@ -20,13 +20,6 @@ output:
 ---
 
 
-```{r setup}
-
-knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file())
-
-```
-
-
 Image credit: [**Unsplash**](https://unsplash.com/photos/CpkOjOcXdUY)
 
 * <span style="color: #fd7f6f;">Complaint</span>
@@ -35,14 +28,18 @@ Image credit: [**Unsplash**](https://unsplash.com/photos/CpkOjOcXdUY)
 
 * <span style="color: #b2e061;">Initial</span>
 
+# Setup
 
-```{r message=FALSE, warning=FALSE}
+```{r setup}
+knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file())
 library("RSocrata")
 library(tidyverse)
 library(knitr)
 library(DBI)
+library(plotly)
+library(htmlwidgets)
+library(htmltools)
 ```
-
 
 # Getting data
 
@@ -58,8 +55,6 @@ if (Sys.info()["sysname"] != "Linux"){
     timeout = 10)
 }
 ```
-
-
 
 ```{r message=FALSE, warning=FALSE, include=FALSE}
 
@@ -79,6 +74,7 @@ if (!dbExistsTable(con, "foodsafety")){
 dbExistsTable(con, "foodsafety")
 ```
 
+
 # Column Names
 
 ```{sql connection=con, output.var = "results" , cache=TRUE}
@@ -92,18 +88,221 @@ WHERE table_name = 'foodsafety';
 results %>% knitr::kable()
 ```
 
-# Sample of Data
+# A Map
+
+```{sql connection=con, output.var = "results"}
+ALTER TABLE foodsafety
+  ALTER COLUMN "latitude" TYPE NUMERIC(14, 11) 
+    USING ("latitude"::NUMERIC(14,11)),
+  ALTER COLUMN "longitude" TYPE NUMERIC(14, 11) 
+    USING ("longitude"::NUMERIC(14,11));
+```
+
+```{sql connection=con, output.var = "results" }
+SELECT  DISTINCT(postal_code), latitude, longitude, insp_type
+FROM foodsafety
+```
+
+```{r}
+library(leaflet)
+pal <- colorFactor(c("#fd7f6f", "#7eb0d5", "#b2e061"), domain = c("COMPLAINT", "ROUTINE", "INITIAL"))
+
+leafMap <- leaflet(results) %>% addTiles() %>%
+  addCircleMarkers(
+    lng=~longitude, lat=~latitude,
+    color = ~pal(insp_type),
+    stroke = FALSE, fillOpacity = 0.5,
+    clusterOptions = markerClusterOptions()
+  ) %>% addProviderTiles(providers$Esri.NatGeoWorldMap)
+```
+
+```{r eval=FALSE, include=FALSE, echo=TRUE}
+leafMap
+```
+
+
+```{r}
+currentWD <- getwd()
+dir.create("static/leaflet", showWarnings = FALSE)
+setwd("static/leaflet")
+saveWidget(leafMap, "leafMap.html")
+setwd(currentWD)
+```
+
+/plots/fs/complaint_actions/complaint_actions.html
+
+<iframe seamless src="/leaflet/leafMap.html" width="100%" height="500"></iframe>
+
+
+# Using dplyr
+
+```{r}
+foodsafety <- tbl(con, "foodsafety")
+
+foodsafety %>% group_by(insp_type) %>% summarise(counts = n()) %>% show_query()
+```
 
 ```{sql connection=con, output.var = "results" , cache=TRUE}
+SELECT insp_type, COUNT(*) AS counts
+FROM foodsafety
+GROUP BY insp_type
+```
+
+```{r message=FALSE, warning=FALSE, cache=TRUE}
+results %>% knitr::kable()
+```
+
+
+
+
+```{sql connection=con, output.var = "results" }
+SELECT  DISTINCT(postal_code), latitude, longitude, insp_type
+FROM foodsafety
+WHERE insp_type = 'COMPLAINT'
+```
+
+```{r}
+library(leaflet)
+#pal <- colorFactor(c("#fd7f6f", "#7eb0d5", "#b2e061"), domain = c("COMPLAINT", "ROUTINE", "INITIAL"))
+
+leaflet(results) %>% addTiles() %>%
+  addCircleMarkers(
+    lng=~longitude, lat=~latitude,
+    color = ~pal(insp_type),
+    stroke = FALSE, fillOpacity = 0.5,
+    clusterOptions = markerClusterOptions()
+  ) %>% addProviderTiles(providers$Esri.NatGeoWorldMap)
+```
+
+# Sample of Data
+
+```{sql connection=con, output.var = "results"}
 SELECT *
 FROM foodsafety
-LIMIT 5
+LIMIT 10
+```
+
+
+```{r message=FALSE, warning=FALSE}
+results
+```
+
+
+# Business name
+
+
+```{sql connection=con, output.var = "results" , cache=TRUE}
+SELECT business_name, COUNT(*) AS counts
+FROM foodsafety
+GROUP BY business_name
+ORDER BY counts DESC
+LIMIT 10
+```
+
+```{r message=FALSE, warning=FALSE, cache=TRUE}
+results# %>% knitr::kable()
+```
+
+```{sql connection=con, output.var = "results" , cache=TRUE}
+ALTER TABLE foodsafety ALTER COLUMN business_name TYPE TEXT;
+```
+
+
+
+```{sql connection=con, output.var = "results" , cache=TRUE}
+SELECT business_name FROM foodsafety WHERE business_name LIKE 'GOL%'::TEXT;
+```
+
+```{r message=FALSE, warning=FALSE, cache=TRUE}
+results# %>% knitr::kable()
+```
+
+
+# Action dates
+
+```{sql connection=con, output.var = "results" , cache=TRUE}
+SELECT DISTINCT action_date, insp_subtype, business_name
+FROM foodsafety
+ORDER BY business_name, action_date
+LIMIT 10
 ```
 
 
 ```{r message=FALSE, warning=FALSE, cache=TRUE}
 results %>% knitr::kable()
 ```
+
+
+```{sql connection=con, output.var = "results" , cache=TRUE}
+SELECT DISTINCT action_date, insp_subtype, business_name
+FROM foodsafety
+ORDER BY business_name, action_date DESC
+LIMIT 10
+```
+
+
+```{r message=FALSE, warning=FALSE, cache=TRUE}
+results %>% knitr::kable()
+```
+
+
+```{sql connection=con, output.var = "results" , cache=TRUE}
+SELECT DISTINCT action_date, insp_subtype, business_name
+FROM foodsafety
+WHERE action_date >= '2020-03-01 00:00:00'::timestamp
+ORDER BY action_date DESC
+```
+
+
+```{r message=FALSE, warning=FALSE, cache=TRUE}
+results %>% knitr::kable()
+```
+
+
+
+```{r eval=FALSE, include=FALSE}
+foodsafety %>% 
+  select(action_date, insp_type) %>%
+  filter(!is.na(action_date), insp_type == "COMPLAINT") %>%
+  mutate(action_month = month(action_date, label = FALSE)) %>% 
+  group_by(action_month) %>% 
+  arrange(action_month) %>% 
+  summarise(complaint_actions = n()) %>% show_query()
+```
+
+
+```{sql connection=con, output.var = "results" , cache=TRUE}
+SELECT "action_month", COUNT(*) AS "complaint_actions"
+FROM (SELECT *
+FROM (SELECT "action_date", "insp_type", EXTRACT(MONTH FROM "action_date") AS "action_month"
+FROM (SELECT *
+FROM (SELECT "action_date", "insp_type"
+FROM "foodsafety") "dbplyr_117"
+WHERE ((NOT((("action_date") IS NULL))) AND ("insp_type" = 'COMPLAINT'))) "dbplyr_118") "dbplyr_119"
+ORDER BY "action_month") "dbplyr_120"
+GROUP BY "action_month"
+```
+
+```{r message=FALSE, warning=FALSE, cache=TRUE}
+results %>% knitr::kable()
+```
+
+```{r message=FALSE, warning=FALSE}
+fig <- plot_ly(x = ~results$action_month, y = ~results$complaint_actions, mode = 'lines', text = paste("seconds from now in"))
+
+root <- getwd()
+setwd("static/plots/fs/complaint_actions/")
+htmlwidgets::saveWidget(as_widget(fig), "complaint_actions.html")
+setwd(root)
+```
+
+```{r eval=FALSE, include=FALSE}
+fig
+```
+
+
+<iframe seamless src="/plots/fs/complaint_actions/complaint_actions.html" width="100%" height="500"></iframe>
+
 
 # Inspection Types 
 
@@ -117,12 +316,6 @@ FROM foodsafety
 results %>% knitr::kable()
 ```
 
-
-
-
-```{r}
-results %>% head() %>% kable()
-```
 
 
 # Cities 
@@ -160,38 +353,9 @@ WHERE insp_type = 'COMPLAINT'
 LIMIT 5
 ```
 
-# And now? 
-
 ```{r message=FALSE, warning=FALSE, cache=TRUE}
 results %>% knitr::kable()
 ```
-
-
-# A Map
-
-Will it go away?
-
-```{sql connection=con, output.var = "results"}
-ALTER TABLE foodsafety
-  ALTER COLUMN "latitude" TYPE NUMERIC(14, 11) 
-    USING ("latitude"::NUMERIC(14,11)),
-  ALTER COLUMN "longitude" TYPE NUMERIC(14, 11) 
-    USING ("longitude"::NUMERIC(14,11));
-```
-
-# And now?
-
-```{sql connection=con, output.var = "results" }
-SELECT  DISTINCT(postal_code), latitude, longitude, insp_type
-FROM foodsafety
-```
-
-# Here is a nice plot. 
-
-```{r}
-
-```
-
 
 
 # Build Site
@@ -206,49 +370,16 @@ con.State
 isPostgresqlIdCurrent(con)
 dbCanConnect(con)
 
-setwd("/home/dre/Documents/blog/")
-blogdown::build_site()
-blogdown::serve_site()
+  setwd("/home/dre/Documents/blog/")
+  blogdown::build_site()
+  blogdown::serve_site()
 ```
-
-
-
-
-```{r}
-library(leaflet)
-pal <- colorFactor(c("#fd7f6f", "#7eb0d5", "#b2e061"), domain = c("COMPLAINT", "ROUTINE", "INITIAL"))
-
-leafMap <- leaflet(results) %>% addTiles() %>%
-  addCircleMarkers(
-    lng=~longitude, lat=~latitude,
-    color = ~pal(insp_type),
-    stroke = FALSE, fillOpacity = 0.5,
-    clusterOptions = markerClusterOptions()
-  ) %>% addProviderTiles(providers$Esri.NatGeoWorldMap)
-```
-
-
-```{r}
-library(htmlwidgets)
-library(htmltools)
-
-currentWD <- getwd()
-dir.create("static/leaflet", showWarnings = FALSE)
-setwd("static/leaflet")
-saveWidget(leafMap, "leafMap.html")
-setwd(currentWD)
-```
-
 
 The html that was saved with the saveWidget function can be called with the iframe html tag.
-
-<iframe seamless src="/leaflet/leafMap.html" width="100%" height="500"></iframe>
-
 
 * <span style="color: #fd7f6f;">Complaint</span>
 * <span style="color: #7eb0d5;">Routine</span>
 * <span style="color: #b2e061;">Initial</span>
-
 
 # References
 
@@ -274,3 +405,8 @@ The html that was saved with the saveWidget function can be called with the ifra
 
 [Using Leaflet and htmlwidgets in a Hugo-generated page](https://waterdata.usgs.gov/blog/leaflet/)
 
+[PostgreSQL- Filter a date range](https://stackoverflow.com/questions/15817871/postgresql-filter-a-date-range)
+
+[Databases using dplyr](https://db.rstudio.com/dplyr/)
+
+[Time Series in R](https://plot.ly/r/time-series/)
