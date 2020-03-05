@@ -31,6 +31,7 @@ Image credit: [**Unsplash**](https://unsplash.com/photos/CpkOjOcXdUY)
 # Setup
 
 ```{r setup}
+knitr::opts_chunk$set(warning = FALSE, message = FALSE)
 knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file())
 library("RSocrata")
 library(tidyverse)
@@ -39,6 +40,7 @@ library(DBI)
 library(plotly)
 library(htmlwidgets)
 library(htmltools)
+library(leaflet)
 ```
 
 # Getting data
@@ -77,14 +79,14 @@ dbExistsTable(con, "foodsafety")
 
 # Column Names
 
-```{sql connection=con, output.var = "results" , cache=TRUE}
+```{sql connection=con, output.var = "results" }
 SELECT column_name,data_type 
 FROM information_schema.columns 
 WHERE table_name = 'foodsafety';
 ```
 
 
-```{r message=FALSE, warning=FALSE, cache=TRUE}
+```{r message=FALSE, warning=FALSE}
 results %>% knitr::kable()
 ```
 
@@ -103,8 +105,7 @@ SELECT  DISTINCT(postal_code), latitude, longitude, insp_type
 FROM foodsafety
 ```
 
-```{r}
-library(leaflet)
+```{r message=FALSE, warning=FALSE}
 pal <- colorFactor(c("#fd7f6f", "#7eb0d5", "#b2e061"), domain = c("COMPLAINT", "ROUTINE", "INITIAL"))
 
 leafMap <- leaflet(results) %>% addTiles() %>%
@@ -129,7 +130,6 @@ saveWidget(leafMap, "leafMap.html")
 setwd(currentWD)
 ```
 
-/plots/fs/complaint_actions/complaint_actions.html
 
 <iframe seamless src="/leaflet/leafMap.html" width="100%" height="500"></iframe>
 
@@ -142,13 +142,13 @@ foodsafety <- tbl(con, "foodsafety")
 foodsafety %>% group_by(insp_type) %>% summarise(counts = n()) %>% show_query()
 ```
 
-```{sql connection=con, output.var = "results" , cache=TRUE}
+```{sql connection=con, output.var = "results" }
 SELECT insp_type, COUNT(*) AS counts
 FROM foodsafety
 GROUP BY insp_type
 ```
 
-```{r message=FALSE, warning=FALSE, cache=TRUE}
+```{r message=FALSE, warning=FALSE}
 results %>% knitr::kable()
 ```
 
@@ -161,7 +161,7 @@ FROM foodsafety
 WHERE insp_type = 'COMPLAINT'
 ```
 
-```{r}
+```{r eval=FALSE, include=FALSE}
 library(leaflet)
 #pal <- colorFactor(c("#fd7f6f", "#7eb0d5", "#b2e061"), domain = c("COMPLAINT", "ROUTINE", "INITIAL"))
 
@@ -191,7 +191,7 @@ results
 # Business name
 
 
-```{sql connection=con, output.var = "results" , cache=TRUE}
+```{sql connection=con, output.var = "results" }
 SELECT business_name, COUNT(*) AS counts
 FROM foodsafety
 GROUP BY business_name
@@ -199,28 +199,30 @@ ORDER BY counts DESC
 LIMIT 10
 ```
 
-```{r message=FALSE, warning=FALSE, cache=TRUE}
+```{r message=FALSE, warning=FALSE}
 results# %>% knitr::kable()
 ```
 
-```{sql connection=con, output.var = "results" , cache=TRUE}
-ALTER TABLE foodsafety ALTER COLUMN business_name TYPE TEXT;
+
+
+```{sql connection=con, output.var = "results" }
+SELECT last_table_update, business_name, violation_comments
+FROM foodsafety 
+WHERE business_name
+LIKE '"BRIDGES%'
+ORDER BY last_table_update DESC
+LIMIT 10
+;
 ```
 
-
-
-```{sql connection=con, output.var = "results" , cache=TRUE}
-SELECT business_name FROM foodsafety WHERE business_name LIKE 'GOL%'::TEXT;
-```
-
-```{r message=FALSE, warning=FALSE, cache=TRUE}
+```{r message=FALSE, warning=FALSE}
 results# %>% knitr::kable()
 ```
 
 
 # Action dates
 
-```{sql connection=con, output.var = "results" , cache=TRUE}
+```{sql connection=con, output.var = "results" }
 SELECT DISTINCT action_date, insp_subtype, business_name
 FROM foodsafety
 ORDER BY business_name, action_date
@@ -228,12 +230,12 @@ LIMIT 10
 ```
 
 
-```{r message=FALSE, warning=FALSE, cache=TRUE}
+```{r message=FALSE, warning=FALSE}
 results %>% knitr::kable()
 ```
 
 
-```{sql connection=con, output.var = "results" , cache=TRUE}
+```{sql connection=con, output.var = "results" }
 SELECT DISTINCT action_date, insp_subtype, business_name
 FROM foodsafety
 ORDER BY business_name, action_date DESC
@@ -241,12 +243,12 @@ LIMIT 10
 ```
 
 
-```{r message=FALSE, warning=FALSE, cache=TRUE}
+```{r message=FALSE, warning=FALSE}
 results %>% knitr::kable()
 ```
 
 
-```{sql connection=con, output.var = "results" , cache=TRUE}
+```{sql connection=con, output.var = "results" }
 SELECT DISTINCT action_date, insp_subtype, business_name
 FROM foodsafety
 WHERE action_date >= '2020-03-01 00:00:00'::timestamp
@@ -254,7 +256,7 @@ ORDER BY action_date DESC
 ```
 
 
-```{r message=FALSE, warning=FALSE, cache=TRUE}
+```{r message=FALSE, warning=FALSE}
 results %>% knitr::kable()
 ```
 
@@ -271,7 +273,7 @@ foodsafety %>%
 ```
 
 
-```{sql connection=con, output.var = "results" , cache=TRUE}
+```{sql connection=con, output.var = "results" }
 SELECT "action_month", COUNT(*) AS "complaint_actions"
 FROM (SELECT *
 FROM (SELECT "action_date", "insp_type", EXTRACT(MONTH FROM "action_date") AS "action_month"
@@ -283,7 +285,7 @@ ORDER BY "action_month") "dbplyr_120"
 GROUP BY "action_month"
 ```
 
-```{r message=FALSE, warning=FALSE, cache=TRUE}
+```{r message=FALSE, warning=FALSE}
 results %>% knitr::kable()
 ```
 
@@ -306,13 +308,13 @@ fig
 
 # Inspection Types 
 
-```{sql connection=con, output.var = "results" , cache=TRUE}
+```{sql connection=con, output.var = "results" }
 SELECT DISTINCT insp_type
 FROM foodsafety
 ```
 
 
-```{r message=FALSE, warning=FALSE, cache=TRUE}
+```{r message=FALSE, warning=FALSE}
 results %>% knitr::kable()
 ```
 
@@ -320,13 +322,13 @@ results %>% knitr::kable()
 
 # Cities 
 
-```{sql connection=con, output.var = "results" , cache=TRUE}
+```{sql connection=con, output.var = "results" }
 SELECT DISTINCT city AS Cities
 FROM foodsafety
 ```
 
 
-```{r message=FALSE, warning=FALSE, cache=TRUE}
+```{r message=FALSE, warning=FALSE}
 results %>% knitr::kable()
 ```
 
@@ -346,15 +348,22 @@ results %>% knitr::kable()
 
 # Complaint Discriptions
 
-```{sql connection=con, output.var = "results" , cache=TRUE}
+```{sql connection=con, output.var = "results"}
 SELECT DISTINCT violation_description AS complaint_description
 FROM foodsafety
 WHERE insp_type = 'COMPLAINT'
 LIMIT 5
 ```
 
-```{r message=FALSE, warning=FALSE, cache=TRUE}
-results %>% knitr::kable()
+```{r message=FALSE, warning=FALSE}
+
+if (Sys.info()["sysname"] != "Linux"){
+  results
+  
+} else {
+  results %>% kable()
+}
+
 ```
 
 
