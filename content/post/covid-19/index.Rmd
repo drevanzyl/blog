@@ -31,9 +31,13 @@ library(leaflet)
 library(stringr)
 ```
 
-The data that was used in generating this map is available on the Github page of the [Center for Systems Science and Engineering at Johns Hopkins University](https://github.com/CSSEGISandData)
+{{% alert note %}}
+**<span style="color: #FF0000;">The data used for this map is outdated.</span>** Refer to this [**dashboard maintained by Johns Hopkins CSSE**](https://www.arcgis.com/apps/opsdashboard/index.html#/bda7594740fd40299423467b48e9ecf6) for up to date information. 
+{{% /alert %}}
 
-```{r eval=FALSE, message=FALSE, warning=FALSE, include=FALSE}
+The data that was used in generating this map is available on the Github page of the [Center for Systems Science and Engineering at Johns Hopkins University](https://github.com/CSSEGISandData). 
+
+```{r message=FALSE, warning=FALSE, include=FALSE}
 jhu_url <- "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Confirmed.csv"
 
 covid <- read_csv(jhu_url) %>% rename(province = "Province/State", 
@@ -82,9 +86,9 @@ covid_total_map <- leaflet(covid_total) %>% addTiles() %>%
   addProviderTiles(providers$Esri)
 
 currentWD <- getwd()
-dir.create("static/maps/covid-19", showWarnings = FALSE)
+#dir.create("static/maps/covid-19", showWarnings = FALSE)
 setwd("static/maps/covid-19")
-saveWidget(leafMap, "covid_total_map.html")
+saveWidget(covid_total_map, "covid_total_map.html")
 setwd(currentWD)
 ```
 
@@ -99,6 +103,8 @@ Click [here](https://github.com/drevanzyl/blog/tree/master/content/post/covid-19
 
 # References
 
+[Coronavirus COVID-19 Global Cases by Johns Hopkins CSSE](https://www.arcgis.com/apps/opsdashboard/index.html#/bda7594740fd40299423467b48e9ecf6)
+
 [COVID-19 epidemiology with R](https://rviews.rstudio.com/2020/03/05/covid-19-epidemiology-with-r/)
 
 [CSSE at Johns Hopkins University](https://github.com/CSSEGISandData)
@@ -108,4 +114,5 @@ Click [here](https://github.com/drevanzyl/blog/tree/master/content/post/covid-19
 [Analysing COVID-19 (2019-nCoV) outbreak data with R - part 2](https://timchurches.github.io/blog/posts/2020-03-01-analysing-covid-19-2019-ncov-outbreak-data-with-r-part-2/)
 
 [Coronavirus: South Africa's President Ramaphosa warns of crisis](https://www.bbc.com/news/world-africa-51752974)
+
 
