@@ -46,7 +46,7 @@ covid_total_map <- leaflet(covid_total) %>% addTiles() %>%
   addCircleMarkers(
     lng = ~ Long,
     lat = ~ Lat,
-    radius = 10,
+    radius = log(covid_total$cumulative_cases)*2,
     layerId = NULL,
     group = ~ country_region,
     stroke = TRUE,
@@ -87,6 +87,11 @@ setwd("static/maps/covid-19")
 saveWidget(leafMap, "covid_total_map.html")
 setwd(currentWD)
 ```
+
+```{r eval=FALSE, include=FALSE}
+covid_total_map
+```
+
 
 <iframe seamless src="/maps/covid-19/covid_total_map.html" width="100%" height="500"></iframe>
 
