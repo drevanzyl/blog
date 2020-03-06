@@ -1,5 +1,5 @@
 ---
-title: Cincinnati Food Safety Program
+title: Exploring the Cincinnati Food Safety Program Data Using PostgreSQL
 author: "André van Zyl"
 date: '2020-03-04'
 slug: cincinnati-food-safety
@@ -29,10 +29,10 @@ Image credit: [**Unsplash**](https://unsplash.com/photos/CpkOjOcXdUY)
 
 # Setup
 
-```{r setup, warning=FALSE, include=FALSE}
+```{r setup, warning=FALSE, include=FALSE, echo=TRUE}
 knitr::opts_chunk$set(message = FALSE, warning = FALSE)
 knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file())
-library("RSocrata")
+library(RSocrata)
 library(tidyverse)
 library(knitr)
 library(DBI)
@@ -40,6 +40,7 @@ library(plotly)
 library(htmlwidgets)
 library(htmltools)
 library(leaflet)
+library(quanteda)
 ```
 
 
@@ -91,6 +92,109 @@ WHERE table_name = 'foodsafety';
 results %>% knitr::kable()
 ```
 
+# Number of Rows
+
+```{sql connection=con, output.var = "results" }
+SELECT
+  COUNT(*) AS number_of_rows
+FROM foodsafety;
+```
+
+```{r message=FALSE, warning=FALSE}
+results %>% knitr::kable()
+```
+
+# Number of Unique Rows
+
+```{sql connection=con, output.var = "results" }
+SELECT 
+  COUNT(*) 
+    FROM (
+      SELECT DISTINCT *
+        FROM foodsafety) 
+        AS unique_foodsafety;
+```
+
+```{r message=FALSE, warning=FALSE}
+results %>% knitr::kable()
+```
+
+# Number of Unique Values
+
+```{sql connection=con, output.var = "results" }
+SELECT 
+  COUNT(DISTINCT recordnum_license) AS unique_recordnum_license,
+  COUNT(DISTINCT license_no) AS unique_license_no,
+  COUNT(DISTINCT business_name) AS unique_business_name,
+  COUNT(DISTINCT address) AS unique_address,
+  COUNT(DISTINCT city) AS unique_city
+FROM foodsafety;
+```
+
+```{r message=FALSE, warning=FALSE}
+results %>% knitr::kable()
+```
+
+
+```{sql connection=con, output.var = "results" }
+SELECT
+  COUNT(DISTINCT state) AS unique_state,
+  COUNT(DISTINCT postal_code) AS unique_postal_code,
+  COUNT(DISTINCT latitude) AS unique_latitude,
+  COUNT(DISTINCT longitude) AS unique_longitude,
+  COUNT(DISTINCT phone_number) AS unique_phone_number
+FROM foodsafety;
+```
+
+```{r message=FALSE, warning=FALSE}
+results %>% knitr::kable()
+```
+
+
+```{sql connection=con, output.var = "results" }
+SELECT 
+  COUNT(DISTINCT license_status) AS unique_license_status,
+  COUNT(DISTINCT recordnum_insp) AS unique_recordnum_insp,
+  COUNT(DISTINCT insp_type) AS unique_insp_type,
+  COUNT(DISTINCT insp_subtype) AS unique_insp_subtype,
+  COUNT(DISTINCT action_date) AS unique_action_date
+FROM foodsafety;
+```
+
+```{r message=FALSE, warning=FALSE}
+results %>% knitr::kable()
+```
+
+
+
+```{sql connection=con, output.var = "results" }
+SELECT 
+  COUNT(DISTINCT action_sequence) AS unique_action_sequence,
+  COUNT(DISTINCT action_status) AS unique_action_status,
+  COUNT(DISTINCT code) AS unique_code,
+  COUNT(DISTINCT violation_description) AS unique_violation_description,
+  COUNT(DISTINCT violation_comments) AS unique_violation_comments
+FROM foodsafety;
+```
+
+```{r message=FALSE, warning=FALSE}
+results %>% knitr::kable()
+```
+
+
+```{sql connection=con, output.var = "results" }
+SELECT 
+  COUNT(DISTINCT violation_key) AS unique_violation_key,
+  COUNT(DISTINCT last_table_update) AS unique_last_table_update,
+  COUNT(DISTINCT neighborhood) AS unique_neighborhood
+FROM foodsafety;
+```
+
+```{r message=FALSE, warning=FALSE}
+results %>% knitr::kable()
+```
+
+
 # A Map
 
 ```{sql connection=con, output.var = "results"}
@@ -122,6 +226,7 @@ leafMap <- leaflet(results) %>% addTiles() %>%
 leafMap
 ```
 
+**Inspection type**
 
 ```{r}
 currentWD <- getwd()
@@ -133,6 +238,10 @@ setwd(currentWD)
 
 
 <iframe seamless src="/leaflet/leafMap.html" width="100%" height="500"></iframe>
+
+* <span style="color: #fd7f6f;">Complaint</span>
+* <span style="color: #7eb0d5;">Routine</span>
+* <span style="color: #b2e061;">Initial</span>
 
 
 # Using dplyr
@@ -188,22 +297,7 @@ LIMIT 5
 results %>% kable()
 ```
 
-# Duplicate rows?
 
-
-```{sql connection=con, output.var = "results" }
-SELECT recordnum_license,	license_no,	business_name,	address,	city,	state,	postal_code,	latitude,	longitude,	phone_number,	license_status,	recordnum_insp,	insp_type,	insp_subtype,	action_date,	action_sequence,	action_status,	code,	violation_description,	violation_comments,	violation_key,	last_table_update,	neighborhood, COUNT(*) AS counts
-FROM foodsafety
-GROUP BY recordnum_license,	license_no,	business_name,	address,	city,	state,	postal_code,	latitude,	longitude,	phone_number,	license_status,	recordnum_insp,	insp_type,	insp_subtype,	action_date,	action_sequence,	action_status,	code,	violation_description,	violation_comments,	violation_key,	last_table_update,	neighborhood
---HAVING
---    COUNT(*)>1
-ORDER BY counts DESC
-LIMIT 3;
-```
-
-```{r message=FALSE, warning=FALSE}
-results %>% knitr::kable()
-```
 
 # Neighborhood
 
@@ -262,7 +356,8 @@ FROM
   foodsafety 
   -- Return rows where demand_loss_mw is not missing or unknown   
 WHERE 
-  action_date IS NULL;
+  action_date IS NULL
+LIMIT 10;
 ```
 
 
@@ -443,6 +538,119 @@ if (Sys.info()["sysname"] != "Linux"){
 
 ```
 
+# Violation descriptions
+
+```{sql connection=con, output.var = "results"}
+SELECT business_name, violation_description, action_date, postal_code, insp_subtype
+FROM foodsafety
+```
+
+
+```{r}
+violation_description_corpus <- corpus(
+  as_tibble(results),
+  docid_field = "business_name",
+  docnames = "insp_subtype",
+  text_field = "violation_description",
+  meta = list(),
+  unique_docnames = FALSE
+)
+```
+
+```{r}
+summary(violation_description_corpus) %>% arrange(desc(Text)) %>% head(10) %>% kable()
+```
+
+```{r}
+texts(violation_description_corpus)['"PIZZA/ITALIAN 3E3".1'] %>% kable()
+```
+
+```{r}
+kwic(violation_description_corpus, pattern = "cloths") %>% head(10) %>% kable()
+```
+
+
+```{r}
+violation_description_tokens <- tokens(
+  violation_description_corpus,
+  what = "sentence",
+  remove_punct = TRUE,
+  remove_symbols = TRUE,
+  remove_numbers = TRUE,
+  remove_url = TRUE,
+  remove_separators = TRUE,
+  split_hyphens = TRUE,
+  include_docvars = TRUE,
+  padding = FALSE,
+  verbose = quanteda_options("verbose")
+)
+```
+
+
+```{r}
+violation_description_tokens_dfm <-
+  dfm(
+    violation_description_tokens,
+    tolower = FALSE,
+    stem = FALSE,
+    select = NULL,
+    remove = c(stopwords("english"),"3717","food", "violation", "f", "b", '"vi.', '"vii.','"vii3.', '"iii.'),
+    dictionary = NULL,
+    thesaurus = NULL,
+    valuetype = c("glob", "regex", "fixed"),
+    case_insensitive = TRUE,
+    groups = NULL,
+    verbose = quanteda_options("verbose")
+  )
+
+topfeatures(violation_description_tokens_dfm, 40) %>% kable()
+```
+
+```{r}
+word_tokens <- tokens(
+  violation_description_corpus,
+  what = "word",
+  remove_punct = TRUE,
+  remove_symbols = TRUE,
+  remove_numbers = TRUE,
+  remove_url = TRUE,
+  remove_separators = TRUE,
+  split_hyphens = TRUE,
+  include_docvars = TRUE,
+  padding = FALSE,
+  verbose = quanteda_options("verbose")
+)
+
+three_gram <- tokens_ngrams(word_tokens, n = 3)
+
+three_gram_dfm <- dfm(
+    three_gram,
+    tolower = TRUE,
+    stem = FALSE,
+    select = NULL,
+    remove = c(stopwords("english"),"3717","food", "violation", "f", "b", '"vi.', '"vii.','"vii3.', '"iii.', '3717_a_violation', '3717_c_violation', '3717_b_violation', '3717_g_violation', '', ''),
+    dictionary = NULL,
+    thesaurus = NULL,
+    valuetype = c("glob", "regex", "fixed"),
+    case_insensitive = TRUE,
+    groups = NULL,
+    verbose = quanteda_options("verbose")
+  )
+```
+
+
+```{r}
+topfeatures(three_gram_dfm, 10) %>% kable()
+```
+
+
+```{r}
+#set.seed(100)
+textplot_wordcloud(three_gram_dfm, min_count = 6, random_order = TRUE,
+                   #rotation = .25,
+                   color = RColorBrewer::brewer.pal(8, "Dark2"))
+```
+
 
 # Build Site
 
@@ -462,11 +670,9 @@ dbCanConnect(con)
   servr::daemon_stop(1)
 ```
 
-The html that was saved with the saveWidget function can be called with the iframe html tag.
 
-* <span style="color: #fd7f6f;">Complaint</span>
-* <span style="color: #7eb0d5;">Routine</span>
-* <span style="color: #b2e061;">Initial</span>
+
+
 
 # References
 
@@ -497,3 +703,7 @@ The html that was saved with the saveWidget function can be called with the ifra
 [Databases using dplyr](https://db.rstudio.com/dplyr/)
 
 [Time Series in R](https://plot.ly/r/time-series/)
+
+[quanteda: Quick Start Guide](https://quanteda.io/articles/quickstart.html)
+
+[QUANTEDA TUTORIALS](https://tutorials.quanteda.io/)
