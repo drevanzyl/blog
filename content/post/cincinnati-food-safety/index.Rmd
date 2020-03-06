@@ -1,6 +1,6 @@
 ---
 title: Cincinnati Food Safety Program
-author: andre
+author: "André van Zyl"
 date: '2020-03-04'
 slug: cincinnati-food-safety
 categories:
