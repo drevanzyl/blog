@@ -33,7 +33,8 @@ library(stringr)
 
 {{% alert note %}}
 **<span style="color: #FF0000;">The data used for this map is outdated.</span>** Refer to this [**dashboard maintained by Johns Hopkins CSSE**](https://www.arcgis.com/apps/opsdashboard/index.html#/bda7594740fd40299423467b48e9ecf6) for up to date information. 
-{{% /alert %}}
+{{% /alert %}} 
+
 
 The data that was used in generating this map is available on the Github page of the [Center for Systems Science and Engineering at Johns Hopkins University](https://github.com/CSSEGISandData). 
 
