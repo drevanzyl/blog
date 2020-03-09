@@ -45,7 +45,12 @@ covid <- read_csv(jhu_url) %>% rename(province = "Province/State",
   country_region = "Country/Region") %>% pivot_longer(-c(province, 
   country_region, Lat, Long), names_to = "Date", values_to = "cumulative_cases")
 
-covid_total <- covid %>% group_by(country_region) %>% filter(cumulative_cases == max(cumulative_cases)) %>% slice(1)
+covid_total <- covid %>%
+  mutate(province = case_when(is.na(province) ~ country_region,
+                              TRUE ~ province)) %>% 
+  group_by(province) %>% 
+  filter(cumulative_cases == max(cumulative_cases)) %>% 
+  slice(1)
 
 covid_total_map <- leaflet(covid_total) %>% addTiles() %>%
   addCircleMarkers(
