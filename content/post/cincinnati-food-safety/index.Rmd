@@ -263,8 +263,6 @@ results %>% knitr::kable()
 ```
 
 
-
-
 ```{sql connection=con, output.var = "results" }
 SELECT  DISTINCT(postal_code), latitude, longitude, insp_type
 FROM foodsafety
