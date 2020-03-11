@@ -92,6 +92,16 @@ WHERE table_name = 'foodsafety';
 results %>% knitr::kable()
 ```
 
+# Correct Values
+
+```{sql connection=con, output.var = "results"}
+ALTER TABLE foodsafety
+  ALTER COLUMN "latitude" TYPE NUMERIC(14, 11) 
+    USING ("latitude"::NUMERIC(14,11)),
+  ALTER COLUMN "longitude" TYPE NUMERIC(14, 11) 
+    USING ("longitude"::NUMERIC(14,11));
+```
+
 # Number of Rows
 
 ```{sql connection=con, output.var = "results" }
@@ -194,30 +204,72 @@ FROM foodsafety;
 results %>% knitr::kable()
 ```
 
+# Create Restaurants Table
+
+
+```{sql eval=FALSE, connection=con, include=FALSE, output.var="results"}
+CREATE TABLE cinci_restaurants(
+business_name VARCHAR,
+address VARCHAR,	
+city VARCHAR,	
+state VARCHAR,	
+neighborhood VARCHAR,	
+postal_code VARCHAR,
+latitude NUMERIC,
+longitude NUMERIC,
+phone_number	VARCHAR
+);
+
+```
+
+```{sql connection=con, output.var = "results"}
+SELECT 
+  * 
+FROM 
+  cinci_restaurants
+LIMIT 10;
+```
+
+
+```{r message=FALSE, warning=FALSE}
+results %>% knitr::kable()
+```
+
+
+```{sql connection=con, output.var = "results"}
+INSERT INTO cinci_restaurants (business_name,	address,	city,	state,	neighborhood,	postal_code,	latitude,	longitude)
+SELECT DISTINCT business_name,	address,	city,	state,	neighborhood,	postal_code,	latitude,	longitude
+FROM 
+foodsafety;
+```
+
+
 
 # A Map
 
-```{sql connection=con, output.var = "results"}
-ALTER TABLE foodsafety
-  ALTER COLUMN "latitude" TYPE NUMERIC(14, 11) 
-    USING ("latitude"::NUMERIC(14,11)),
-  ALTER COLUMN "longitude" TYPE NUMERIC(14, 11) 
-    USING ("longitude"::NUMERIC(14,11));
-```
 
 ```{sql connection=con, output.var = "results" }
-SELECT  DISTINCT(postal_code), latitude, longitude, insp_type
-FROM foodsafety
+SELECT  business_name,	address,	city,	state,	neighborhood,	postal_code,	latitude,	longitude
+FROM cinci_restaurants
 ```
 
-```{r message=FALSE, warning=FALSE}
-pal <- colorFactor(c("#fd7f6f", "#7eb0d5", "#b2e061"), domain = c("COMPLAINT", "ROUTINE", "INITIAL"))
 
-leafMap <- leaflet(results) %>% addTiles() %>%
+
+```{r message=FALSE, warning=FALSE}
+#pal <- colorFactor(c("#fd7f6f", "#7eb0d5", "#b2e061"), domain = c("COMPLAINT", "ROUTINE", "INITIAL"))
+
+results <- results %>% 
+  group_by(business_name,	address,	city,	state,	neighborhood,	postal_code,	latitude,	longitude) %>% 
+  summarise(n())
+
+leafMap <-  results %>% 
+  leaflet() %>% 
+  addTiles() %>%
   addCircleMarkers(
     lng=~longitude, lat=~latitude,
-    color = ~pal(insp_type),
+    #color = ~pal(insp_type),
     stroke = FALSE, fillOpacity = 0.5,
+    label = results$business_name,
     clusterOptions = markerClusterOptions()
   ) %>% addProviderTiles(providers$Esri.NatGeoWorldMap)
 ```
