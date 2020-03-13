@@ -204,6 +204,7 @@ FROM foodsafety;
 results %>% knitr::kable()
 ```
 
+
 # Create Restaurants Table
 
 
@@ -757,3 +758,5 @@ dbCanConnect(con)
 [quanteda: Quick Start Guide](https://quanteda.io/articles/quickstart.html)
 
 [QUANTEDA TUTORIALS](https://tutorials.quanteda.io/)
+
+[PL/pgSQL Variables](https://www.postgresqltutorial.com/plpgsql-variables/)
