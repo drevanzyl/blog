@@ -1,0 +1,2505 @@
+---
+title: Exploring the Cincinnati Food Safety Program Data Using PostgreSQL
+author: "André van Zyl"
+date: '2020-03-04'
+slug: cincinnati-food-safety
+categories:
+  - Public Health
+  - R
+tags:
+  - Food Safety
+subtitle: ''
+summary: ''
+authors: []
+lastmod: '2020-03-04T07:53:58-05:00'
+featured: no
+projects: []
+output:
+  blogdown::html_page:
+    toc: true
+---
+
+
+<div id="TOC">
+<ul>
+<li><a href="#setup">Setup</a></li>
+<li><a href="#getting-data">Getting data</a></li>
+<li><a href="#column-names">Column Names</a></li>
+<li><a href="#correct-values">Correct Values</a></li>
+<li><a href="#number-of-rows">Number of Rows</a></li>
+<li><a href="#number-of-unique-rows">Number of Unique Rows</a></li>
+<li><a href="#number-of-unique-values">Number of Unique Values</a></li>
+<li><a href="#create-restaurants-table">Create Restaurants Table</a></li>
+<li><a href="#a-map">A Map</a></li>
+<li><a href="#using-dplyr">Using dplyr</a></li>
+<li><a href="#sample-of-data">Sample of Data</a></li>
+<li><a href="#neighborhood">Neighborhood</a></li>
+<li><a href="#business-name">Business name</a></li>
+<li><a href="#action-dates">Action dates</a></li>
+<li><a href="#inspection-types">Inspection Types</a></li>
+<li><a href="#cities">Cities</a></li>
+<li><a href="#postal-codes">Postal Codes</a></li>
+<li><a href="#complaint-discriptions">Complaint Discriptions</a></li>
+<li><a href="#violation-descriptions">Violation descriptions</a></li>
+<li><a href="#build-site">Build Site</a></li>
+<li><a href="#references">References</a></li>
+</ul>
+</div>
+
+<p>Image credit: <a href="https://unsplash.com/photos/CpkOjOcXdUY"><strong>Unsplash</strong></a></p>
+<ul>
+<li><p><span style="color: #fd7f6f;">Complaint</span></p></li>
+<li><p><span style="color: #7eb0d5;">Routine</span></p></li>
+<li><p><span style="color: #b2e061;">Initial</span></p></li>
+</ul>
+<div id="setup" class="section level1">
+<h1>Setup</h1>
+</div>
+<div id="getting-data" class="section level1">
+<h1>Getting data</h1>
+<p>First, you will need to create your database. Click <a href="https://andrevanzyl.netlify.com/post/install-postgresql-on-kubuntu-ubuntu-19-10/">here</a> for instructions on setting up a PostgreSQL server on Kubuntu 19.10.</p>
+<pre class="r"><code>if (Sys.info()[&quot;sysname&quot;] != &quot;Linux&quot;){
+  con &lt;- dbConnect(odbc::odbc(), Server = &quot;127.0.0.1&quot;, Database = &quot;cincinnati&quot;, 
+    UID = &quot;dre&quot;, PWD = &quot;password&quot;, Port = 5432, .connection_string = &quot;Driver={PostgreSQL ODBC Driver(ANSI)};&quot;, 
+    timeout = 10)
+  
+} else {
+  con &lt;- dbConnect(odbc::odbc(), Server = &quot;127.0.0.1&quot;, Database = &quot;cincinnati&quot;, 
+    UID = &quot;dre&quot;, PWD = &quot;password&quot;, Port = 5432, .connection_string = &quot;Driver={PostgreSQL ANSI};&quot;, 
+    timeout = 10)
+}</code></pre>
+<pre class="r"><code>## Install the required package with:
+## install.packages(&quot;RSocrata&quot;)
+
+
+if (!dbExistsTable(con, &quot;foodsafety&quot;)){
+  df &lt;- read.socrata(
+  &quot;https://data.cincinnati-oh.gov/resource/rg6p-b3h3.json&quot;#,
+  #app_token = &quot;YOURAPPTOKENHERE&quot;,
+  #email     = &quot;user@example.com&quot;,
+  #password  = &quot;fakepassword&quot;
+)
+  dbWriteTable(con, &quot;foodsafety&quot;, df, row.names=FALSE, append=FALSE)
+}
+dbExistsTable(con, &quot;foodsafety&quot;)</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+</div>
+<div id="column-names" class="section level1">
+<h1>Column Names</h1>
+<pre class="sql"><code>SELECT column_name,data_type 
+FROM information_schema.columns 
+WHERE table_name = &#39;foodsafety&#39;;</code></pre>
+<pre class="r"><code>results %&gt;% knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">column_name</th>
+<th align="left">data_type</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">recordnum_license</td>
+<td align="left">text</td>
+</tr>
+<tr class="even">
+<td align="left">license_no</td>
+<td align="left">text</td>
+</tr>
+<tr class="odd">
+<td align="left">business_name</td>
+<td align="left">text</td>
+</tr>
+<tr class="even">
+<td align="left">address</td>
+<td align="left">text</td>
+</tr>
+<tr class="odd">
+<td align="left">city</td>
+<td align="left">text</td>
+</tr>
+<tr class="even">
+<td align="left">state</td>
+<td align="left">text</td>
+</tr>
+<tr class="odd">
+<td align="left">postal_code</td>
+<td align="left">text</td>
+</tr>
+<tr class="even">
+<td align="left">latitude</td>
+<td align="left">numeric</td>
+</tr>
+<tr class="odd">
+<td align="left">longitude</td>
+<td align="left">numeric</td>
+</tr>
+<tr class="even">
+<td align="left">phone_number</td>
+<td align="left">text</td>
+</tr>
+<tr class="odd">
+<td align="left">license_status</td>
+<td align="left">text</td>
+</tr>
+<tr class="even">
+<td align="left">recordnum_insp</td>
+<td align="left">text</td>
+</tr>
+<tr class="odd">
+<td align="left">insp_type</td>
+<td align="left">text</td>
+</tr>
+<tr class="even">
+<td align="left">insp_subtype</td>
+<td align="left">text</td>
+</tr>
+<tr class="odd">
+<td align="left">action_date</td>
+<td align="left">timestamp without time zone</td>
+</tr>
+<tr class="even">
+<td align="left">action_sequence</td>
+<td align="left">text</td>
+</tr>
+<tr class="odd">
+<td align="left">action_status</td>
+<td align="left">text</td>
+</tr>
+<tr class="even">
+<td align="left">code</td>
+<td align="left">text</td>
+</tr>
+<tr class="odd">
+<td align="left">violation_description</td>
+<td align="left">text</td>
+</tr>
+<tr class="even">
+<td align="left">violation_comments</td>
+<td align="left">text</td>
+</tr>
+<tr class="odd">
+<td align="left">violation_key</td>
+<td align="left">text</td>
+</tr>
+<tr class="even">
+<td align="left">last_table_update</td>
+<td align="left">timestamp without time zone</td>
+</tr>
+<tr class="odd">
+<td align="left">neighborhood</td>
+<td align="left">text</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="correct-values" class="section level1">
+<h1>Correct Values</h1>
+<pre class="sql"><code>ALTER TABLE foodsafety
+  ALTER COLUMN &quot;latitude&quot; TYPE NUMERIC(14, 11) 
+    USING (&quot;latitude&quot;::NUMERIC(14,11)),
+  ALTER COLUMN &quot;longitude&quot; TYPE NUMERIC(14, 11) 
+    USING (&quot;longitude&quot;::NUMERIC(14,11));</code></pre>
+</div>
+<div id="number-of-rows" class="section level1">
+<h1>Number of Rows</h1>
+<pre class="sql"><code>SELECT
+  COUNT(*) AS number_of_rows
+FROM foodsafety;</code></pre>
+<pre class="r"><code>results %&gt;% knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">number_of_rows</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">206652</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="number-of-unique-rows" class="section level1">
+<h1>Number of Unique Rows</h1>
+<pre class="sql"><code>SELECT 
+  COUNT(*) 
+    FROM (
+      SELECT DISTINCT *
+        FROM foodsafety) 
+        AS unique_foodsafety;</code></pre>
+<pre class="r"><code>results %&gt;% knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">count</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">206652</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="number-of-unique-values" class="section level1">
+<h1>Number of Unique Values</h1>
+<pre class="sql"><code>SELECT 
+  COUNT(DISTINCT recordnum_license) AS unique_recordnum_license,
+  COUNT(DISTINCT license_no) AS unique_license_no,
+  COUNT(DISTINCT business_name) AS unique_business_name,
+  COUNT(DISTINCT address) AS unique_address,
+  COUNT(DISTINCT city) AS unique_city
+FROM foodsafety;</code></pre>
+<pre class="r"><code>results %&gt;% knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">unique_recordnum_license</th>
+<th align="right">unique_license_no</th>
+<th align="right">unique_business_name</th>
+<th align="right">unique_address</th>
+<th align="right">unique_city</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">3110</td>
+<td align="right">3233</td>
+<td align="right">3043</td>
+<td align="right">2053</td>
+<td align="right">3</td>
+</tr>
+</tbody>
+</table>
+<pre class="sql"><code>SELECT
+  COUNT(DISTINCT state) AS unique_state,
+  COUNT(DISTINCT postal_code) AS unique_postal_code,
+  COUNT(DISTINCT latitude) AS unique_latitude,
+  COUNT(DISTINCT longitude) AS unique_longitude,
+  COUNT(DISTINCT phone_number) AS unique_phone_number
+FROM foodsafety;</code></pre>
+<pre class="r"><code>results %&gt;% knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">unique_state</th>
+<th align="right">unique_postal_code</th>
+<th align="right">unique_latitude</th>
+<th align="right">unique_longitude</th>
+<th align="right">unique_phone_number</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">32</td>
+<td align="right">2219</td>
+<td align="right">2219</td>
+<td align="right">3567</td>
+</tr>
+</tbody>
+</table>
+<pre class="sql"><code>SELECT 
+  COUNT(DISTINCT license_status) AS unique_license_status,
+  COUNT(DISTINCT recordnum_insp) AS unique_recordnum_insp,
+  COUNT(DISTINCT insp_type) AS unique_insp_type,
+  COUNT(DISTINCT insp_subtype) AS unique_insp_subtype,
+  COUNT(DISTINCT action_date) AS unique_action_date
+FROM foodsafety;</code></pre>
+<pre class="r"><code>results %&gt;% knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">unique_license_status</th>
+<th align="right">unique_recordnum_insp</th>
+<th align="right">unique_insp_type</th>
+<th align="right">unique_insp_subtype</th>
+<th align="right">unique_action_date</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">5</td>
+<td align="right">34872</td>
+<td align="right">3</td>
+<td align="right">5</td>
+<td align="right">17321</td>
+</tr>
+</tbody>
+</table>
+<pre class="sql"><code>SELECT 
+  COUNT(DISTINCT action_sequence) AS unique_action_sequence,
+  COUNT(DISTINCT action_status) AS unique_action_status,
+  COUNT(DISTINCT code) AS unique_code,
+  COUNT(DISTINCT violation_description) AS unique_violation_description,
+  COUNT(DISTINCT violation_comments) AS unique_violation_comments
+FROM foodsafety;</code></pre>
+<pre class="r"><code>results %&gt;% knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">unique_action_sequence</th>
+<th align="right">unique_action_status</th>
+<th align="right">unique_code</th>
+<th align="right">unique_violation_description</th>
+<th align="right">unique_violation_comments</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">195986</td>
+<td align="right">4</td>
+<td align="right">564</td>
+<td align="right">885</td>
+<td align="right">124124</td>
+</tr>
+</tbody>
+</table>
+<pre class="sql"><code>SELECT 
+  COUNT(DISTINCT violation_key) AS unique_violation_key,
+  COUNT(DISTINCT last_table_update) AS unique_last_table_update,
+  COUNT(DISTINCT neighborhood) AS unique_neighborhood
+FROM foodsafety;</code></pre>
+<pre class="r"><code>results %&gt;% knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">unique_violation_key</th>
+<th align="right">unique_last_table_update</th>
+<th align="right">unique_neighborhood</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1590</td>
+<td align="right">1214</td>
+<td align="right">50</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="create-restaurants-table" class="section level1">
+<h1>Create Restaurants Table</h1>
+<pre class="sql"><code>SELECT 
+  * 
+FROM 
+  cinci_restaurants
+LIMIT 10;</code></pre>
+<pre class="r"><code>results %&gt;% knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">business_name</th>
+<th align="left">address</th>
+<th align="left">city</th>
+<th align="left">state</th>
+<th align="left">neighborhood</th>
+<th align="left">postal_code</th>
+<th align="right">latitude</th>
+<th align="right">longitude</th>
+<th align="left">phone_number</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">“MT WASHINGTON SCHOOL”</td>
+<td align="left">1730 MEARS AV</td>
+<td align="left">CINCINNATI</td>
+<td align="left">OH</td>
+<td align="left">MT. WASHINGTON</td>
+<td align="left">45230</td>
+<td align="right">39.08569</td>
+<td align="right">-84.38563</td>
+<td align="left">NA</td>
+</tr>
+<tr class="even">
+<td align="left">“BLUE BLOB’S DINER”</td>
+<td align="left">3815 ST FRANCIS XAVIER WY</td>
+<td align="left">CINCINNATI</td>
+<td align="left">OH</td>
+<td align="left">EVANSTON</td>
+<td align="left">45207</td>
+<td align="right">39.14961</td>
+<td align="right">-84.47469</td>
+<td align="left">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">“PIES &amp; PINTS”</td>
+<td align="left">56 W FREEDOM WY</td>
+<td align="left">CINCINNATI</td>
+<td align="left">OH</td>
+<td align="left">DOWNTOWN</td>
+<td align="left">45202</td>
+<td align="right">39.09713</td>
+<td align="right">-84.51288</td>
+<td align="left">NA</td>
+</tr>
+<tr class="even">
+<td align="left">“SONG LONG RESTAURANT”</td>
+<td align="left">1737 SECTION RD</td>
+<td align="left">CINCINNATI</td>
+<td align="left">OH</td>
+<td align="left">ROSELAWN</td>
+<td align="left">45237</td>
+<td align="right">39.19714</td>
+<td align="right">-84.45785</td>
+<td align="left">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">“GO CHILD DEVELOPMENT CENTER”</td>
+<td align="left">400 NEW ST</td>
+<td align="left">CINCINNATI</td>
+<td align="left">OH</td>
+<td align="left">DOWNTOWN</td>
+<td align="left">45202</td>
+<td align="right">39.10420</td>
+<td align="right">-84.50672</td>
+<td align="left">NA</td>
+</tr>
+<tr class="even">
+<td align="left">“MT WASHINGTON POST 484 AMERICAN LEGION”</td>
+<td align="left">1837 SUTTON AV</td>
+<td align="left">CINCINNATI</td>
+<td align="left">OH</td>
+<td align="left">MT. WASHINGTON</td>
+<td align="left">45230</td>
+<td align="right">39.08842</td>
+<td align="right">-84.39047</td>
+<td align="left">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">“NATHANIEL’S INSANITY NUTRITION”</td>
+<td align="left">129 CALHOUN ST</td>
+<td align="left">CINCINNATI</td>
+<td align="left">OH</td>
+<td align="left">CUF</td>
+<td align="left">45219</td>
+<td align="right">39.12800</td>
+<td align="right">-84.51417</td>
+<td align="left">NA</td>
+</tr>
+<tr class="even">
+<td align="left">“MAINSTREET PIZZA”</td>
+<td align="left">2701 BEARCAT WY</td>
+<td align="left">CINCINNATI</td>
+<td align="left">OH</td>
+<td align="left">CUF</td>
+<td align="left">45221</td>
+<td align="right">39.13111</td>
+<td align="right">-84.51757</td>
+<td align="left">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">“CONSTANT CARE LEARNING CENTER”</td>
+<td align="left">647 EAST EPWORTH AV</td>
+<td align="left">CINCINNATI</td>
+<td align="left">OH</td>
+<td align="left">SPRING GROVE VILLAGE</td>
+<td align="left">45232</td>
+<td align="right">39.17324</td>
+<td align="right">-84.51600</td>
+<td align="left">NA</td>
+</tr>
+<tr class="even">
+<td align="left">“LINDA’S KITCHEN”</td>
+<td align="left">5841 HAMILTON AV</td>
+<td align="left">CINCINNATI</td>
+<td align="left">OH</td>
+<td align="left">COLLEGE HILL</td>
+<td align="left">45224</td>
+<td align="right">39.19824</td>
+<td align="right">-84.54663</td>
+<td align="left">NA</td>
+</tr>
+</tbody>
+</table>
+<pre class="sql"><code>INSERT INTO cinci_restaurants (business_name,   address,    city,   state,  neighborhood,   postal_code,    latitude,   longitude)
+SELECT DISTINCT business_name,  address,    city,   state,  neighborhood,   postal_code,    latitude,   longitude
+FROM 
+foodsafety;</code></pre>
+</div>
+<div id="a-map" class="section level1">
+<h1>A Map</h1>
+<pre class="sql"><code>SELECT  business_name,  address,    city,   state,  neighborhood,   postal_code,    latitude,   longitude
+FROM cinci_restaurants</code></pre>
+<pre class="r"><code>#pal &lt;- colorFactor(c(&quot;#fd7f6f&quot;, &quot;#7eb0d5&quot;, &quot;#b2e061&quot;), domain = c(&quot;COMPLAINT&quot;, &quot;ROUTINE&quot;, &quot;INITIAL&quot;))
+
+results &lt;- results %&gt;% 
+  group_by(business_name,   address,    city,   state,  neighborhood,   postal_code,    latitude,   longitude) %&gt;% 
+  summarise(n())
+
+leafMap &lt;-  results %&gt;% 
+  leaflet() %&gt;% 
+  addTiles() %&gt;%
+  addCircleMarkers(
+    lng=~longitude, lat=~latitude,
+    #color = ~pal(insp_type),
+    stroke = FALSE, fillOpacity = 0.5,
+    label = results$business_name,
+    clusterOptions = markerClusterOptions()
+  ) %&gt;% addProviderTiles(providers$Esri.NatGeoWorldMap)</code></pre>
+<p><strong>Inspection type</strong></p>
+<pre class="r"><code>currentWD &lt;- getwd()
+dir.create(&quot;static/leaflet&quot;, showWarnings = FALSE)
+setwd(&quot;static/leaflet&quot;)
+saveWidget(leafMap, &quot;leafMap.html&quot;)
+setwd(currentWD)</code></pre>
+<iframe seamless src="/leaflet/leafMap.html" width="100%" height="500">
+</iframe>
+<ul>
+<li><span style="color: #fd7f6f;">Complaint</span></li>
+<li><span style="color: #7eb0d5;">Routine</span></li>
+<li><span style="color: #b2e061;">Initial</span></li>
+</ul>
+</div>
+<div id="using-dplyr" class="section level1">
+<h1>Using dplyr</h1>
+<pre class="r"><code>foodsafety &lt;- tbl(con, &quot;foodsafety&quot;)
+
+foodsafety %&gt;% group_by(insp_type) %&gt;% summarise(counts = n()) %&gt;% show_query()</code></pre>
+<pre><code>## &lt;SQL&gt;
+## SELECT &quot;insp_type&quot;, COUNT(*) AS &quot;counts&quot;
+## FROM &quot;foodsafety&quot;
+## GROUP BY &quot;insp_type&quot;</code></pre>
+<pre class="sql"><code>SELECT insp_type, COUNT(*) AS counts
+FROM foodsafety
+GROUP BY insp_type</code></pre>
+<pre class="r"><code>results %&gt;% knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">insp_type</th>
+<th align="right">counts</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">COMPLAINT</td>
+<td align="right">3746</td>
+</tr>
+<tr class="even">
+<td align="left">INITIAL</td>
+<td align="right">10</td>
+</tr>
+<tr class="odd">
+<td align="left">ROUTINE</td>
+<td align="right">202896</td>
+</tr>
+</tbody>
+</table>
+<pre class="sql"><code>SELECT  DISTINCT(postal_code), latitude, longitude, insp_type
+FROM foodsafety
+WHERE insp_type = &#39;COMPLAINT&#39;</code></pre>
+</div>
+<div id="sample-of-data" class="section level1">
+<h1>Sample of Data</h1>
+<pre class="sql"><code>SELECT *
+FROM foodsafety
+LIMIT 5</code></pre>
+<pre class="r"><code>results %&gt;% kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">recordnum_license</th>
+<th align="left">license_no</th>
+<th align="left">business_name</th>
+<th align="left">address</th>
+<th align="left">city</th>
+<th align="left">state</th>
+<th align="left">postal_code</th>
+<th align="right">latitude</th>
+<th align="right">longitude</th>
+<th align="left">phone_number</th>
+<th align="left">license_status</th>
+<th align="left">recordnum_insp</th>
+<th align="left">insp_type</th>
+<th align="left">insp_subtype</th>
+<th align="left">action_date</th>
+<th align="left">action_sequence</th>
+<th align="left">action_status</th>
+<th align="left">code</th>
+<th align="left">violation_description</th>
+<th align="left">violation_comments</th>
+<th align="left">violation_key</th>
+<th align="left">last_table_update</th>
+<th align="left">neighborhood</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">H201200242</td>
+<td align="left">FSO-019506-C3S</td>
+<td align="left">“CREATIVE BUTTERFLIES CHILDCARE CENTER”</td>
+<td align="left">6700 VINE ST</td>
+<td align="left">CINCINNATI</td>
+<td align="left">OH</td>
+<td align="left">45216</td>
+<td align="right">39.19120</td>
+<td align="right">-84.48287</td>
+<td align="left">513 761-3100</td>
+<td align="left">LICENSE</td>
+<td align="left">CFSI153903</td>
+<td align="left">ROUTINE</td>
+<td align="left">STANDARD INSPECTION</td>
+<td align="left">2015-12-15 18:28:26</td>
+<td align="left">A016042871</td>
+<td align="left">Not Abated</td>
+<td align="left">3717-1-06.4(D)(1)</td>
+<td align="left">“3717-1-06.4(D)(1) - Violation - Facilities: Ventilation systems: CleaningIntake and exhaust air ducts are a source of contamination by dust, dirt, and other materials.”</td>
+<td align="left">“The HVAC vent cover over the food prep sink had accumulated soil/lint on the cover. Clean the cover and maintain as necessary.”</td>
+<td align="left">HLE132600V</td>
+<td align="left">2015-12-16 03:07:21</td>
+<td align="left">CARTHAGE</td>
+</tr>
+<tr class="even">
+<td align="left">H200800024</td>
+<td align="left">FSO-000107-C4S</td>
+<td align="left">“BRUEGGER’S BAGEL BAKERY”</td>
+<td align="left">3317 CLIFTON AV</td>
+<td align="left">CINCINNATI</td>
+<td align="left">OH</td>
+<td align="left">45220</td>
+<td align="right">39.14190</td>
+<td align="right">-84.51981</td>
+<td align="left">513 221-2243</td>
+<td align="left">LICENSE</td>
+<td align="left">CFSI130196</td>
+<td align="left">ROUTINE</td>
+<td align="left">STANDARD INSPECTION</td>
+<td align="left">2013-08-22 04:00:00</td>
+<td align="left">A012396932</td>
+<td align="left">Abated</td>
+<td align="left">3717-1-02.3(A)(1)(2)(3)</td>
+<td align="left">“3717-1-02.3(A)(1)(2)(3) - Violation - Employee DrinksObserved unacceptable employee beverage containers.”</td>
+<td align="left">“Violation has been abated”</td>
+<td align="left">HLE130090V</td>
+<td align="left">2015-03-06 02:56:43</td>
+<td align="left">CLIFTON</td>
+</tr>
+<tr class="odd">
+<td align="left">H201100186</td>
+<td align="left">FSO-018753-C4S</td>
+<td align="left">“HOFF DINING COMMONS”</td>
+<td align="left">1625 HERALD AV</td>
+<td align="left">CINCINNATI</td>
+<td align="left">OH</td>
+<td align="left">45207</td>
+<td align="right">39.14830</td>
+<td align="right">-84.47335</td>
+<td align="left">513 745-4874</td>
+<td align="left">LICENSE</td>
+<td align="left">CFSI173219</td>
+<td align="left">ROUTINE</td>
+<td align="left">STANDARD INSPECTION</td>
+<td align="left">2017-04-07 04:00:00</td>
+<td align="left">A018016156</td>
+<td align="left">Not Abated</td>
+<td align="left">3717-1-03.4(F)(1)(a)</td>
+<td align="left">“3717-1-03.4(F)(1)(a) - Violation - TCS-Hot HoldingTCS foods were being hot held at temperatures &lt;135° F or a roast &lt;130° F.”</td>
+<td align="left">“There were a hot holding temperature violations as follow:-rice was presented at the grill in a DEEP bowl measuring 116F. Try using shallow pans, adjust the surface warmer or provide other means to maintain hot food over 135F.-vege burgers and black bean burgers measured 113F and 120F respectively at about 11a.m. Staff tried moving pans under hold holding from under heat lamps to pans setting directly on the hot block surface. This made little difference. Staff then placed food items on a sheet pan setting on the same hot block surface unit with better success. Temps were acceptable. -Spag and Alfredo sauce on a similar hot block surface unit measured 115F and 120F, respectively. After discussion staff felt felt it may be more practical to maintain these sauces cold -to be added to other ingredients that are cooked in sauce pans on at the grill: agreed.”</td>
+<td align="left">HLE160810V</td>
+<td align="left">2017-04-12 02:10:32</td>
+<td align="left">EVANSTON</td>
+</tr>
+<tr class="even">
+<td align="left">H200800667</td>
+<td align="left">FSO-005993-C4S</td>
+<td align="left">“FRISCH CENTRAL PKWY #3”</td>
+<td align="left">3226 CENTRAL PKWY</td>
+<td align="left">CINCINNATI</td>
+<td align="left">OH</td>
+<td align="left">45220</td>
+<td align="right">39.14133</td>
+<td align="right">-84.53143</td>
+<td align="left">513 559-0555</td>
+<td align="left">LICENSE</td>
+<td align="left">CFSI160879</td>
+<td align="left">ROUTINE</td>
+<td align="left">STANDARD INSPECTION</td>
+<td align="left">2016-04-01 13:09:52</td>
+<td align="left">A016430150</td>
+<td align="left">Abated On-Site</td>
+<td align="left">3717-1-03.2(K)</td>
+<td align="left">“3717-1-03.2(K) - Violation - In-use utensils-between-use storageIn-use utensils are improperly stored.”</td>
+<td align="left">“(Corrected On-Site) In use utensils stored in stagnant water”</td>
+<td align="left">HLE160535V</td>
+<td align="left">2016-04-02 02:07:06</td>
+<td align="left">CLIFTON</td>
+</tr>
+<tr class="odd">
+<td align="left">H201200161</td>
+<td align="left">FSO-019339-C4S</td>
+<td align="left">“TALBERT HOUSE”</td>
+<td align="left">2880 CENTRAL PKWY</td>
+<td align="left">CINCINNATI</td>
+<td align="left">OH</td>
+<td align="left">45225</td>
+<td align="right">39.13467</td>
+<td align="right">-84.53188</td>
+<td align="left">513 661-4620</td>
+<td align="left">LICENSE</td>
+<td align="left">CFSI163444</td>
+<td align="left">ROUTINE</td>
+<td align="left">STANDARD INSPECTION</td>
+<td align="left">2016-09-27 13:12:16</td>
+<td align="left">A017222249</td>
+<td align="left">Abated On-Site</td>
+<td align="left">3717-1-04.8(G)(2)</td>
+<td align="left">“3717-1-04.8(G)(2) - Violation - Kitchenware and tableware-handling.Knives, forks, and spoons that are not prewrapped were not presented so that only the handles are touched by employees or consumers.”</td>
+<td align="left">“(Corrected On-Site) Plastic utensils stored in random order, store inverted/handles up”</td>
+<td align="left">HLE161715V</td>
+<td align="left">2016-09-28 02:05:30</td>
+<td align="left">CUF</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="neighborhood" class="section level1">
+<h1>Neighborhood</h1>
+<pre class="sql"><code>SELECT neighborhood, COUNT(*) AS counts
+FROM foodsafety
+GROUP BY neighborhood
+ORDER BY counts DESC
+LIMIT 20</code></pre>
+<pre class="r"><code>results %&gt;% knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">neighborhood</th>
+<th align="right">counts</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">DOWNTOWN</td>
+<td align="right">36803</td>
+</tr>
+<tr class="even">
+<td align="left">OAKLEY</td>
+<td align="right">19769</td>
+</tr>
+<tr class="odd">
+<td align="left">CUF</td>
+<td align="right">14415</td>
+</tr>
+<tr class="even">
+<td align="left">WESTWOOD</td>
+<td align="right">12854</td>
+</tr>
+<tr class="odd">
+<td align="left">OVER-THE-RHINE</td>
+<td align="right">11506</td>
+</tr>
+<tr class="even">
+<td align="left">HYDE PARK</td>
+<td align="right">8540</td>
+</tr>
+<tr class="odd">
+<td align="left">CLIFTON</td>
+<td align="right">8237</td>
+</tr>
+<tr class="even">
+<td align="left">CORRYVILLE</td>
+<td align="right">6727</td>
+</tr>
+<tr class="odd">
+<td align="left">MADISONVILLE</td>
+<td align="right">6598</td>
+</tr>
+<tr class="even">
+<td align="left">AVONDALE</td>
+<td align="right">6467</td>
+</tr>
+<tr class="odd">
+<td align="left">WEST PRICE HILL</td>
+<td align="right">5137</td>
+</tr>
+<tr class="even">
+<td align="left">EAST PRICE HILL</td>
+<td align="right">5031</td>
+</tr>
+<tr class="odd">
+<td align="left">NORTHSIDE</td>
+<td align="right">4652</td>
+</tr>
+<tr class="even">
+<td align="left">WALNUT HILLS</td>
+<td align="right">4551</td>
+</tr>
+<tr class="odd">
+<td align="left">PLEASANT RIDGE</td>
+<td align="right">4145</td>
+</tr>
+<tr class="even">
+<td align="left">ROSELAWN</td>
+<td align="right">4124</td>
+</tr>
+<tr class="odd">
+<td align="left">COLLEGE HILL</td>
+<td align="right">3535</td>
+</tr>
+<tr class="even">
+<td align="left">EVANSTON</td>
+<td align="right">3356</td>
+</tr>
+<tr class="odd">
+<td align="left">BOND HILL</td>
+<td align="right">2932</td>
+</tr>
+<tr class="even">
+<td align="left">EAST END</td>
+<td align="right">2704</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="business-name" class="section level1">
+<h1>Business name</h1>
+<pre class="sql"><code>SELECT business_name, COUNT(*) AS counts
+FROM foodsafety
+GROUP BY business_name
+ORDER BY counts DESC
+LIMIT 10</code></pre>
+<pre class="r"><code>results %&gt;% knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">business_name</th>
+<th align="right">counts</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">“GREAT AMERICAN BALL PARK”</td>
+<td align="right">1666</td>
+</tr>
+<tr class="even">
+<td align="left">“IZZY’S”</td>
+<td align="right">1533</td>
+</tr>
+<tr class="odd">
+<td align="left">“GOLD STAR CHILI”</td>
+<td align="right">1508</td>
+</tr>
+<tr class="even">
+<td align="left">“MCDONALD’S”</td>
+<td align="right">1254</td>
+</tr>
+<tr class="odd">
+<td align="left">“HOOK FISH &amp; CHICKEN”</td>
+<td align="right">999</td>
+</tr>
+<tr class="even">
+<td align="left">“SKYLINE CHILI”</td>
+<td align="right">855</td>
+</tr>
+<tr class="odd">
+<td align="left">“SUBWAY”</td>
+<td align="right">836</td>
+</tr>
+<tr class="even">
+<td align="left">“RICHIE’S FAST FOOD RESTAURANT”</td>
+<td align="right">832</td>
+</tr>
+<tr class="odd">
+<td align="left">“LITTLE CAESARS”</td>
+<td align="right">730</td>
+</tr>
+<tr class="even">
+<td align="left">“FUJI’S HOUSE”</td>
+<td align="right">691</td>
+</tr>
+</tbody>
+</table>
+<pre class="sql"><code>SELECT last_table_update, business_name, violation_comments
+FROM foodsafety 
+WHERE business_name
+LIKE &#39;&quot;BRIDGES%&#39;
+ORDER BY last_table_update DESC
+LIMIT 10
+;</code></pre>
+<pre class="r"><code>results %&gt;% knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">last_table_update</th>
+<th align="left">business_name</th>
+<th align="left">violation_comments</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">2019-10-16 02:12:12</td>
+<td align="left">“BRIDGES LLC”</td>
+<td align="left">“Thawing TCS-Temperature / Time ControlTCS food was improperly thawed. Observed bulk frozen dough thawing at room temperature. Utilize mechanical refrigeration &lt;=41F.”</td>
+</tr>
+<tr class="even">
+<td align="left">2019-10-16 02:12:12</td>
+<td align="left">“BRIDGES LLC”</td>
+<td align="left">“Thawing TCS-Temperature / Time ControlTCS food was improperly thawed. Observed bulk frozen dough thawing at room temperature. Utilize mechanical refrigeration &lt;=41F.”</td>
+</tr>
+<tr class="odd">
+<td align="left">2019-10-16 02:12:12</td>
+<td align="left">“BRIDGES LLC”</td>
+<td align="left">“Equipment-good repair and proper adjustment.Equipment and/or components were not maintained in good working order. Observed reach in cooler with possible compressor leak. Repair.”</td>
+</tr>
+<tr class="even">
+<td align="left">2019-10-16 02:12:12</td>
+<td align="left">“BRIDGES LLC”</td>
+<td align="left">“OBSERVATION: Preventing Contamination by Separation, Packaging, and SegregationReady-to-eat food was not protected from cross-contamination by raw animal food. Observed shell eggs stored above and next to RTE foods.CORRECTIVE ACTION: PIC relocated eggs to bottom of refrigeration. Maintain separated.”</td>
+</tr>
+<tr class="odd">
+<td align="left">2019-10-16 02:12:12</td>
+<td align="left">“BRIDGES LLC”</td>
+<td align="left">“OBSERVATION: Preventing Contamination by Separation, Packaging, and SegregationReady-to-eat food was not protected from cross-contamination by raw animal food. Observed shell eggs stored above and next to RTE foods.CORRECTIVE ACTION: PIC relocated eggs to bottom of refrigeration. Maintain separated.”</td>
+</tr>
+<tr class="even">
+<td align="left">2019-05-31 02:10:54</td>
+<td align="left">“BRIDGES LLC”</td>
+<td align="left">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">2019-05-31 02:10:54</td>
+<td align="left">“BRIDGES LLC”</td>
+<td align="left">“Equipment, good repair, doors, sealsEquipment components were not intact, tight or properly adjusted. Cooler seals worn/torn. Please replace.”</td>
+</tr>
+<tr class="even">
+<td align="left">2019-05-31 02:10:54</td>
+<td align="left">“BRIDGES LLC”</td>
+<td align="left">“Non-food contact surfaces-Cleaning FrequencyNonfood-contact surfaces are not cleaned frequently enough. Small cooler seals with excessive soil and debris; thoroughly clean. Hood panels/suppression system with grease build-up; increase cleaning frequency.”</td>
+</tr>
+<tr class="odd">
+<td align="left">2019-05-31 02:10:54</td>
+<td align="left">“BRIDGES LLC”</td>
+<td align="left">“Equipment, linens, single-service items-storage.Clean equipment not properly stored. Observed clean bowls and utensils stored improperly. Store utensils inverted, with handles up and bowls/plates inverted.”</td>
+</tr>
+<tr class="even">
+<td align="left">2018-05-26 02:13:43</td>
+<td align="left">“BRIDGES LLC”</td>
+<td align="left">NA</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="action-dates" class="section level1">
+<h1>Action dates</h1>
+<pre class="sql"><code>SELECT 
+  * 
+FROM 
+  foodsafety 
+  -- Return rows where demand_loss_mw is not missing or unknown   
+WHERE 
+  action_date IS NULL
+LIMIT 10;</code></pre>
+<pre class="r"><code>results %&gt;% knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">recordnum_license</th>
+<th align="left">license_no</th>
+<th align="left">business_name</th>
+<th align="left">address</th>
+<th align="left">city</th>
+<th align="left">state</th>
+<th align="left">postal_code</th>
+<th align="right">latitude</th>
+<th align="right">longitude</th>
+<th align="left">phone_number</th>
+<th align="left">license_status</th>
+<th align="left">recordnum_insp</th>
+<th align="left">insp_type</th>
+<th align="left">insp_subtype</th>
+<th align="left">action_date</th>
+<th align="left">action_sequence</th>
+<th align="left">action_status</th>
+<th align="left">code</th>
+<th align="left">violation_description</th>
+<th align="left">violation_comments</th>
+<th align="left">violation_key</th>
+<th align="left">last_table_update</th>
+<th align="left">neighborhood</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">H201200165</td>
+<td align="left">FSO-019355-C4S</td>
+<td align="left">“BOSWELL’S”</td>
+<td align="left">1686 BLUE ROCK ST</td>
+<td align="left">CINCINNATI</td>
+<td align="left">OH</td>
+<td align="left">45223</td>
+<td align="right">39.16077</td>
+<td align="right">-84.54341</td>
+<td align="left">513 681-8100</td>
+<td align="left">LICENSE</td>
+<td align="left">CFSI173417</td>
+<td align="left">ROUTINE</td>
+<td align="left">STANDARD INSPECTION</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">3717-1-02.4(A)(2)</td>
+<td align="left">“3717-1-02.4(A)(2) - Violation - PIC-Level 2 CertificationNo manager has level 2 certification in food protection.”</td>
+<td align="left">""</td>
+<td align="left">HLE160112V</td>
+<td align="left">2017-09-12 02:10:29</td>
+<td align="left">NORTHSIDE</td>
+</tr>
+<tr class="even">
+<td align="left">H200800229</td>
+<td align="left">FSO-001939-C4S</td>
+<td align="left">“BLUE GIBBON”</td>
+<td align="left">1231 TENNESSEE AV</td>
+<td align="left">CINCINNATI</td>
+<td align="left">OH</td>
+<td align="left">45229</td>
+<td align="right">39.16812</td>
+<td align="right">-84.47687</td>
+<td align="left">513 641-4100</td>
+<td align="left">LICENSE</td>
+<td align="left">CFSI170456</td>
+<td align="left">ROUTINE</td>
+<td align="left">STANDARD INSPECTION</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">3717-1-02.2(D)</td>
+<td align="left">“3717-1-02.2(D) - Violation - Hands &amp; arms-where to wash (handwashing)Food employee(s) were not washing hands in a handwashing sink.”</td>
+<td align="left">""</td>
+<td align="left">HLE160050V</td>
+<td align="left">2017-09-09 02:10:08</td>
+<td align="left">NORTH AVONDALE - PADDOCK HILLS</td>
+</tr>
+<tr class="odd">
+<td align="left">H200801813</td>
+<td align="left">FSO-015886-C4S</td>
+<td align="left">“FUNKY’S CATERING”</td>
+<td align="left">1761 TENNESSEE AV</td>
+<td align="left">CINCINNATI</td>
+<td align="left">OH</td>
+<td align="left">45229</td>
+<td align="right">39.16689</td>
+<td align="right">-84.46733</td>
+<td align="left">513 841-9999</td>
+<td align="left">LICENSE</td>
+<td align="left">CFSI172473</td>
+<td align="left">ROUTINE</td>
+<td align="left">STANDARD INSPECTION</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">3717-1-04.5(A)(1)(2)</td>
+<td align="left">“3717-1-04.5(A)(1)&amp;(2) - Violation - Equipment cleanliness-food contactFood-contact surfaces were dirty.”</td>
+<td align="left">""</td>
+<td align="left">HLE161460V</td>
+<td align="left">2017-09-09 02:10:08</td>
+<td align="left">NORTH AVONDALE - PADDOCK HILLS</td>
+</tr>
+<tr class="even">
+<td align="left">H200801813</td>
+<td align="left">FSO-015886-C4S</td>
+<td align="left">“FUNKY’S CATERING”</td>
+<td align="left">1761 TENNESSEE AV</td>
+<td align="left">CINCINNATI</td>
+<td align="left">OH</td>
+<td align="left">45229</td>
+<td align="right">39.16689</td>
+<td align="right">-84.46733</td>
+<td align="left">513 841-9999</td>
+<td align="left">LICENSE</td>
+<td align="left">CFSI172473</td>
+<td align="left">ROUTINE</td>
+<td align="left">STANDARD INSPECTION</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">3717-1-04.4(N)</td>
+<td align="left">“3717-1-04.4(N) - Violation - Warewashing Equipment-Chemical Sanitization A chemical sanitizer was unregistered, improperly used, or improperly produced.”</td>
+<td align="left">""</td>
+<td align="left">HLE161421V</td>
+<td align="left">2017-09-09 02:10:08</td>
+<td align="left">NORTH AVONDALE - PADDOCK HILLS</td>
+</tr>
+<tr class="odd">
+<td align="left">H201200165</td>
+<td align="left">FSO-019355-C4S</td>
+<td align="left">“BOSWELL’S”</td>
+<td align="left">1686 BLUE ROCK ST</td>
+<td align="left">CINCINNATI</td>
+<td align="left">OH</td>
+<td align="left">45223</td>
+<td align="right">39.16077</td>
+<td align="right">-84.54341</td>
+<td align="left">513 681-8100</td>
+<td align="left">LICENSE</td>
+<td align="left">CFSI173417</td>
+<td align="left">ROUTINE</td>
+<td align="left">STANDARD INSPECTION</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">3717-1-03.4(F)(1)(b)</td>
+<td align="left">“3717-1-03.4(F)(1)(b) - Violation - TCS-cold holdingTCS foods were being held at temperatures &gt;41° F.”</td>
+<td align="left">""</td>
+<td align="left">HLE160815V</td>
+<td align="left">2017-09-12 02:10:29</td>
+<td align="left">NORTHSIDE</td>
+</tr>
+<tr class="even">
+<td align="left">H200800229</td>
+<td align="left">FSO-001939-C4S</td>
+<td align="left">“BLUE GIBBON”</td>
+<td align="left">1231 TENNESSEE AV</td>
+<td align="left">CINCINNATI</td>
+<td align="left">OH</td>
+<td align="left">45229</td>
+<td align="right">39.16812</td>
+<td align="right">-84.47687</td>
+<td align="left">513 641-4100</td>
+<td align="left">LICENSE</td>
+<td align="left">CFSI170456</td>
+<td align="left">ROUTINE</td>
+<td align="left">STANDARD INSPECTION</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">3717-1-03.4(F)(1)(b)</td>
+<td align="left">“3717-1-03.4(F)(1)(b) - Violation - TCS-cold holdingTCS foods were being held at temperatures &gt;41° F.”</td>
+<td align="left">""</td>
+<td align="left">HLE160815V</td>
+<td align="left">2017-09-09 02:10:08</td>
+<td align="left">NORTH AVONDALE - PADDOCK HILLS</td>
+</tr>
+<tr class="odd">
+<td align="left">H201200165</td>
+<td align="left">FSO-019355-C4S</td>
+<td align="left">“BOSWELL’S”</td>
+<td align="left">1686 BLUE ROCK ST</td>
+<td align="left">CINCINNATI</td>
+<td align="left">OH</td>
+<td align="left">45223</td>
+<td align="right">39.16077</td>
+<td align="right">-84.54341</td>
+<td align="left">513 681-8100</td>
+<td align="left">LICENSE</td>
+<td align="left">CFSI173417</td>
+<td align="left">ROUTINE</td>
+<td align="left">STANDARD INSPECTION</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">3717-1-03.4(F)(1)(a)</td>
+<td align="left">“3717-1-03.4(F)(1)(a) - Violation - TCS-Hot HoldingTCS foods were being hot held at temperatures &lt;135° F or a roast &lt;130° F.”</td>
+<td align="left">""</td>
+<td align="left">HLE160810V</td>
+<td align="left">2017-09-12 02:10:29</td>
+<td align="left">NORTHSIDE</td>
+</tr>
+<tr class="even">
+<td align="left">H200801813</td>
+<td align="left">FSO-015886-C4S</td>
+<td align="left">“FUNKY’S CATERING”</td>
+<td align="left">1761 TENNESSEE AV</td>
+<td align="left">CINCINNATI</td>
+<td align="left">OH</td>
+<td align="left">45229</td>
+<td align="right">39.16689</td>
+<td align="right">-84.46733</td>
+<td align="left">513 841-9999</td>
+<td align="left">LICENSE</td>
+<td align="left">CFSI172473</td>
+<td align="left">ROUTINE</td>
+<td align="left">STANDARD INSPECTION</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">3717-1-04.5(A)(3)</td>
+<td align="left">“3717-1-04.5(A)(3) - Violation - Equipment cleanliness-Nonfood-contactNon-food contact surfaces are dirty.”</td>
+<td align="left">""</td>
+<td align="left">HLE161465V</td>
+<td align="left">2017-09-09 02:10:08</td>
+<td align="left">NORTH AVONDALE - PADDOCK HILLS</td>
+</tr>
+<tr class="odd">
+<td align="left">H200802052</td>
+<td align="left">FSO-016528-C3S</td>
+<td align="left">“DUNKIN’ DONUTS / BASKIN ROBBINS”</td>
+<td align="left">435 E MARTIN LUTHER KING JR DR</td>
+<td align="left">CINCINNATI</td>
+<td align="left">OH</td>
+<td align="left">45219</td>
+<td align="right">39.13484</td>
+<td align="right">-84.49935</td>
+<td align="left">513-281-3700</td>
+<td align="left">RENEWAL</td>
+<td align="left">CFSI191680</td>
+<td align="left">ROUTINE</td>
+<td align="left">STANDARD INSPECTION</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">""</td>
+<td align="left">""</td>
+<td align="left">NA</td>
+<td align="left">2020-02-11 03:17:15</td>
+<td align="left">AVONDALE</td>
+</tr>
+<tr class="even">
+<td align="left">H200800229</td>
+<td align="left">FSO-001939-C4S</td>
+<td align="left">“BLUE GIBBON”</td>
+<td align="left">1231 TENNESSEE AV</td>
+<td align="left">CINCINNATI</td>
+<td align="left">OH</td>
+<td align="left">45229</td>
+<td align="right">39.16812</td>
+<td align="right">-84.47687</td>
+<td align="left">513 641-4100</td>
+<td align="left">LICENSE</td>
+<td align="left">CFSI170456</td>
+<td align="left">ROUTINE</td>
+<td align="left">STANDARD INSPECTION</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">3717-1-06.4(K)</td>
+<td align="left">“3717-1-06.4(K) - Violation - Facilities: Pest control: The presence of insects, rodents, and other pests is not being adequately controlled or minimized.”</td>
+<td align="left">""</td>
+<td align="left">HLE162645V</td>
+<td align="left">2017-09-09 02:10:08</td>
+<td align="left">NORTH AVONDALE - PADDOCK HILLS</td>
+</tr>
+</tbody>
+</table>
+<pre class="sql"><code>SELECT DISTINCT action_date, insp_subtype, business_name
+FROM foodsafety
+ORDER BY business_name, action_date
+LIMIT 10</code></pre>
+<pre class="r"><code>results %&gt;% knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">action_date</th>
+<th align="left">insp_subtype</th>
+<th align="left">business_name</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">2012-06-04 04:00:00</td>
+<td align="left">STANDARD INSPECTION</td>
+<td align="left">“1132 BAR”</td>
+</tr>
+<tr class="even">
+<td align="left">2013-01-15 13:45:33</td>
+<td align="left">STANDARD INSPECTION</td>
+<td align="left">“1132 BAR”</td>
+</tr>
+<tr class="odd">
+<td align="left">2013-04-18 04:00:00</td>
+<td align="left">STANDARD INSPECTION</td>
+<td align="left">“1132 BAR”</td>
+</tr>
+<tr class="even">
+<td align="left">2013-04-18 04:00:00</td>
+<td align="left">COMPLAINT</td>
+<td align="left">“1132 BAR”</td>
+</tr>
+<tr class="odd">
+<td align="left">2013-11-05 05:00:00</td>
+<td align="left">STANDARD INSPECTION</td>
+<td align="left">“1132 BAR”</td>
+</tr>
+<tr class="even">
+<td align="left">2014-04-07 04:00:00</td>
+<td align="left">STANDARD INSPECTION</td>
+<td align="left">“1132 BAR”</td>
+</tr>
+<tr class="odd">
+<td align="left">2014-05-21 04:00:00</td>
+<td align="left">COMPLAINT</td>
+<td align="left">“1132 BAR”</td>
+</tr>
+<tr class="even">
+<td align="left">2014-11-04 05:00:00</td>
+<td align="left">STANDARD INSPECTION</td>
+<td align="left">“1132 BAR”</td>
+</tr>
+<tr class="odd">
+<td align="left">2014-11-05 14:19:07</td>
+<td align="left">COMPLAINT</td>
+<td align="left">“1132 BAR”</td>
+</tr>
+<tr class="even">
+<td align="left">2014-11-05 14:35:51</td>
+<td align="left">COMPLAINT</td>
+<td align="left">“1132 BAR”</td>
+</tr>
+</tbody>
+</table>
+<pre class="sql"><code>SELECT DISTINCT action_date, insp_subtype, business_name
+FROM foodsafety
+ORDER BY business_name, action_date DESC
+LIMIT 10</code></pre>
+<pre class="r"><code>results %&gt;% knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">action_date</th>
+<th align="left">insp_subtype</th>
+<th align="left">business_name</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">2015-07-23 14:22:28</td>
+<td align="left">COMPLAINT</td>
+<td align="left">“1132 BAR”</td>
+</tr>
+<tr class="even">
+<td align="left">2015-07-23 14:18:59</td>
+<td align="left">COMPLAINT</td>
+<td align="left">“1132 BAR”</td>
+</tr>
+<tr class="odd">
+<td align="left">2015-05-11 13:18:43</td>
+<td align="left">STANDARD INSPECTION</td>
+<td align="left">“1132 BAR”</td>
+</tr>
+<tr class="even">
+<td align="left">2014-11-05 14:35:51</td>
+<td align="left">COMPLAINT</td>
+<td align="left">“1132 BAR”</td>
+</tr>
+<tr class="odd">
+<td align="left">2014-11-05 14:19:07</td>
+<td align="left">COMPLAINT</td>
+<td align="left">“1132 BAR”</td>
+</tr>
+<tr class="even">
+<td align="left">2014-11-04 05:00:00</td>
+<td align="left">STANDARD INSPECTION</td>
+<td align="left">“1132 BAR”</td>
+</tr>
+<tr class="odd">
+<td align="left">2014-05-21 04:00:00</td>
+<td align="left">COMPLAINT</td>
+<td align="left">“1132 BAR”</td>
+</tr>
+<tr class="even">
+<td align="left">2014-04-07 04:00:00</td>
+<td align="left">STANDARD INSPECTION</td>
+<td align="left">“1132 BAR”</td>
+</tr>
+<tr class="odd">
+<td align="left">2013-11-05 05:00:00</td>
+<td align="left">STANDARD INSPECTION</td>
+<td align="left">“1132 BAR”</td>
+</tr>
+<tr class="even">
+<td align="left">2013-04-18 04:00:00</td>
+<td align="left">STANDARD INSPECTION</td>
+<td align="left">“1132 BAR”</td>
+</tr>
+</tbody>
+</table>
+<pre class="sql"><code>SELECT DISTINCT action_date, insp_subtype, business_name
+FROM foodsafety
+WHERE action_date &gt;= &#39;2020-03-01 00:00:00&#39;::timestamp
+ORDER BY action_date DESC</code></pre>
+<pre class="r"><code>results %&gt;% knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">action_date</th>
+<th align="left">insp_subtype</th>
+<th align="left">business_name</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">2020-03-03 14:44:38</td>
+<td align="left">STANDARD INSPECTION</td>
+<td align="left">“NORTHSIDE DRIVE THRU”</td>
+</tr>
+<tr class="even">
+<td align="left">2020-03-03 14:44:37</td>
+<td align="left">STANDARD INSPECTION</td>
+<td align="left">“NORTHSIDE DRIVE THRU”</td>
+</tr>
+<tr class="odd">
+<td align="left">2020-03-03 13:53:51</td>
+<td align="left">STANDARD INSPECTION</td>
+<td align="left">“BANGKOK BISTRO”</td>
+</tr>
+<tr class="even">
+<td align="left">2020-03-02 17:30:33</td>
+<td align="left">STANDARD INSPECTION</td>
+<td align="left">“GOMEZ WALNUT”</td>
+</tr>
+<tr class="odd">
+<td align="left">2020-03-02 16:59:44</td>
+<td align="left">STANDARD INSPECTION</td>
+<td align="left">“BANGKOK BISTRO”</td>
+</tr>
+<tr class="even">
+<td align="left">2020-03-02 16:59:43</td>
+<td align="left">STANDARD INSPECTION</td>
+<td align="left">“BANGKOK BISTRO”</td>
+</tr>
+<tr class="odd">
+<td align="left">2020-03-02 16:56:27</td>
+<td align="left">STANDARD INSPECTION</td>
+<td align="left">“TOSTADO’S GRILL”</td>
+</tr>
+<tr class="even">
+<td align="left">2020-03-02 16:25:46</td>
+<td align="left">STANDARD INSPECTION</td>
+<td align="left">“ELI’S BBQ”</td>
+</tr>
+<tr class="odd">
+<td align="left">2020-03-02 15:59:18</td>
+<td align="left">STANDARD INSPECTION</td>
+<td align="left">“SONNY’S BEER GARDEN &amp; PATIO”</td>
+</tr>
+<tr class="even">
+<td align="left">2020-03-02 15:57:42</td>
+<td align="left">STANDARD INSPECTION</td>
+<td align="left">“SONNY’S BEER GARDEN &amp; PATIO”</td>
+</tr>
+<tr class="odd">
+<td align="left">2020-03-02 15:12:02</td>
+<td align="left">STANDARD INSPECTION</td>
+<td align="left">“THE KENWOOD BY SENIOR STAR LLC”</td>
+</tr>
+<tr class="even">
+<td align="left">2020-03-01 05:00:00</td>
+<td align="left">STANDARD INSPECTION</td>
+<td align="left">“CARL’S DELI”</td>
+</tr>
+</tbody>
+</table>
+<pre class="sql"><code>SELECT &quot;action_month&quot;, COUNT(*) AS &quot;complaint_actions&quot;
+FROM (SELECT *
+FROM (SELECT &quot;action_date&quot;, &quot;insp_type&quot;, EXTRACT(MONTH FROM &quot;action_date&quot;) AS &quot;action_month&quot;
+FROM (SELECT *
+FROM (SELECT &quot;action_date&quot;, &quot;insp_type&quot;
+FROM &quot;foodsafety&quot;) &quot;dbplyr_117&quot;
+WHERE ((NOT(((&quot;action_date&quot;) IS NULL))) AND (&quot;insp_type&quot; = &#39;COMPLAINT&#39;))) &quot;dbplyr_118&quot;) &quot;dbplyr_119&quot;
+ORDER BY &quot;action_month&quot;) &quot;table&quot;
+GROUP BY &quot;action_month&quot;</code></pre>
+<pre class="r"><code>results %&gt;% knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">action_month</th>
+<th align="right">complaint_actions</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">299</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="right">340</td>
+</tr>
+<tr class="odd">
+<td align="right">3</td>
+<td align="right">310</td>
+</tr>
+<tr class="even">
+<td align="right">4</td>
+<td align="right">376</td>
+</tr>
+<tr class="odd">
+<td align="right">5</td>
+<td align="right">315</td>
+</tr>
+<tr class="even">
+<td align="right">6</td>
+<td align="right">240</td>
+</tr>
+<tr class="odd">
+<td align="right">7</td>
+<td align="right">428</td>
+</tr>
+<tr class="even">
+<td align="right">8</td>
+<td align="right">444</td>
+</tr>
+<tr class="odd">
+<td align="right">9</td>
+<td align="right">288</td>
+</tr>
+<tr class="even">
+<td align="right">10</td>
+<td align="right">315</td>
+</tr>
+<tr class="odd">
+<td align="right">11</td>
+<td align="right">178</td>
+</tr>
+<tr class="even">
+<td align="right">12</td>
+<td align="right">213</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>fig &lt;- plot_ly(x = ~results$action_month, y = ~results$complaint_actions, mode = &#39;lines&#39;, text = paste(&quot;seconds from now in&quot;))
+
+root &lt;- getwd()
+setwd(&quot;static/plots/fs/complaint_actions/&quot;)
+htmlwidgets::saveWidget(as_widget(fig), &quot;complaint_actions.html&quot;)
+setwd(root)</code></pre>
+<iframe seamless src="/plots/fs/complaint_actions/complaint_actions.html" width="100%" height="500">
+</iframe>
+</div>
+<div id="inspection-types" class="section level1">
+<h1>Inspection Types</h1>
+<pre class="sql"><code>SELECT DISTINCT insp_type
+FROM foodsafety</code></pre>
+<pre class="r"><code>results %&gt;% knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">insp_type</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">ROUTINE</td>
+</tr>
+<tr class="even">
+<td align="left">COMPLAINT</td>
+</tr>
+<tr class="odd">
+<td align="left">INITIAL</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="cities" class="section level1">
+<h1>Cities</h1>
+<pre class="sql"><code>SELECT DISTINCT city AS Cities
+FROM foodsafety</code></pre>
+<pre class="r"><code>results %&gt;% knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">cities</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">CINCINNATI</td>
+</tr>
+<tr class="even">
+<td align="left">COLU</td>
+</tr>
+<tr class="odd">
+<td align="left">FAIR</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="postal-codes" class="section level1">
+<h1>Postal Codes</h1>
+<pre class="sql"><code>SELECT DISTINCT postal_code AS postal_codes, city
+FROM foodsafety
+LIMIT 10</code></pre>
+<pre class="r"><code>results %&gt;% knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">postal_codes</th>
+<th align="left">city</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">45217</td>
+<td align="left">CINCINNATI</td>
+</tr>
+<tr class="even">
+<td align="left">45227</td>
+<td align="left">COLU</td>
+</tr>
+<tr class="odd">
+<td align="left">45228</td>
+<td align="left">CINCINNATI</td>
+</tr>
+<tr class="even">
+<td align="left">45208</td>
+<td align="left">CINCINNATI</td>
+</tr>
+<tr class="odd">
+<td align="left">45213</td>
+<td align="left">COLU</td>
+</tr>
+<tr class="even">
+<td align="left">45239</td>
+<td align="left">CINCINNATI</td>
+</tr>
+<tr class="odd">
+<td align="left">45233</td>
+<td align="left">CINCINNATI</td>
+</tr>
+<tr class="even">
+<td align="left">45206</td>
+<td align="left">CINCINNATI</td>
+</tr>
+<tr class="odd">
+<td align="left">45211</td>
+<td align="left">CINCINNATI</td>
+</tr>
+<tr class="even">
+<td align="left">45212</td>
+<td align="left">CINCINNATI</td>
+</tr>
+</tbody>
+</table>
+<pre class="sql"><code>SELECT 
+  neighborhood,
+  business_name,
+  last_table_update,
+  violation_description,
+  postal_code
+FROM 
+  foodsafety
+WHERE 
+  ((
+    business_name LIKE &#39;&quot;BRIDGE%&#39; 
+    AND postal_code = &#39;45223&#39;
+  AND last_table_update &gt;= &#39;2019-10-01&#39;::timestamp
+  ) 
+  OR (postal_code = &#39;45220&#39; AND
+  business_name LIKE &#39;&quot;BR%&#39; AND
+  last_table_update &gt;= &#39;2019-10-01&#39;::timestamp))
+ORDER BY 
+  neighborhood,
+  business_name,
+  violation_description;</code></pre>
+<pre class="r"><code>results %&gt;% knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">neighborhood</th>
+<th align="left">business_name</th>
+<th align="left">last_table_update</th>
+<th align="left">violation_description</th>
+<th align="left">postal_code</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">CLIFTON</td>
+<td align="left">“BRUEGGER’S BAGELS #3743”</td>
+<td align="left">2019-10-22 02:13:42</td>
+<td align="left">“3717-1-02.4(B) - Violation - PIC Demonstration of KnowledgeThe person in charge was unable to demonstrate the necessary food safety knowledge.”</td>
+<td align="left">45220</td>
+</tr>
+<tr class="even">
+<td align="left">CLIFTON</td>
+<td align="left">“BRUEGGER’S BAGELS #3743”</td>
+<td align="left">2019-10-22 02:13:42</td>
+<td align="left">“3717-1-02.4(B) - Violation - PIC Demonstration of KnowledgeThe person in charge was unable to demonstrate the necessary food safety knowledge.”</td>
+<td align="left">45220</td>
+</tr>
+<tr class="odd">
+<td align="left">CLIFTON</td>
+<td align="left">“BRUEGGER’S BAGELS #3743”</td>
+<td align="left">2019-10-22 02:13:42</td>
+<td align="left">“3717-1-02.4(C)(16) - Violation - PIC Duties -response plan for vomiting/diarrheaNo/inadequate written procedures for response to vomiting/diarrheal events.”</td>
+<td align="left">45220</td>
+</tr>
+<tr class="even">
+<td align="left">CLIFTON</td>
+<td align="left">“BRUEGGER’S BAGELS #3743”</td>
+<td align="left">2019-10-22 02:13:42</td>
+<td align="left">“3717-1-02.4(C)(16) - Violation - PIC Duties -response plan for vomiting/diarrheaNo/inadequate written procedures for response to vomiting/diarrheal events.”</td>
+<td align="left">45220</td>
+</tr>
+<tr class="odd">
+<td align="left">CLIFTON</td>
+<td align="left">“BRUEGGER’S BAGELS #3743”</td>
+<td align="left">2019-10-22 02:13:42</td>
+<td align="left">“3717-1-03.2(Y) - Violation - Miscellaneous sources of contaminationMiscellaneous sources of contamination observed.”</td>
+<td align="left">45220</td>
+</tr>
+<tr class="even">
+<td align="left">CLIFTON</td>
+<td align="left">“BRUEGGER’S BAGELS #3743”</td>
+<td align="left">2019-10-22 02:13:42</td>
+<td align="left">“3717-1-03.2(Y) - Violation - Miscellaneous sources of contaminationMiscellaneous sources of contamination observed.”</td>
+<td align="left">45220</td>
+</tr>
+<tr class="odd">
+<td align="left">CLIFTON</td>
+<td align="left">“BRUEGGER’S BAGELS #3743”</td>
+<td align="left">2019-10-22 02:13:42</td>
+<td align="left">“3717-1-03.3(H)(1) - Violation - Reheating For Hot HoldingReheated TCS food was not heated to 165F”</td>
+<td align="left">45220</td>
+</tr>
+<tr class="even">
+<td align="left">CLIFTON</td>
+<td align="left">“BRUEGGER’S BAGELS #3743”</td>
+<td align="left">2019-10-22 02:13:42</td>
+<td align="left">“3717-1-03.3(H)(1) - Violation - Reheating For Hot HoldingReheated TCS food was not heated to 165F”</td>
+<td align="left">45220</td>
+</tr>
+<tr class="odd">
+<td align="left">CLIFTON</td>
+<td align="left">“BRUEGGER’S BAGELS #3743”</td>
+<td align="left">2019-10-22 02:13:42</td>
+<td align="left">“3717-1-03.4(F)(1)(a) - Violation - TCS-Hot HoldingTCS foods were being hot held at temperatures &lt;135° F or a roast &lt;130° F.”</td>
+<td align="left">45220</td>
+</tr>
+<tr class="even">
+<td align="left">CLIFTON</td>
+<td align="left">“BRUEGGER’S BAGELS #3743”</td>
+<td align="left">2019-10-22 02:13:42</td>
+<td align="left">“3717-1-03.4(F)(1)(a) - Violation - TCS-Hot HoldingTCS foods were being hot held at temperatures &lt;135° F or a roast &lt;130° F.”</td>
+<td align="left">45220</td>
+</tr>
+<tr class="odd">
+<td align="left">CLIFTON</td>
+<td align="left">“BRUEGGER’S BAGELS #3743”</td>
+<td align="left">2019-10-22 02:13:42</td>
+<td align="left">“3717-1-03.4(F)(1)(b) - Violation - TCS-cold holdingTCS foods were being held at temperatures &gt;41° F.”</td>
+<td align="left">45220</td>
+</tr>
+<tr class="even">
+<td align="left">CLIFTON</td>
+<td align="left">“BRUEGGER’S BAGELS #3743”</td>
+<td align="left">2019-10-22 02:13:42</td>
+<td align="left">“3717-1-04.1(Y) - Violation - Temperature Measuring DevicesTemperature measuring devices are missing, not correctly placed, not readable, or of improper design.”</td>
+<td align="left">45220</td>
+</tr>
+<tr class="odd">
+<td align="left">CLIFTON</td>
+<td align="left">“BRUEGGER’S BAGELS #3743”</td>
+<td align="left">2019-10-22 02:13:42</td>
+<td align="left">“3717-1-04.4(A)(1) - Violation - Equipment-good repair and proper adjustment.Equipment and/or components were not maintained in good working order.”</td>
+<td align="left">45220</td>
+</tr>
+<tr class="even">
+<td align="left">CLIFTON</td>
+<td align="left">“BRUEGGER’S BAGELS #3743”</td>
+<td align="left">2019-10-22 02:13:42</td>
+<td align="left">“3717-1-04.4(B) - Violation - Cutting surfaces.Cutting surface(s) unable to be effectively cleaned and sanitized.”</td>
+<td align="left">45220</td>
+</tr>
+<tr class="odd">
+<td align="left">CLIFTON</td>
+<td align="left">“BRUEGGER’S BAGELS #3743”</td>
+<td align="left">2019-10-22 02:13:42</td>
+<td align="left">“3717-1-04.5(A)(1)(2) - Violation - Equipment cleanliness-food contactFood-contact surfaces were dirty.”</td>
+<td align="left">45220</td>
+</tr>
+<tr class="even">
+<td align="left">CLIFTON</td>
+<td align="left">“BRUEGGER’S BAGELS #3743”</td>
+<td align="left">2019-10-22 02:13:42</td>
+<td align="left">“3717-1-04.5(A)(1)(2) - Violation - Equipment cleanliness-food contactFood-contact surfaces were dirty.”</td>
+<td align="left">45220</td>
+</tr>
+<tr class="odd">
+<td align="left">CLIFTON</td>
+<td align="left">“BRUEGGER’S BAGELS #3743”</td>
+<td align="left">2019-10-22 02:13:42</td>
+<td align="left">“3717-1-04.5(B)(3) - Violation - Cleaning frequency-TCS Surfaces and/or utensils used for TCS foods not cleaned every 4 hours.”</td>
+<td align="left">45220</td>
+</tr>
+<tr class="even">
+<td align="left">CLIFTON</td>
+<td align="left">“BRUEGGER’S BAGELS #3743”</td>
+<td align="left">2019-10-22 02:13:42</td>
+<td align="left">“3717-1-04.5(B)(3) - Violation - Cleaning frequency-TCS Surfaces and/or utensils used for TCS foods not cleaned every 4 hours.”</td>
+<td align="left">45220</td>
+</tr>
+<tr class="odd">
+<td align="left">CLIFTON</td>
+<td align="left">“BRUEGGER’S BAGELS #3743”</td>
+<td align="left">2019-10-22 02:13:42</td>
+<td align="left">“3717-1-04.5(D) - Violation - Non-food contact surfaces-Cleaning FrequencyNonfood-contact surfaces are not cleaned frequently enough.”</td>
+<td align="left">45220</td>
+</tr>
+<tr class="even">
+<td align="left">CLIFTON</td>
+<td align="left">“BRUEGGER’S BAGELS #3743”</td>
+<td align="left">2019-10-22 02:13:42</td>
+<td align="left">“3717-1-04.5(D) - Violation - Non-food contact surfaces-Cleaning FrequencyNonfood-contact surfaces are not cleaned frequently enough.”</td>
+<td align="left">45220</td>
+</tr>
+<tr class="odd">
+<td align="left">CLIFTON</td>
+<td align="left">“BRUEGGER’S BAGELS #3743”</td>
+<td align="left">2019-10-22 02:13:42</td>
+<td align="left">“3717-1-06.0(A)(1)(a) - Violation - Facilities-floors, walls, ceilingsIndoor floor, wall, or ceiling surfaces are not smooth, durable, and easily cleanable in areas where FSO or RFE activities are conducted.”</td>
+<td align="left">45220</td>
+</tr>
+<tr class="even">
+<td align="left">CLIFTON</td>
+<td align="left">“BRUEGGER’S BAGELS #3743”</td>
+<td align="left">2019-10-22 02:13:42</td>
+<td align="left">“3717-1-06.1(L) - Violation - Facilities-bathroom design, self-closing doorA toilet room wasn’t completely enclosed or lacks a self-closing door.”</td>
+<td align="left">45220</td>
+</tr>
+<tr class="odd">
+<td align="left">CLIFTON</td>
+<td align="left">“BRUEGGER’S BAGELS #3743”</td>
+<td align="left">2019-10-22 02:13:42</td>
+<td align="left">“3717-1-06.2(B) - Violation - Facilities-handwashing cleanser availabilityEach handwashing lavatory did not have a supply of hand cleanser.”</td>
+<td align="left">45220</td>
+</tr>
+<tr class="even">
+<td align="left">CLIFTON</td>
+<td align="left">“BRUEGGER’S BAGELS #3743”</td>
+<td align="left">2019-10-22 02:13:42</td>
+<td align="left">“3717-1-06.2(B) - Violation - Facilities-handwashing cleanser availabilityEach handwashing lavatory did not have a supply of hand cleanser.”</td>
+<td align="left">45220</td>
+</tr>
+<tr class="odd">
+<td align="left">CLIFTON</td>
+<td align="left">“BRUEGGER’S BAGELS #3743”</td>
+<td align="left">2019-10-22 02:13:42</td>
+<td align="left">“3717-1-06.4(B)(1) - Violation - Facilities: Cleaning: Frequency The physical facilities are not cleaned as often as necessary to keep them clean.”</td>
+<td align="left">45220</td>
+</tr>
+<tr class="even">
+<td align="left">CLIFTON</td>
+<td align="left">“BRUEGGER’S BAGELS #3743”</td>
+<td align="left">2019-10-22 02:13:42</td>
+<td align="left">“3717-1-06.4(F) - Violation - Facilities: Mops: DryingAfter use, mops are not placed in a position that allows them to air-dry without soiling walls, equipment, or supplies.”</td>
+<td align="left">45220</td>
+</tr>
+<tr class="odd">
+<td align="left">NORTHSIDE</td>
+<td align="left">“BRIDGES LLC”</td>
+<td align="left">2019-10-16 02:12:12</td>
+<td align="left">“3717-1-03.2(C)(1) - Violation - Preventing Contamination by Separation, Packaging, and SegregationReady-to-eat food was not protected from cross-contamination by raw animal food.”</td>
+<td align="left">45223</td>
+</tr>
+<tr class="even">
+<td align="left">NORTHSIDE</td>
+<td align="left">“BRIDGES LLC”</td>
+<td align="left">2019-10-16 02:12:12</td>
+<td align="left">“3717-1-03.2(C)(1) - Violation - Preventing Contamination by Separation, Packaging, and SegregationReady-to-eat food was not protected from cross-contamination by raw animal food.”</td>
+<td align="left">45223</td>
+</tr>
+<tr class="odd">
+<td align="left">NORTHSIDE</td>
+<td align="left">“BRIDGES LLC”</td>
+<td align="left">2019-10-16 02:12:12</td>
+<td align="left">“3717-1-03.4(C) - Violation - Thawing TCS-Temperature / Time ControlTCS food was improperly thawed.”</td>
+<td align="left">45223</td>
+</tr>
+<tr class="even">
+<td align="left">NORTHSIDE</td>
+<td align="left">“BRIDGES LLC”</td>
+<td align="left">2019-10-16 02:12:12</td>
+<td align="left">“3717-1-03.4(C) - Violation - Thawing TCS-Temperature / Time ControlTCS food was improperly thawed.”</td>
+<td align="left">45223</td>
+</tr>
+<tr class="odd">
+<td align="left">NORTHSIDE</td>
+<td align="left">“BRIDGES LLC”</td>
+<td align="left">2019-10-16 02:12:12</td>
+<td align="left">“3717-1-04.4(A)(1) - Violation - Equipment-good repair and proper adjustment.Equipment and/or components were not maintained in good working order.”</td>
+<td align="left">45223</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="complaint-discriptions" class="section level1">
+<h1>Complaint Discriptions</h1>
+<pre class="sql"><code>SELECT DISTINCT violation_description AS complaint_description
+FROM foodsafety
+WHERE insp_type = &#39;COMPLAINT&#39;
+LIMIT 5</code></pre>
+<pre class="r"><code>if (Sys.info()[&quot;sysname&quot;] != &quot;Linux&quot;){
+  results
+  
+} else {
+  results %&gt;% kable()
+}</code></pre>
+<table>
+<colgroup>
+<col width="100%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">complaint_description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">NA</td>
+</tr>
+<tr class="even">
+<td align="left">“3717-1-03.4(G)(1) - Violation - RTE TCS, date marking, food prepared in facilityRefrigerated, ready-to-eat, TCS food that is prepared in the food facility and held refrigerated for more than 24 hours is not properly date marked.”</td>
+</tr>
+<tr class="odd">
+<td align="left">“3717-1-05.4(G)(1) - Violation - Refuse: Storage area: Not sufficentRefuse is stored in an area insufficient to handle the amount of waste.”</td>
+</tr>
+<tr class="even">
+<td align="left">“3717-1-03.1(A)(1) - Violation - Sources compliance with food lawFood is from an unapproved source.”</td>
+</tr>
+<tr class="odd">
+<td align="left">“3717-1-03.4(F)(2) - Violation - TCS-cold holding-shell eggsRaw shell eggs are not maintained at =45° F.”</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="violation-descriptions" class="section level1">
+<h1>Violation descriptions</h1>
+<pre class="sql"><code>SELECT business_name, violation_description, action_date, postal_code, insp_subtype
+FROM foodsafety</code></pre>
+<pre class="r"><code>violation_description_corpus &lt;- corpus(
+  as_tibble(results),
+  docid_field = &quot;business_name&quot;,
+  docnames = &quot;insp_subtype&quot;,
+  text_field = &quot;violation_description&quot;,
+  meta = list(),
+  unique_docnames = FALSE
+)</code></pre>
+<pre class="r"><code>summary(violation_description_corpus) %&gt;% arrange(desc(Text)) %&gt;% head(10) %&gt;% kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Text</th>
+<th align="right">Types</th>
+<th align="right">Tokens</th>
+<th align="right">Sentences</th>
+<th align="left">action_date</th>
+<th align="left">postal_code</th>
+<th align="left">insp_subtype</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">“ZIP’S CAFE”.2</td>
+<td align="right">31</td>
+<td align="right">50</td>
+<td align="right">3</td>
+<td align="left">2016-02-05 13:36:11</td>
+<td align="left">45208</td>
+<td align="left">CRITICAL CONTROL POINT</td>
+</tr>
+<tr class="even">
+<td align="left">“ZIP’S CAFE”.1</td>
+<td align="right">26</td>
+<td align="right">33</td>
+<td align="right">1</td>
+<td align="left">2015-07-17 14:13:11</td>
+<td align="left">45208</td>
+<td align="left">STANDARD INSPECTION</td>
+</tr>
+<tr class="odd">
+<td align="left">“WOODS EDGE POINTE”.1</td>
+<td align="right">33</td>
+<td align="right">46</td>
+<td align="right">1</td>
+<td align="left">2016-06-20 04:00:00</td>
+<td align="left">45237</td>
+<td align="left">STANDARD INSPECTION</td>
+</tr>
+<tr class="even">
+<td align="left">“WINTON HILL CHILD DEVELOPMENT CENTER”.1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="left">2016-06-06 04:00:00</td>
+<td align="left">45232</td>
+<td align="left">STANDARD INSPECTION</td>
+</tr>
+<tr class="odd">
+<td align="left">“W &amp; S RIBS &amp; MORE”.1</td>
+<td align="right">36</td>
+<td align="right">50</td>
+<td align="right">2</td>
+<td align="left">2015-08-13 04:00:00</td>
+<td align="left">45237</td>
+<td align="left">STANDARD INSPECTION</td>
+</tr>
+<tr class="even">
+<td align="left">“VINNIE’S GOURMET PRETZELS”.1</td>
+<td align="right">21</td>
+<td align="right">23</td>
+<td align="right">1</td>
+<td align="left">2014-07-03 15:09:47</td>
+<td align="left">45223</td>
+<td align="left">STANDARD INSPECTION</td>
+</tr>
+<tr class="odd">
+<td align="left">“UNITED DAIRY FARMERS #152”.2</td>
+<td align="right">26</td>
+<td align="right">32</td>
+<td align="right">1</td>
+<td align="left">2017-02-24 05:00:00</td>
+<td align="left">45205</td>
+<td align="left">STANDARD INSPECTION</td>
+</tr>
+<tr class="even">
+<td align="left">“UNITED DAIRY FARMERS #152”.1</td>
+<td align="right">21</td>
+<td align="right">24</td>
+<td align="right">1</td>
+<td align="left">2012-04-26 04:00:00</td>
+<td align="left">45205</td>
+<td align="left">STANDARD INSPECTION</td>
+</tr>
+<tr class="odd">
+<td align="left">“UNITED DAIRY FARMERS #101”.1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="left">2017-03-31 04:00:00</td>
+<td align="left">45230</td>
+<td align="left">STANDARD INSPECTION</td>
+</tr>
+<tr class="even">
+<td align="left">“TUSKERS”.1</td>
+<td align="right">28</td>
+<td align="right">32</td>
+<td align="right">1</td>
+<td align="left">2015-10-08 04:00:00</td>
+<td align="left">45220</td>
+<td align="left">STANDARD INSPECTION</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>texts(violation_description_corpus)[&#39;&quot;PIZZA/ITALIAN 3E3&quot;.1&#39;] %&gt;% kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th align="left">x</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>“PIZZA/ITALIAN 3E3”.1</td>
+<td align="left">“3717-1-02.3(A)(1)(2)(3) - Violation - Employee DrinksObserved unacceptable employee beverage containers.”</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>kwic(violation_description_corpus, pattern = &quot;cloths&quot;) %&gt;% head(10) %&gt;% kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">docname</th>
+<th align="right">from</th>
+<th align="right">to</th>
+<th align="left">pre</th>
+<th align="left">keyword</th>
+<th align="left">post</th>
+<th align="left">pattern</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">“HAMILTON COUNTY JUSTICE CENTER”.1</td>
+<td align="right">32</td>
+<td align="right">32</td>
+<td align="left">contamination of equipment , wiping</td>
+<td align="left">cloths</td>
+<td align="left">used for wiping food spills</td>
+<td align="left">cloths</td>
+</tr>
+<tr class="even">
+<td align="left">“GREAT AMERICAN BALL PARK”.2</td>
+<td align="right">32</td>
+<td align="right">32</td>
+<td align="left">contamination of equipment , wiping</td>
+<td align="left">cloths</td>
+<td align="left">used for wiping food spills</td>
+<td align="left">cloths</td>
+</tr>
+<tr class="odd">
+<td align="left">“GRILL/FRY 4C1”.1</td>
+<td align="right">32</td>
+<td align="right">32</td>
+<td align="left">contamination of equipment , wiping</td>
+<td align="left">cloths</td>
+<td align="left">used for wiping food spills</td>
+<td align="left">cloths</td>
+</tr>
+<tr class="even">
+<td align="left">“MURRAY’S PUB”.2</td>
+<td align="right">32</td>
+<td align="right">32</td>
+<td align="left">contamination of equipment , wiping</td>
+<td align="left">cloths</td>
+<td align="left">used for wiping food spills</td>
+<td align="left">cloths</td>
+</tr>
+<tr class="odd">
+<td align="left">“POMODORI’S”.1</td>
+<td align="right">32</td>
+<td align="right">32</td>
+<td align="left">contamination of equipment , wiping</td>
+<td align="left">cloths</td>
+<td align="left">used for wiping food spills</td>
+<td align="left">cloths</td>
+</tr>
+<tr class="even">
+<td align="left">“SUBWAY #831”.1</td>
+<td align="right">32</td>
+<td align="right">32</td>
+<td align="left">contamination of equipment , wiping</td>
+<td align="left">cloths</td>
+<td align="left">used for wiping food spills</td>
+<td align="left">cloths</td>
+</tr>
+<tr class="odd">
+<td align="left">“CURRITO”.1</td>
+<td align="right">32</td>
+<td align="right">32</td>
+<td align="left">contamination of equipment , wiping</td>
+<td align="left">cloths</td>
+<td align="left">used for wiping food spills</td>
+<td align="left">cloths</td>
+</tr>
+<tr class="even">
+<td align="left">“CAFÉ DE PARIS”.2</td>
+<td align="right">32</td>
+<td align="right">32</td>
+<td align="left">contamination of equipment , wiping</td>
+<td align="left">cloths</td>
+<td align="left">used for wiping food spills</td>
+<td align="left">cloths</td>
+</tr>
+<tr class="odd">
+<td align="left">“EVANSTON MARATHON”.1</td>
+<td align="right">32</td>
+<td align="right">32</td>
+<td align="left">contamination of equipment , wiping</td>
+<td align="left">cloths</td>
+<td align="left">used for wiping food spills</td>
+<td align="left">cloths</td>
+</tr>
+<tr class="even">
+<td align="left">“CAFÉ DE SALES”.1</td>
+<td align="right">32</td>
+<td align="right">32</td>
+<td align="left">contamination of equipment , wiping</td>
+<td align="left">cloths</td>
+<td align="left">used for wiping food spills</td>
+<td align="left">cloths</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>violation_description_tokens &lt;- tokens(
+  violation_description_corpus,
+  what = &quot;sentence&quot;,
+  remove_punct = TRUE,
+  remove_symbols = TRUE,
+  remove_numbers = TRUE,
+  remove_url = TRUE,
+  remove_separators = TRUE,
+  split_hyphens = TRUE,
+  include_docvars = TRUE,
+  padding = FALSE,
+  verbose = quanteda_options(&quot;verbose&quot;)
+)</code></pre>
+<pre class="r"><code>violation_description_tokens_dfm &lt;-
+  dfm(
+    violation_description_tokens,
+    tolower = FALSE,
+    stem = FALSE,
+    select = NULL,
+    remove = c(stopwords(&quot;english&quot;),&quot;3717&quot;,&quot;food&quot;, &quot;violation&quot;, &quot;f&quot;, &quot;b&quot;, &#39;&quot;vi.&#39;, &#39;&quot;vii.&#39;,&#39;&quot;vii3.&#39;, &#39;&quot;iii.&#39;),
+    dictionary = NULL,
+    thesaurus = NULL,
+    valuetype = c(&quot;glob&quot;, &quot;regex&quot;, &quot;fixed&quot;),
+    case_insensitive = TRUE,
+    groups = NULL,
+    verbose = quanteda_options(&quot;verbose&quot;)
+  )
+
+topfeatures(violation_description_tokens_dfm, 40) %&gt;% kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th align="right">x</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>“3717-1-04.5(A)(3) - Violation - Equipment cleanliness-Nonfood-contactNon-food contact surfaces are dirty.”</td>
+<td align="right">9755</td>
+</tr>
+<tr class="even">
+<td>“3717-1-06.4(B)(1) - Violation - Facilities: Cleaning: Frequency The physical facilities are not cleaned as often as necessary to keep them clean.”</td>
+<td align="right">8820</td>
+</tr>
+<tr class="odd">
+<td>“3717-1-04.4(A)(1) - Violation - Equipment-good repair and proper adjustment.Equipment and/or components were not maintained in good working order.”</td>
+<td align="right">5610</td>
+</tr>
+<tr class="even">
+<td>“3717-1-04.5(A)(1)(2) - Violation - Equipment cleanliness-food contactFood-contact surfaces were dirty.”</td>
+<td align="right">5528</td>
+</tr>
+<tr class="odd">
+<td>“3717-1-06.4(A) - Violation - Facilities: Maintenance: Good repairThe physical facilities were not maintained in good repair.”</td>
+<td align="right">4716</td>
+</tr>
+<tr class="even">
+<td>Time/Temperature Controlled Safety FoodProper: cooking time and temperatures; reheating procedures for hot holding; cooling time and temperatures; hot holding temperatures; cold holding temperatures; date marking and disposition.</td>
+<td align="right">4491</td>
+</tr>
+<tr class="odd">
+<td>Time as a public health control procedures and record."</td>
+<td align="right">4491</td>
+</tr>
+<tr class="even">
+<td>“3717-1-04.1(Y) - Violation - Temperature Measuring DevicesTemperature measuring devices are missing, not correctly placed, not readable, or of improper design.”</td>
+<td align="right">3587</td>
+</tr>
+<tr class="odd">
+<td>“3717-1-04.2(I) - Violation - Sanitizing solutions-testing devices.There is no test kit available for measuring the concentration of the sanitizer.”</td>
+<td align="right">3448</td>
+</tr>
+<tr class="even">
+<td>“3717-1-03.2(Y) - Violation - Miscellaneous sources of contaminationMiscellaneous sources of contamination observed.”</td>
+<td align="right">3442</td>
+</tr>
+<tr class="odd">
+<td>“3717-1-06.4(F) - Violation - Facilities: Mops: DryingAfter use, mops are not placed in a position that allows them to air-dry without soiling walls, equipment, or supplies.”</td>
+<td align="right">3410</td>
+</tr>
+<tr class="even">
+<td>“3717-1-03.4(F)(1)(b) - Violation - TCS-cold holdingTCS foods were being held at temperatures &gt;41° F.”</td>
+<td align="right">3382</td>
+</tr>
+<tr class="odd">
+<td>Protection from ContaminationFood separated and protected; food contact surfaces cleaned and sanitized; proper disposition of returned, previously served, reconditioned, and unsafe food."</td>
+<td align="right">2969</td>
+</tr>
+<tr class="even">
+<td>“3717-1-04.5(A)(1)&amp;(2) - Violation - Equipment cleanliness-food contactFood-contact surfaces were dirty.”</td>
+<td align="right">2699</td>
+</tr>
+<tr class="odd">
+<td>"3717-1-05.1(O)(2) - Violation - Using handwashing facility-Other purposesHandwashing facility is being used for purposes other than handwashing.</td>
+<td align="right">2518</td>
+</tr>
+<tr class="even">
+<td>"3717-1-04.4(A)(2) - Violation - Equipment,good repair, doors, sealsEquipment components were not intact, tight or properly adjusted.</td>
+<td align="right">2482</td>
+</tr>
+<tr class="odd">
+<td>“3717-1-03.2(Q) - Violation - Food Storage–preventing contamination form the premisesFood items are not protected from contamination during storage.”</td>
+<td align="right">2273</td>
+</tr>
+<tr class="even">
+<td>“3717-1-03.2(D) - Violation - Food Storage containers-common name IDWorking containers of food are not properly labeled.”</td>
+<td align="right">2233</td>
+</tr>
+<tr class="odd">
+<td>“3717-1-06.2(C) - Violation - Facilities-hand drying provisionHandwashing lavatory had no, unapproved, or inoperable hand drying provision.”</td>
+<td align="right">2120</td>
+</tr>
+<tr class="even">
+<td>"3717-1-03.4(F)(1)(b) - Violation - PHF, 41F cold holdingTCS foods were being held temperatures above 41F (5C).</td>
+<td align="right">2011</td>
+</tr>
+<tr class="odd">
+<td>“3717-1-03.4(G)(1) - Violation - RTE TCS, date marking, food prepared in facilityRefrigerated, ready-to-eat, TCS food that is prepared in the food facility and held refrigerated for more than 24 hours is not properly date marked.”</td>
+<td align="right">1967</td>
+</tr>
+<tr class="even">
+<td>"3717-1-06.4(N) - Violation - Maintaining premises: unnecessary items and litter.There are unnecessary or nonfunctional items and /or litter on the premises.</td>
+<td align="right">1922</td>
+</tr>
+<tr class="odd">
+<td>“3717-1-03.2(K) - Violation - In-use utensils-between-use storageIn-use utensils are improperly stored.”</td>
+<td align="right">1920</td>
+</tr>
+<tr class="even">
+<td>“3717-1-03.2(Q) - Violation - Food Storage-preventing contamination form the premisesFood items are not protected from contamination during storage.”</td>
+<td align="right">1882</td>
+</tr>
+<tr class="odd">
+<td>“3717-1-03.2(M)(2)(a) - Violation - Wiping cloths-use limitationWet wiping cloth was not maintained in a sanitizer solution between uses.”</td>
+<td align="right">1864</td>
+</tr>
+<tr class="even">
+<td>“3717-1-03.2(M)(2)(a) - Violation - Wiping cloths– use limitationTo prevent the growth of bacteria and the subsequent contamination of equipment, wiping cloths used for wiping food spills shall be stored in a chemical sanitizer of the appropriate concentration and shall be laundered daily.”</td>
+<td align="right">1863</td>
+</tr>
+<tr class="odd">
+<td>“3717-1-06.4(K) - Violation - Facilities: Pest control: The presence of insects, rodents, and other pests is not being adequately controlled or minimized.”</td>
+<td align="right">1861</td>
+</tr>
+<tr class="even">
+<td>“3717-1-04.6(C)(3) - Violation - Food contact surfaces, chemical sanitizingAfter being cleaned, food-contact surfaces and utensils were not sanitized using an effective or approved combination of exposure time, chemical concentration, temperature, and/or pH.”</td>
+<td align="right">1822</td>
+</tr>
+<tr class="odd">
+<td>“3717-1-03.2(D) - Violation - Food Storage containers–common name IDWorking containers of food are not properly labeled.”</td>
+<td align="right">1767</td>
+</tr>
+<tr class="even">
+<td>“3717-1-03.2(C)(1) - Violation - Preventing Contamination by Separation, Packaging, and SegregationReady-to-eat food was not protected from cross-contamination by raw animal food.”</td>
+<td align="right">1729</td>
+</tr>
+<tr class="odd">
+<td>“3717-1-03.4(F)(1)(a) - Violation - TCS-Hot HoldingTCS foods were being hot held at temperatures &lt;135° F or a roast &lt;130° F.”</td>
+<td align="right">1658</td>
+</tr>
+<tr class="even">
+<td>“3717-1-03.4(G)(1) - Violation - RTE PHF, date marking, food prepared in facilityRefrigerated, ready-to-eat, potentially hazardous food that is prepared in the food facility and held refrigerated for more than 24 hours is not properly date marked.”</td>
+<td align="right">1620</td>
+</tr>
+<tr class="odd">
+<td>“3717-1-03.2(K) - Violation - In-use utensils–between-use storageIn-use utensils are improperly stored.”</td>
+<td align="right">1566</td>
+</tr>
+<tr class="even">
+<td>“3717-1-06.2(C) - Violation - Handwashing Facilities - Hand Drying ProvisionHandwashing lavatory had no, unapproved, or inoperable hand drying provision.”</td>
+<td align="right">1522</td>
+</tr>
+<tr class="odd">
+<td>“3717-1-05.1(S)(2) - Violation - Plumbing system-maintained in good repairPlumbing system is not maintained in good repair.”</td>
+<td align="right">1511</td>
+</tr>
+<tr class="even">
+<td>“3717-1-07.0(B) - Violation - Poisonous/toxic material-working containersWorking containers of poisonous/toxic materials are not labeled.”</td>
+<td align="right">1493</td>
+</tr>
+<tr class="odd">
+<td>“3717-1-03.2(C)(8) - Violation - Protection from Contamination-Food StorageFood is stored unwrapped or in uncovered containers.”</td>
+<td align="right">1452</td>
+</tr>
+<tr class="even">
+<td>“3717-1-03.2(C)(9) - Violation - Protection from Contamination - Food StorageFood is stored unwrapped or in uncovered containers.”</td>
+<td align="right">1353</td>
+</tr>
+<tr class="odd">
+<td>“3717-1-03.4(G)(2) - Violation - RTE TCS, date marking-prepared in processing plantReady-to-eat, TCS food that was prepared in a food processing plant and subsequently opened in a FSO or a RFE is not properly date marked.”</td>
+<td align="right">1319</td>
+</tr>
+<tr class="even">
+<td>“3717-1-06.4(D)(1) - Violation - Facilities: Ventilation systems: CleaningIntake and exhaust air ducts are a source of contamination by dust, dirt, and other materials.”</td>
+<td align="right">1294</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>word_tokens &lt;- tokens(
+  violation_description_corpus,
+  what = &quot;word&quot;,
+  remove_punct = TRUE,
+  remove_symbols = TRUE,
+  remove_numbers = TRUE,
+  remove_url = TRUE,
+  remove_separators = TRUE,
+  split_hyphens = TRUE,
+  include_docvars = TRUE,
+  padding = FALSE,
+  verbose = quanteda_options(&quot;verbose&quot;)
+)
+
+three_gram &lt;- tokens_ngrams(word_tokens, n = 3)
+
+three_gram_dfm &lt;- dfm(
+    three_gram,
+    tolower = TRUE,
+    stem = FALSE,
+    select = NULL,
+    remove = c(stopwords(&quot;english&quot;),&quot;3717&quot;,&quot;food&quot;, &quot;violation&quot;, &quot;f&quot;, &quot;b&quot;, &#39;&quot;vi.&#39;, &#39;&quot;vii.&#39;,&#39;&quot;vii3.&#39;, &#39;&quot;iii.&#39;, &#39;3717_a_violation&#39;, &#39;3717_c_violation&#39;, &#39;3717_b_violation&#39;, &#39;3717_g_violation&#39;, &#39;&#39;, &#39;&#39;),
+    dictionary = NULL,
+    thesaurus = NULL,
+    valuetype = c(&quot;glob&quot;, &quot;regex&quot;, &quot;fixed&quot;),
+    case_insensitive = TRUE,
+    groups = NULL,
+    verbose = quanteda_options(&quot;verbose&quot;)
+  )</code></pre>
+<pre class="r"><code>topfeatures(three_gram_dfm, 10) %&gt;% kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th align="right">x</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>a_violation_equipment</td>
+<td align="right">28095</td>
+</tr>
+<tr class="even">
+<td>food_contact_surfaces</td>
+<td align="right">19498</td>
+</tr>
+<tr class="odd">
+<td>violation_equipment_cleanliness</td>
+<td align="right">17982</td>
+</tr>
+<tr class="even">
+<td>maintained_in_good</td>
+<td align="right">16163</td>
+</tr>
+<tr class="odd">
+<td>not_maintained_in</td>
+<td align="right">14829</td>
+</tr>
+<tr class="even">
+<td>contact_surfaces_are</td>
+<td align="right">10985</td>
+</tr>
+<tr class="odd">
+<td>facilities_are_not</td>
+<td align="right">10658</td>
+</tr>
+<tr class="even">
+<td>were_not_maintained</td>
+<td align="right">10379</td>
+</tr>
+<tr class="odd">
+<td>violation_facilities_cleaning</td>
+<td align="right">10351</td>
+</tr>
+<tr class="even">
+<td>are_not_cleaned</td>
+<td align="right">10148</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>#set.seed(100)
+textplot_wordcloud(three_gram_dfm, min_count = 6, random_order = TRUE,
+                   #rotation = .25,
+                   color = RColorBrewer::brewer.pal(8, &quot;Dark2&quot;))</code></pre>
+<p><img src="/post/cincinnati-food-safety/index_files/figure-html/unnamed-chunk-73-1.png" width="672" /></p>
+</div>
+<div id="build-site" class="section level1">
+<h1>Build Site</h1>
+</div>
+<div id="references" class="section level1">
+<h1>References</h1>
+<p><a href="https://www.cincinnati-oh.gov/health/cincinnati-health-department-programs/food-safety-and-inspections-program/">Food Safety and Inspections</a></p>
+<p><a href="https://data.cincinnati-oh.gov/Thriving-Neighborhoods/Cincinnati-Food-Safety-Program/rg6p-b3h3">Cincinnati Food Safety Program</a></p>
+<p><a href="https://dev.socrata.com/foundry/data.cincinnati-oh.gov/rg6p-b3h3">SODA: Cincinnati Food Safety Program</a></p>
+<p><a href="https://db.rstudio.com/getting-started/connect-to-database/">Connect to a Database</a></p>
+<p><a href="https://db.rstudio.com/">Databases using R</a></p>
+<p><a href="https://stackoverflow.com/questions/20194806/how-to-get-a-list-column-names-and-datatype-of-a-table-in-postgresql">How to get a list column names and datatype of a table in PostgreSQL?</a></p>
+<p><a href="https://support.socrata.com/hc/en-us/articles/115011432428">Open A Socrata Dataset In Microsoft Power BI</a></p>
+<p><a href="https://www.w3schools.com/sql/default.asp">SQL Tutorial</a></p>
+<p><a href="https://rstudio.github.io/leaflet/">Leaflet for R</a></p>
+<p><a href="https://dba.stackexchange.com/questions/78580/postgres-columns-of-latitude-and-longitude-from-varchar-to-numeric">Postgres columns of latitude and longitude from varchar to numeric</a></p>
+<p><a href="https://waterdata.usgs.gov/blog/leaflet/">Using Leaflet and htmlwidgets in a Hugo-generated page</a></p>
+<p><a href="https://stackoverflow.com/questions/15817871/postgresql-filter-a-date-range">PostgreSQL- Filter a date range</a></p>
+<p><a href="https://db.rstudio.com/dplyr/">Databases using dplyr</a></p>
+<p><a href="https://plot.ly/r/time-series/">Time Series in R</a></p>
+<p><a href="https://quanteda.io/articles/quickstart.html">quanteda: Quick Start Guide</a></p>
+<p><a href="https://tutorials.quanteda.io/">QUANTEDA TUTORIALS</a></p>
+<p><a href="https://www.postgresqltutorial.com/plpgsql-variables/">PL/pgSQL Variables</a></p>
+</div>
