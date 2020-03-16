@@ -123,6 +123,28 @@ André is a public health data analytics professional with around ten years’ w
 Professional Experience {data-icon=suitcase}
 --------------------------------------------------------------------------------
 
+### Consultant
+
+[University of Cincinnati](https://www.uc.edu/) 
+
+[Cincinnati, Ohio](https://goo.gl/maps/MbYfedyeqwaB9jat6)
+
+```{r message=FALSE, warning=FALSE, include=FALSE}
+library(anytime) 
+dm = as.numeric(round((anytime(Sys.Date()) - anytime("1 Sep 2017"))/365, digits = 1))
+```
+
+April 2020 -  March 2020
+
+::: concise
+- Leading the data and analytics teams in the [University Health Services](https://www.med.uc.edu/uhs) COVID-19 outbreak response.  
+- Helping with prioritization. 
+- Serving and advising the research team. 
+- Analyzing and reporting on operational data. 
+- Ensuring data collected in REDCap gets exported in a meaningful way to support clinical decision making. 
+- Building of a "dashboard"  in the R Studio programming environment to ensure the clinicians and management can quickly get data out of REDCap without having to rely on me. 
+:::
+
 ### Data Manager
 
 [Sefako Makgatho Health Sciences University](https://www.smu.ac.za/) 
