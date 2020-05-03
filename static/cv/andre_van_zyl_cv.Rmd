@@ -118,7 +118,7 @@ André van Zyl {#title}
 
 ### Public Health Data Analytics Professional 
 
-André is a public health data analytics professional with around ten years’ work experience in roles related to research, technology, analytics, public health, behavioral health, and education. His current career interests revolve around digital analytics and data science, electronic data acquisition, epidemiology, and monitoring and evaluation. For the past two years, he has been responsible for monitoring and managing the data collection of a research project with 27 sites in three South African provinces.
+André is a public health data analytics professional with approximately ten years’ work experience in roles related to research, technology, analytics, public health, behavioral health, and education. His current career interests revolve around digital analytics and data science, electronic data acquisition, epidemiology, and monitoring and evaluation. For the past two years, he has been responsible for monitoring and managing the data collection of a research project with 27 sites in three South African provinces.
 
 Professional Experience {data-icon=suitcase}
 --------------------------------------------------------------------------------
@@ -137,12 +137,10 @@ dm = as.numeric(round((anytime(Sys.Date()) - anytime("1 Sep 2017"))/365, digits 
 April 2020 -  March 2020
 
 ::: concise
-- Leading the data and analytics teams in the [University Health Services](https://www.med.uc.edu/uhs) COVID-19 outbreak response.  
-- Helping with prioritization. 
-- Serving and advising the research team. 
-- Analyzing and reporting on operational data. 
-- Ensuring data collected in REDCap gets exported in a meaningful way to support clinical decision making. 
-- Building of a "dashboard"  in the R Studio programming environment to ensure the clinicians and management can quickly get data out of REDCap without having to rely on me. 
+- Lead the [University Health Services](https://www.med.uc.edu/uhs) data and analytics teams in COVID-19 surveillance and outbreak response.  
+- Aid in defining objectives and priorities. 
+- Analyze and report on operational data.
+- Export and transform REDCap data using the [RStudio](https://rstudio.com/) programming environment to ensure clinicians and administrators have timely access to actionable data.
 :::
 
 ### Data Manager
