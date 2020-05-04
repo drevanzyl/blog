@@ -118,7 +118,7 @@ André van Zyl {#title}
 
 ### Public Health Data Analytics Professional 
 
-André is a public health data analytics professional with approximately ten years’ work experience in roles related to research, technology, analytics, public health, behavioral health, and education. His current career interests revolve around digital analytics and data science, electronic data acquisition, epidemiology, and monitoring and evaluation. For the past two years, he has been responsible for monitoring and managing the data collection of a research project with 27 sites in three South African provinces.
+André is a public health data analytics professional with approximately ten years’ work experience in roles related to research, technology, analytics, public health, behavioral health, and education. He gets excited by working on projects that have a strong focus on alleviating the suffering caused by the social determinants of health. His current career interests revolve around digital analytics and data science, electronic data acquisition, epidemiology, and monitoring and evaluation. He is used to working in settings where the resources required to meet project objectives are limited. For the past two years, he has been responsible for monitoring and managing the data collection of a research project with 27 sites in three South African provinces.
 
 Professional Experience {data-icon=suitcase}
 --------------------------------------------------------------------------------
@@ -137,10 +137,13 @@ dm = as.numeric(round((anytime(Sys.Date()) - anytime("1 Sep 2017"))/365, digits 
 April 2020 -  March 2020
 
 ::: concise
-- Lead the [University Health Services](https://www.med.uc.edu/uhs) data and analytics teams in COVID-19 surveillance and outbreak response.  
+- Lead the [University Health Services](https://www.med.uc.edu/uhs) data and analytics teams in COVID-19 surveillance and outbreak response.
+- Utilizing Google Docs and Google Sheets for project communication and management.
 - Aid in defining objectives and priorities. 
 - Analyze and report on operational data.
 - Export and transform REDCap data using the [RStudio](https://rstudio.com/) programming environment to ensure clinicians and administrators have timely access to actionable data.
+- Advising on business continuity planning and expansion.
+- Identifying and engaging with service providers who could assist with system improvements.
 :::
 
 ### Data Manager
@@ -157,18 +160,22 @@ dm = as.numeric(round((anytime(Sys.Date()) - anytime("1 Sep 2017"))/365, digits 
 Present -  Sep 2017
 
 ::: concise
+- Drafting of the data management section of the protocol.
 - Project planning and implementation related to data collection and management.
-- Questionnaire improvement. 
 - Development of the mobile data collection application on the [CommCare platform](https://www.dimagi.com/commcare/).
 - Configuration of the [short text messaging system](https://telerivet.com/) used to communicate with participants.
-- Drafting of technical aspects of the protocol.
+- Ensuring that the mobile data collection application meets the research project's protocol specifications and operational needs.
+- Questionnaire improvement and translation to CommCare.
+- Develop video recordings, presentations, and documents used to train field staff.
 - Training of coordinators and fieldworkers on using Android OS, internet communication tools, the data collection application, and questionnaire completion.
--	Develop video recordings, presentations, and documents used to train field staff. 
-- Provision of local and remote technical and data collection support to 27 fieldworkers and 3 project coordinators.  
-- Ensure that researchers are blinded. 
-- Remote monitoring of data collection process and quality of submitted data.
-- Data cleaning.
 - Creation of project performance reports and visual data representations using [RStudio](https://rstudio.com/). My resume is an example of such a report written in RStudio.
+- Refining the mobile data collection application based on feedback from the research team, the project manager, the coordinators, and the team working at the clinics.  
+- Provision of local and remote technical and data collection support to 27 fieldworkers and three project coordinators. 
+- Managing the data collection operations with the help of RStudio, the [CommCare Data Export Tool]( https://confluence.dimagi.com/display/commcarepublic/CommCare+Data+Export+Tool), [WhatsApp]( https://www.whatsapp.com/), and the on-the-ground help of the project manager.
+- Ensure that researchers are blinded. 
+- Generate detailed Microsoft Word reports in RStudio, highlighting outliers and inconsistencies in the data. 
+- Programmatically clean data based on the feedback from the districts. 
+- Programmatically generate neatly structured and labeled [STATA](https://www.stata.com/) data files from our research data stored on a local PostgreSQL server. 
 :::
 
 Title of the research: [ImPROving TB outcomes by modifying LIFE-style behaviours through a brief motivational intervention followed by short text messages (ProLife): study protocol for a randomised controlled trial](https://trialsjournal.biomedcentral.com/articles/10.1186/s13063-019-3551-9)
@@ -225,12 +232,14 @@ itsi = as.numeric(round((anytime("1 May 2016") - anytime("1 Jan 2014"))/365, dig
 May 2016 - Jan 2014
 
 ::: concise
+- Utilizing Google Docs, Google Sheets, and software developers project management tools. 
 - Supported the implementation of the ITSI eLearning platform in South African schools. 
 - Training teachers and learners on how to use the ITSI eLearning platform. 
 - Quality assurance on electronic textbooks. 
 - Developing training material. 
 - Provided helpdesk support.
 - Testing of the ITSI eLearning platform and recommending product improvements. 
+- Advising the software development team on product improvements based on feedback from our clients.
 :::
 
 ### Behavioral Therapist
@@ -304,6 +313,24 @@ Master of Public Health
 2016
  
 Thesis: Health education resources available to high school Life Orientation educators in Tshwane, South Africa. 
+
+Modules:
+
+::: concise
+- Biostatistics
+- Communication in Health 
+- Disease Control
+- Environmental Health
+- Epidemiology
+- Health Management
+- Health Promotion
+- Human Nutrition and Public Health
+- Monitoring and Evaluation
+- Project Management in Healthcare
+- Qualitative Research Methods
+- Social Determinants
+       
+:::
 
 ### [Nelson Mandela University](https://www.mandela.ac.za/)
 
