@@ -19,8 +19,8 @@ Contact Info {#contact}
 - <i class="fa fa-envelope"></i> drevanzyl@gmail.com
 - <i class="fab fa-linkedin-in"></i> [linkedin.com/in/andre-van-zyl](https://www.linkedin.com/in/andre-van-zyl)
 - <i class="fab fa-skype"></i> [andre.van.zyl](https://join.skype.com/invite/h0VHiLg2Impf)
-- <i class="fa fa-phone"></i> +1 513-546-8310 (USA)
-- <i class="fa fa-phone"></i> +27 72-901-8324 (SA)
+- <i class="fa fa-phone"></i> +1 (513) 866-0333 (USA)
+
 - <i class="far fa-calendar-alt"></i> **Last updated on `r Sys.Date()`.**
 - For more information, please contact him via email.
 
@@ -118,10 +118,29 @@ André van Zyl {#title}
 
 ### Public Health Data Analytics Professional 
 
-André is a public health data analytics professional with approximately ten years’ work experience in roles related to research, technology, analytics, public health, behavioral health, and education. He gets excited by working on projects that have a strong focus on alleviating the suffering caused by the social determinants of health. His current career interests revolve around digital analytics and data science, electronic data acquisition, epidemiology, and monitoring and evaluation. He is used to working in settings where the resources required to meet project objectives are limited. For the past two years, he has been responsible for monitoring and managing the data collection of a research project with 27 sites in three South African provinces.
+André is a public health data analytics professional with approximately ten years’ work experience in roles related to research, technology, analytics, public health, behavioral health, and education.  His current career interests revolve around digital analytics and data science, electronic data acquisition, epidemiology, and monitoring and evaluation. He is used to working in settings where the resources required to meet project objectives are limited. For the past two years, he has been responsible for monitoring and managing the data collection of a research project with 27 sites in three South African provinces.
 
 Professional Experience {data-icon=suitcase}
 --------------------------------------------------------------------------------
+
+### Independent Contractor
+
+[Dimagi](https://www.dimagi.com/) 
+
+[Cincinnati, Ohio](https://goo.gl/maps/MbYfedyeqwaB9jat6)
+
+```{r message=FALSE, warning=FALSE, include=FALSE}
+library(anytime) 
+dm = as.numeric(round((anytime(Sys.Date()) - anytime("1 June 2020"))/31, digits = 1))
+```
+
+Present - June 2020 
+
+::: concise
+- Application development, quality assurance, and configuration for US COVID-19 clients using the [CommCare platform](https://www.dimagi.com/commcare/).
+- Create technical documentation of application systems, requirements clarification, and LOE estimates, and provide additional clarity to clients about the system.
+- Utilizing [Asana](https://asana.com/) for project communication and management.
+:::
 
 ### Consultant
 
@@ -157,7 +176,7 @@ library(anytime)
 dm = as.numeric(round((anytime(Sys.Date()) - anytime("1 Sep 2017"))/365, digits = 1))
 ```
 
-Present -  Sep 2017
+June 2020 -  Sep 2017
 
 ::: concise
 - Drafting of the data management section of the protocol.
