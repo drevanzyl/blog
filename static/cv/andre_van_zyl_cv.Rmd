@@ -20,10 +20,8 @@ Contact Info {#contact}
 - <i class="fab fa-linkedin-in"></i> [linkedin.com/in/andre-van-zyl](https://www.linkedin.com/in/andre-van-zyl)
 - <i class="fab fa-skype"></i> [andre.van.zyl](https://join.skype.com/invite/h0VHiLg2Impf)
 - <i class="fa fa-phone"></i> +1 (513) 866-0333 (USA)
-
 - <i class="far fa-calendar-alt"></i> **Last updated on `r Sys.Date()`.**
 - For more information, please contact him via email.
-
 
 Skills {#skills}
 --------------------------------------------------------------------------------
@@ -118,7 +116,7 @@ André van Zyl {#title}
 
 ### Public Health Data Analytics Professional 
 
-André is a public health data analytics professional with approximately ten years’ work experience in roles related to research, technology, analytics, public health, behavioral health, and education.  His current career interests revolve around digital analytics and data science, electronic data acquisition, epidemiology, and monitoring and evaluation. He is used to working in settings where the resources required to meet project objectives are limited. For the past two years, he has been responsible for monitoring and managing the data collection of a research project with 27 sites in three South African provinces.
+André is a public health data analytics professional with approximately ten years of work experience in research, technology, analytics, public health, behavioral health, and education.  His current career interests revolve around digital analytics and data science, electronic data acquisition, epidemiology, and monitoring and evaluation. As a native South African, he is used to working in resource-limited settings where meeting objectives and timeline goals require collaboration and creativity. For the past two years, he has been responsible for monitoring and managing data collection for a research project with 27 sites in three South African provinces.
 
 Professional Experience {data-icon=suitcase}
 --------------------------------------------------------------------------------
@@ -137,9 +135,10 @@ dm = as.numeric(round((anytime(Sys.Date()) - anytime("1 June 2020"))/31, digits 
 Present - June 2020 
 
 ::: concise
-- Application development, quality assurance, and configuration for US COVID-19 clients using the [CommCare platform](https://www.dimagi.com/commcare/).
+- Work in application development and configuration for US COVID-19 clients using the [CommCare platform](https://www.dimagi.com/commcare/).
+- Quality assurance. 
 - Create technical documentation of application systems, requirements clarification, and LOE estimates, and provide additional clarity to clients about the system.
-- Utilizing [Asana](https://asana.com/) for project communication and management.
+- Utilize [Asana](https://asana.com/) for project communication and management.
 :::
 
 ### Consultant
@@ -156,13 +155,13 @@ dm = as.numeric(round((anytime(Sys.Date()) - anytime("1 Sep 2017"))/365, digits 
 April 2020 -  March 2020
 
 ::: concise
-- Lead the [University Health Services](https://www.med.uc.edu/uhs) data and analytics teams in COVID-19 surveillance and outbreak response.
-- Utilizing Google Docs and Google Sheets for project communication and management.
-- Aid in defining objectives and priorities. 
-- Analyze and report on operational data.
-- Export and transform REDCap data using the [RStudio](https://rstudio.com/) programming environment to ensure clinicians and administrators have timely access to actionable data.
-- Advising on business continuity planning and expansion.
-- Identifying and engaging with service providers who could assist with system improvements.
+- Led the [University Health Services](https://www.med.uc.edu/uhs) data and analytics efforts in COVID-19 surveillance and outbreak response.
+- Utilized Google Docs and Google Sheets for project communication and management.
+- Aided in defining objectives and priorities. 
+- Analyzed and reported on operational data.
+- Exported and transformed REDCap data using the [RStudio](https://rstudio.com/) programming environment to ensure clinicians and administrators have timely access to actionable data.
+- Advised on business continuity planning and expansion.
+- Identified and engaged with service providers who could assist with system improvements.
 :::
 
 ### Data Manager
@@ -179,22 +178,22 @@ dm = as.numeric(round((anytime(Sys.Date()) - anytime("1 Sep 2017"))/365, digits 
 June 2020 -  Sep 2017
 
 ::: concise
-- Drafting of the data management section of the protocol.
-- Project planning and implementation related to data collection and management.
-- Development of the mobile data collection application on the [CommCare platform](https://www.dimagi.com/commcare/).
-- Configuration of the [short text messaging system](https://telerivet.com/) used to communicate with participants.
-- Ensuring that the mobile data collection application meets the research project's protocol specifications and operational needs.
-- Questionnaire improvement and translation to CommCare.
-- Develop video recordings, presentations, and documents used to train field staff.
-- Training of coordinators and fieldworkers on using Android OS, internet communication tools, the data collection application, and questionnaire completion.
-- Creation of project performance reports and visual data representations using [RStudio](https://rstudio.com/). My resume is an example of such a report written in RStudio.
-- Refining the mobile data collection application based on feedback from the research team, the project manager, the coordinators, and the team working at the clinics.  
-- Provision of local and remote technical and data collection support to 27 fieldworkers and three project coordinators. 
-- Managing the data collection operations with the help of RStudio, the [CommCare Data Export Tool]( https://confluence.dimagi.com/display/commcarepublic/CommCare+Data+Export+Tool), [WhatsApp]( https://www.whatsapp.com/), and the on-the-ground help of the project manager.
-- Ensure that researchers are blinded. 
-- Generate detailed Microsoft Word reports in RStudio, highlighting outliers and inconsistencies in the data. 
-- Programmatically clean data based on the feedback from the districts. 
-- Programmatically generate neatly structured and labeled [STATA](https://www.stata.com/) data files from our research data stored on a local PostgreSQL server. 
+- Drafted the data management section of the protocol.
+- Led project planning and implementation related to data collection and management.
+- Developed the mobile data collection application on the [CommCare platform](https://www.dimagi.com/commcare/).
+- Configured the [short text messaging system](https://telerivet.com/) used to communicate with participants.
+- Ensured that the mobile data collection application meets the research project's protocol specifications and operational needs.
+- Contributed to questionnaire improvement and translation to CommCare.
+- Developed video recordings, presentations, and documents used to train field staff.
+- Trained coordinators and fieldworkers on using Android OS, internet communication tools, the data collection application, and questionnaire completion.
+- Created project performance reports and visual data representations using [RStudio](https://rstudio.com/). My resume is an example of such a report written in RStudio.
+- Refined the mobile data collection application based on feedback from the research team, the project manager, the coordinators, and the team working at the clinics.  
+- Provided local and remote technical and data collection support to 27 fieldworkers and three project coordinators. 
+- Managed the data collection operations with the help of RStudio, the [CommCare Data Export Tool]( https://confluence.dimagi.com/display/commcarepublic/CommCare+Data+Export+Tool), [WhatsApp]( https://www.whatsapp.com/), and the on-the-ground help of the project manager.
+- Ensured that the researchers are blinded. 
+- Generated detailed Microsoft Word reports in RStudio, highlighting outliers and inconsistencies in the data. 
+- Programmatically cleaned data based on the feedback from the districts. 
+- Programmatically generated neatly structured and labeled [STATA](https://www.stata.com/) data files from our research data stored on a local PostgreSQL server. 
 :::
 
 Title of the research: [ImPROving TB outcomes by modifying LIFE-style behaviours through a brief motivational intervention followed by short text messages (ProLife): study protocol for a randomised controlled trial](https://trialsjournal.biomedcentral.com/articles/10.1186/s13063-019-3551-9)
@@ -251,14 +250,14 @@ itsi = as.numeric(round((anytime("1 May 2016") - anytime("1 Jan 2014"))/365, dig
 May 2016 - Jan 2014
 
 ::: concise
-- Utilizing Google Docs, Google Sheets, and software developers project management tools. 
+- Utilized Google Docs, Google Sheets, and software developers’ project management tools. 
 - Supported the implementation of the ITSI eLearning platform in South African schools. 
-- Training teachers and learners on how to use the ITSI eLearning platform. 
-- Quality assurance on electronic textbooks. 
-- Developing training material. 
+- Trained teachers and learners on how to use the ITSI eLearning platform. 
+- Provided quality assurance on electronic textbooks. 
+- Developed training material. 
 - Provided helpdesk support.
-- Testing of the ITSI eLearning platform and recommending product improvements. 
-- Advising the software development team on product improvements based on feedback from our clients.
+- Tested the ITSI eLearning platform and recommending product improvements. 
+- Advised the software development team on product improvements based on feedback from our clients.
 :::
 
 ### Behavioral Therapist
@@ -275,8 +274,7 @@ bt = as.numeric(round((anytime("1 Jul 2014") - anytime("1 Feb 2014"))/365, digit
 Jul 2014 - Feb 2014
 
 ::: concise
-        
-       
+- Provided Applied Behavior Analysis (ABA) to children with developmental disorders.        
 :::
 
 ### Support Counselor
@@ -289,6 +287,10 @@ Jul 2014 - Feb 2014
 library(anytime) 
 sc = as.numeric(round((anytime("1 Jul 2013") - anytime("1 Jan 2013"))/365, digits = 1))
 ```
+
+::: concise
+- Provided supervision and support to clients at the facility.   
+:::
 
 Jul 2013 - Jan 2013
 
@@ -303,9 +305,15 @@ library(anytime)
 nmmu_ra = as.numeric(round((anytime("1 Jul 2012") - anytime("1 Oct 2011"))/365, digits = 1))
 ```
 
+
 Jul 2012 - Oct 2011
 
 Title of the research: [Help-seeking behaviour, barriers to care and experiences of care among persons with depression in Eastern Cape, South Africa.](https://www.ncbi.nlm.nih.gov/pubmed/23890669)
+
+::: concise
+- Aided in questionnaire improvement. 
+- Performed informed consent and conducted structured interviews with participants to collect research data.
+:::
 
 ### Internet Service Provider
 
@@ -319,6 +327,10 @@ isp = as.numeric(round((anytime("1 Jun 2008") - anytime("1 Jul 2005"))/365, digi
 ```
 
 Jun 2008 - Jul 2005
+
+::: concise
+- Started a small business providing WiFi internet access to students.        
+:::
 
 Education {data-icon=graduation-cap data-concise=true}
 --------------------------------------------------------------------------------
@@ -550,6 +562,7 @@ The Zizi Centre
 [Port Elizabeth, South Africa](https://goo.gl/maps/HPiR3HkfGB1QUZAr9)
 
 2012
+
 
 
 
