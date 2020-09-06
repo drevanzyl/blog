@@ -116,7 +116,7 @@ André van Zyl {#title}
 
 ### Public Health Data Analytics Professional 
 
-André is a public health data analytics professional with approximately ten years of work experience in research, technology, analytics, public health, behavioral health, and education.  His current career interests revolve around digital analytics and data science, electronic data acquisition, epidemiology, and monitoring and evaluation. As a native South African, he is used to working in resource-limited settings where meeting objectives and timeline goals require collaboration and creativity. For the past two years, he has been responsible for monitoring and managing data collection for a research project with 27 sites in three South African provinces.
+André is a public health data analytics professional with approximately ten years of work experience in research, technology, analytics, public health, behavioral health, and education.  His current career interests revolve around digital analytics and data science, electronic data acquisition, epidemiology, and monitoring and evaluation. As a native South African, he is used to working in resource-limited settings where meeting objectives and timeline goals requires collaboration and creativity. For the past two years, he has been responsible for monitoring and managing data collection for a research project with 27 sites in three South African provinces.
 
 Professional Experience {data-icon=suitcase}
 --------------------------------------------------------------------------------
@@ -135,7 +135,7 @@ dm = as.numeric(round((anytime(Sys.Date()) - anytime("1 June 2020"))/31, digits 
 Present - June 2020 
 
 ::: concise
-- Work in application development and configuration for US COVID-19 clients using the [CommCare platform](https://www.dimagi.com/commcare/).
+- Work in application development and configuration for US COVID-19 contact tracing partners using the [CommCare platform](https://www.dimagi.com/commcare/).
 - Quality assurance. 
 - Create technical documentation of application systems, requirements clarification, and LOE estimates, and provide additional clarity to clients about the system.
 - Utilize [Asana](https://asana.com/) for project communication and management.
@@ -182,7 +182,7 @@ June 2020 -  Sep 2017
 - Led project planning and implementation related to data collection and management.
 - Developed the mobile data collection application on the [CommCare platform](https://www.dimagi.com/commcare/).
 - Configured the [short text messaging system](https://telerivet.com/) used to communicate with participants.
-- Ensured that the mobile data collection application meets the research project's protocol specifications and operational needs.
+- Ensured that the mobile data collection application met the research project's protocol specifications and operational needs.
 - Contributed to questionnaire improvement and translation to CommCare.
 - Developed video recordings, presentations, and documents used to train field staff.
 - Trained coordinators and fieldworkers on using Android OS, internet communication tools, the data collection application, and questionnaire completion.
@@ -190,7 +190,7 @@ June 2020 -  Sep 2017
 - Refined the mobile data collection application based on feedback from the research team, the project manager, the coordinators, and the team working at the clinics.  
 - Provided local and remote technical and data collection support to 27 fieldworkers and three project coordinators. 
 - Managed the data collection operations with the help of RStudio, the [CommCare Data Export Tool]( https://confluence.dimagi.com/display/commcarepublic/CommCare+Data+Export+Tool), [WhatsApp]( https://www.whatsapp.com/), and the on-the-ground help of the project manager.
-- Ensured that the researchers are blinded. 
+- Ensured that the researchers were blinded. 
 - Generated detailed Microsoft Word reports in RStudio, highlighting outliers and inconsistencies in the data. 
 - Programmatically cleaned data based on the feedback from the districts. 
 - Programmatically generated neatly structured and labeled [STATA](https://www.stata.com/) data files from our research data stored on a local PostgreSQL server. 
@@ -211,14 +211,16 @@ da = as.numeric(round((anytime("1 Sep 2017") - anytime("1 Sep 2016"))/365, digit
 
 Sep 2017 - Sep 2016
 
-I supported the data and implementation teams on the following projects:
 
 ::: concise
-- Assessment of mental health care services provided in public health clinics in four districts in SA, 2016-2017
-- Validation of TB stigma scales in Buffalo City Metropolitan, Nkangala and Tshwane Districts in South Africa
-- Phased implementation of a public health program: cryptococcal antigen screening and treatment in South Africa
-- Investigating the acceptability, feasibility and outcomes of home-based TB testing of household contacts using a new, mobile point of care technology
-- Pilot study of STI screening and treatment for PMTCT
+- Supported project planning and implementation.
+- Supervised on-site data collection at participating research clinics. 
+- Conducted literature reviews. 
+- Supported data cleaning. 
+- Assisted with budgeting and procurement of research supplies. 
+- Contributed to questionnaire improvement and translation.
+- Provided training to numerators. 
+- Co-authored journal article on mental health care integration. 
 :::
 
 ### Research Assistant
@@ -256,7 +258,7 @@ May 2016 - Jan 2014
 - Provided quality assurance on electronic textbooks. 
 - Developed training material. 
 - Provided helpdesk support.
-- Tested the ITSI eLearning platform and recommending product improvements. 
+- Tested the ITSI eLearning platform and recommended product improvements. 
 - Advised the software development team on product improvements based on feedback from our clients.
 :::
 
