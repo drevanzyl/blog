@@ -75,12 +75,14 @@ proficiency <- tibble::tribble(
   "CommCare (mobile data collection)",  140,
   "SQL",40,
   "RedCAP", 70,
+  "Asana",85,
   "Microsoft Project",68,
   "SPSS",25,
   "Stata",22,
   "Microsoft Office",90,
   "Python",32,
-  "Power BI",40
+  "Power BI",40,
+  "Tableau",40
 ) 
 
 library(forcats)
