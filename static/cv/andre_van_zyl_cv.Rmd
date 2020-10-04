@@ -118,7 +118,7 @@ André van Zyl {#title}
 
 ### Public Health Data Analytics Professional 
 
-André is a public health data analytics professional with approximately ten years of work experience in research, technology, analytics, public health, behavioral health, and education.  His current career interests revolve around digital analytics and data science, electronic data acquisition, epidemiology, and monitoring and evaluation. As a native South African, he is used to working in resource-limited settings where meeting objectives and timeline goals requires collaboration and creativity. For the past two years, he has been responsible for monitoring and managing data collection for a research project with 27 sites in three South African provinces.
+André is a public health data analytics professional with approximately ten years of work experience in research, technology, analytics, public health, behavioral health, and education.  His current career interests revolve around digital analytics and data science, electronic data acquisition, epidemiology, and monitoring and evaluation. As a native South African, he is used to working in resource-limited settings where meeting objectives and timeline goals require collaboration and creativity. He has been working on US COVID-19 projects since March 2020. Prior to his work on COVID-19 projects, he has been responsible for monitoring and managing data collection for a research project with 27 sites in three South African provinces.
 
 Professional Experience {data-icon=suitcase}
 --------------------------------------------------------------------------------
