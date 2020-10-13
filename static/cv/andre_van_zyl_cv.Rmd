@@ -158,7 +158,7 @@ dm = as.numeric(round((anytime(Sys.Date()) - anytime("1 Sep 2017"))/365, digits 
 April 2020 -  March 2020
 
 ::: concise
-- Worked with the REDCap Team on the [University Health Services](https://www.med.uc.edu/uhs) data and analytics efforts in COVID-19 surveillance and outbreak response.
+- Worked with the REDCap Team on the [University Health Services](https://www.med.uc.edu/uhs) data and analytics efforts in the COVID-19 surveillance and outbreak response.
 - Utilized Google Docs and Google Sheets for project communication and management.
 - Aided in defining objectives and priorities. 
 - Analyzed and reported on operational data.
